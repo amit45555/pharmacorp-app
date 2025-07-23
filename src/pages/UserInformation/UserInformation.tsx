@@ -1,24 +1,70 @@
 // src/pages/UserInformation/UserInformation.tsx
-import styles from './UserInformation.module.css';
-import { useNavigate } from 'react-router-dom';
-import React,{ useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./UserInformation.module.css";
 
 const UserInformation: React.FC = () => {
+  const [requestType, setRequestType] = useState("Self");
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', empCode: '', location: '', department: '' });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Optionally validate form here...
+
+    // Redirect to the next step (e.g., Access Details page)
+    navigate("/access-details");
   };
 
   return (
     <div className={styles.container}>
-      <h2>User Information</h2>
-      <input name="name" placeholder="Name" onChange={handleChange} value={form.name} />
-      <input name="empCode" placeholder="Employee Code" onChange={handleChange} value={form.empCode} />
-      <input name="location" placeholder="Location" onChange={handleChange} value={form.location} />
-      <input name="department" placeholder="Department" onChange={handleChange} value={form.department} />
-      <button onClick={() => navigate('/access-details')}>Next</button>
+      <h1 className={styles.title}>PharmaCorp</h1>
+      <p className={styles.subtitle}>User Access Management System</p>
+
+      <div className={styles.stepper}>
+        <div className={`${styles.step} ${styles.active}`}>1</div>
+        <div className={styles.step}>2</div>
+        <div className={styles.step}>3</div>
+        <div className={styles.step}>4</div>
+      </div>
+
+      <h2 className={styles.formTitle}>User Information & Request Type</h2>
+      <p className={styles.instruction}>
+        Please provide basic user information and specify the request type.
+      </p>
+
+      <div className={styles.requestType}>
+        {["Self", "Others", "Vendor/OEM"].map((type) => (
+          <button
+            key={type}
+            type="button"
+            className={`${styles.requestButton} ${
+              requestType === type ? styles.selected : ""
+            }`}
+            onClick={() => setRequestType(type)}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label>User Name *</label>
+        <input type="text" placeholder="Start typing to search directory..." required />
+
+        <label>Employee Code *</label>
+        <input type="text" placeholder="Enter or search employee code" required />
+
+        <label>Location *</label>
+        <input type="text" placeholder="Start typing location..." required />
+
+        <label>Department *</label>
+        <input type="text" placeholder="Start typing department..." required />
+
+        <button type="submit" className={styles.continueButton}>
+          Continue ⤵
+        </button>
+      </form>
     </div>
   );
 };
