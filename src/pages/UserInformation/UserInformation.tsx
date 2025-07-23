@@ -21,7 +21,51 @@ const UserInformation: React.FC = () => {
     navigate("/access-details");
   };
 
-  const stepConfig = formSteps[0];
+  // For demo: inject hardcoded options for all fields to simulate DB/API
+  const stepConfig = {
+    ...formSteps[0],
+    fields: formSteps[0].fields.map((field) => {
+      if (field.name === "userName") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: [
+            "Amit Kumar",
+            "Priya Sharma",
+            "Rahul Singh",
+            "Neha Patel",
+            "Vikas Gupta",
+          ],
+          required: true,
+        };
+      }
+      if (field.name === "employeeCode") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: ["EMP001", "EMP002", "EMP003", "EMP004", "EMP005"],
+          required: true,
+        };
+      }
+      if (field.name === "department") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: ["IT", "HR", "Finance", "Operations", "Sales"],
+          required: true,
+        };
+      }
+      if (field.name === "location") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai"],
+          required: true,
+        };
+      }
+      return { ...field, required: true };
+    }),
+  };
 
   return (
     <div className={styles.container}>
