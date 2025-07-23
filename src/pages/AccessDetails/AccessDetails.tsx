@@ -21,7 +21,43 @@ const AccessDetails: React.FC = () => {
     navigate("/review-submit");
   };
 
-  const stepConfig = formSteps[1];
+  // For demo: inject hardcoded options for all fields to simulate DB/API
+  const stepConfig = {
+    ...formSteps[1],
+    fields: formSteps[1].fields.map((field) => {
+      if (field.name === "accessType") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: ["SAP", "Email", "VPN", "Network Drive", "HRMS"],
+          required: true,
+        };
+      }
+      if (field.name === "accessLevel") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: ["Read", "Write", "Admin", "Custom"],
+          required: true,
+        };
+      }
+      if (field.name === "justification") {
+        return {
+          ...field,
+          type: "select" as const,
+          options: [
+            "Project Requirement",
+            "Role Change",
+            "New Joiner",
+            "Temporary Access",
+            "Other",
+          ],
+          required: true,
+        };
+      }
+      return { ...field, required: true };
+    }),
+  };
 
   return (
     <div className={styles.container}>

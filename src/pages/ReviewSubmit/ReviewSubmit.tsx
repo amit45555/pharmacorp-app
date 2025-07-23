@@ -15,9 +15,16 @@ const ReviewSubmit: React.FC = () => {
   };
 
   // Gather all fields from previous steps
-  const reviewFields: FormField[] = formSteps
-    .filter((step: { step: number }) => step.step === 1 || step.step === 2)
-    .flatMap((step: { fields: FormField[] }) => step.fields);
+  const reviewFields: FormField[] = formSteps.flatMap((step) => step.fields);
+
+  // Add credential info if present in context (simulate as extra fields)
+  const credentialFields = [
+    { name: "userId", label: "User ID" },
+    { name: "password", label: "Generated Password" },
+    { name: "requestId", label: "Request ID" },
+    { name: "approvedAt", label: "Approved At" },
+    { name: "validUntil", label: "Valid Until" },
+  ];
 
   const recordData: Record<string, any> = data as Record<string, any>;
 
@@ -49,6 +56,15 @@ const ReviewSubmit: React.FC = () => {
             )}
           </div>
         ))}
+        {/* Show credential info if present */}
+        {credentialFields.map((field) =>
+          recordData[field.name] ? (
+            <div className={styles.reviewItem} key={field.name}>
+              <strong>{field.label}:</strong>{" "}
+              {field.name === "password" ? "••••••••" : recordData[field.name]}
+            </div>
+          ) : null
+        )}
         <button className={styles.submitButton} type="submit">
           Submit Request
         </button>
