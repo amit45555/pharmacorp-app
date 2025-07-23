@@ -19,37 +19,6 @@
   margin-bottom: 2rem;
 }
 
-.stepper {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  padding: 0 1rem;
-}
-
-.step {
-  width: 30px;
-  height: 30px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 26px;
-  font-weight: bold;
-  color: #aaa;
-  background: #f3f3f3;
-}
-
-.completed {
-  background-color: #007f86;
-  color: white;
-  border-color: #007f86;
-}
-
-.active {
-  background-color: #007f86;
-  color: white;
-  border-color: #007f86;
-}
-
 .card {
   background: linear-gradient(135deg, #f8fafc 0%, #e3f6f9 100%);
   border-radius: 16px;

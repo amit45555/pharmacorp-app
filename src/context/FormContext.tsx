@@ -7,6 +7,10 @@ interface FormData {
   appName: string;
   role: string;
   version: string;
+  requestId?: string;
+  approvedAt?: string;
+  validUntil?: string;
+  userId?: string;
 }
 
 interface FormContextType {
@@ -21,11 +25,17 @@ const defaultData: FormData = {
   appName: "",
   role: "",
   version: "",
+  requestId: undefined,
+  approvedAt: undefined,
+  validUntil: undefined,
+  userId: undefined,
 };
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
-export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const FormProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [data, setData] = useState<FormData>(defaultData);
 
   return (
@@ -37,6 +47,7 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useFormContext = () => {
   const context = useContext(FormContext);
-  if (!context) throw new Error("useFormContext must be used inside FormProvider");
+  if (!context)
+    throw new Error("useFormContext must be used inside FormProvider");
   return context;
 };
