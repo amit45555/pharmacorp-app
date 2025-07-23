@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState } from "react";
 
+interface LogEntry {
+  timestamp: string;
+  message: string;
+}
+
+type RequestStatus = "draft" | "pending" | "approved" | "denied";
+
 interface FormData {
   accessTypes: string[];
   trainingStatus: string;
@@ -7,10 +14,13 @@ interface FormData {
   appName: string;
   role: string;
   version: string;
+  employeeCode?: string;
   requestId?: string;
   approvedAt?: string;
   validUntil?: string;
   userId?: string;
+  requestStatus?: RequestStatus;
+  logs?: LogEntry[];
 }
 
 interface FormContextType {
@@ -25,10 +35,15 @@ const defaultData: FormData = {
   appName: "",
   role: "",
   version: "",
+  employeeCode: "",
   requestId: undefined,
   approvedAt: undefined,
   validUntil: undefined,
   userId: undefined,
+  requestStatus: "draft",
+  logs: [
+    { timestamp: new Date().toISOString(), message: "Request created (draft)" },
+  ],
 };
 
 const FormContext = createContext<FormContextType | undefined>(undefined);

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "../../context/FormContext";
+import { checkUserActiveStatus } from "../../utils/zingApi";
 import { useNavigate } from "react-router-dom";
 import styles from "./ReviewSubmit.module.css";
 import Stepper from "../../components/Stepper/Stepper";
@@ -8,6 +9,19 @@ import { formSteps, FormField } from "../../data/formFields";
 const ReviewSubmit: React.FC = () => {
   const { data } = useFormContext();
   const navigate = useNavigate();
+  const [userStatus, setUserStatus] = useState<
+    "active" | "inactive" | "checking"
+  >("checking");
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      setUserStatus("checking");
+      const status = await checkUserActiveStatus(data.employeeCode || "");
+      setUserStatus(status);
+    };
+    checkStatus();
+    // eslint-disable-next-line
+  }, [data.employeeCode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +55,34 @@ const ReviewSubmit: React.FC = () => {
       </div>
 
       <form className={styles.card} onSubmit={handleSubmit}>
+        {/* Zing HR status check */}
+        {userStatus === "inactive" && (
+          <div style={{ color: "#c00", marginBottom: 12, fontWeight: 500 }}>
+            Warning: This user is marked as <b>inactive</b> in Zing HR. You
+            cannot submit a request for an inactive user.
+          </div>
+        )}
         <h2 className={styles.formTitle}>Review & Submit</h2>
+        {/* Request Status */}
+        <div style={{ marginBottom: "1.2rem" }}>
+          <strong>Status:</strong> {recordData.requestStatus || "draft"}
+        </div>
+        {/* Logs Timeline */}
+        {Array.isArray(recordData.logs) && recordData.logs.length > 0 && (
+          <div style={{ marginBottom: "1.2rem" }}>
+            <strong>Logs:</strong>
+            <ul style={{ paddingLeft: 18, margin: 0 }}>
+              {recordData.logs.map((log: any, idx: number) => (
+                <li key={idx} style={{ fontSize: 13, color: "#555" }}>
+                  <span style={{ color: "#888", fontSize: 12 }}>
+                    {new Date(log.timestamp).toLocaleString()}:
+                  </span>{" "}
+                  {log.message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {reviewFields.map((field: FormField) => (
           <div className={styles.reviewItem} key={field.name}>
             <strong>{field.label}:</strong>{" "}
@@ -65,9 +106,29 @@ const ReviewSubmit: React.FC = () => {
             </div>
           ) : null
         )}
-        <button className={styles.submitButton} type="submit">
-          Submit Request
-        </button>
+        <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+          <button
+            className={styles.submitButton}
+            type="submit"
+            disabled={userStatus === "inactive" || userStatus === "checking"}
+          >
+            {userStatus === "checking"
+              ? "Checking user status..."
+              : "Submit Request"}
+          </button>
+          <button
+            type="button"
+            className={styles.submitButton}
+            style={{
+              background: "#eee",
+              color: "#007f86",
+              border: "1.5px solid #5ac9d8",
+            }}
+            onClick={() => navigate("/track-request")}
+          >
+            Track Request
+          </button>
+        </div>
       </form>
     </div>
   );
