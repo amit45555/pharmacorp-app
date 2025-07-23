@@ -1,0 +1,96 @@
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #007f86;
+  font-size: 28px;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  text-align: center;
+  color: #444;
+  font-size: 14px;
+  margin-bottom: 2rem;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 26px;
+  font-weight: bold;
+  color: #aaa;
+  background: #f3f3f3;
+}
+
+.completed {
+  background-color: #007f86;
+  color: white;
+  border-color: #007f86;
+}
+
+.active {
+  background-color: #007f86;
+  color: white;
+  border-color: #007f86;
+}
+
+.card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e3f6f9 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 2rem 2.5rem;
+  margin-top: 1rem;
+}
+
+.formTitle {
+  font-size: 22px;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.reviewItem {
+  margin-bottom: 1.2rem;
+  font-size: 15px;
+  color: #333;
+}
+
+.list {
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+}
+
+.submitButton {
+  width: 100%;
+  background: linear-gradient(90deg, #5ac9d8 0%, #7e57c2 100%);
+  color: white;
+  border: none;
+  padding: 0.85rem;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 2rem;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.submitButton:hover {
+  background: linear-gradient(90deg, #46b6c3 0%, #6d47b1 100%);
+  box-shadow: 0 4px 16px rgba(90, 201, 216, 0.16);
+}
