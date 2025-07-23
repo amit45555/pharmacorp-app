@@ -1,0 +1,22 @@
+/* src/components/Common/Button.module.css */
+.button {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(106,17,203,0.15);
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.button:hover {
+  background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+  box-shadow: 0 8px 32px rgba(37,117,252,0.25);
+  transform: translateY(-2px) scale(1.04);
+}
+.button:active {
+  background: #2575fc;
+  transform: scale(0.98);
+}

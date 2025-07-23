@@ -1,0 +1,30 @@
+/* src/components/Common/RadioGroup.module.css */
+.radioGroupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+}
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.radioInput {
+  accent-color: #2575fc;
+  width: 18px;
+  height: 18px;
+}
+.radioOption:hover {
+  color: #2575fc;
+}
