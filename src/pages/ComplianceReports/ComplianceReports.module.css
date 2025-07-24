@@ -1,10 +1,11 @@
 .container {
-  padding: 32px;
+  padding: 32px 40px;
+  background: #fcfdfd;
 }
 .title {
   font-size: 2rem;
-  font-weight: 600;
-  color: #007f86;
+  font-weight: 700;
+  color: #1a3c4b;
   margin-bottom: 1.5rem;
 }
 .filtersRow {
@@ -27,22 +28,24 @@
 }
 .reportsTable {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.07);
+  box-shadow: 0 2px 12px 0 rgba(90, 201, 216, 0.08);
+  margin-bottom: 0;
 }
 .reportsTable th,
 .reportsTable td {
   padding: 0.9rem 1.1rem;
   text-align: left;
-  border-bottom: 1px solid #e3f6f9;
+  border-bottom: 1px solid #e3e9f7;
 }
 .reportsTable th {
   background: #f8fafc;
   color: #007f86;
-  font-weight: 600;
+  font-weight: 700;
 }
 .reportsTable tr:last-child td {
   border-bottom: none;
@@ -54,14 +57,16 @@
   padding: 0.2rem 1rem;
   font-size: 1rem;
   font-weight: 600;
+  border: 1px solid #b2e0ea;
 }
 .statusNonCompliant {
-  background: #e3f6f9;
+  background: #fbe9e7;
   color: #c00;
   border-radius: 16px;
   padding: 0.2rem 1rem;
   font-size: 1rem;
   font-weight: 600;
+  border: 1px solid #f8bbbc;
 }
 .actionBtn {
   background: #5ac9d8;

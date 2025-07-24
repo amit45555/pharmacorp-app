@@ -1,23 +1,271 @@
+/* Container for the whole admin dashboard layout */
 .container {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
-  background: #f8fafc;
+  width: 100vw;
+  background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%);
+  overflow-x: hidden !important;
 }
-.sidebar {
-  width: 230px;
-  background: #fff;
-  border-right: 1.5px solid #e3f6f9;
+
+.mainContent {
+  flex: 1;
+  margin-left: 230px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 2rem 1.2rem 1.2rem 1.2rem;
-  gap: 1.2rem;
+  min-width: 0;
+  min-height: 100vh;
+  background: transparent;
+  overflow-x: hidden !important;
+  max-width: calc(100vw - 230px);
+  box-sizing: border-box;
+}
+
+.pageContent {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 40px 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  max-width: 230px;
+  background: #f8fafc;
+  color: #1a3c4b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 16px 0;
+  box-shadow: 2px 0 16px 0 rgba(90, 201, 216, 0.07);
+  border-right: 1.5px solid #e3e9f7;
+  transition: box-shadow 0.3s, background 0.3s;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  overflow-x: hidden;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 36px;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #1a3c4b;
+  text-shadow: none;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.navItem {
+  background: none;
+  border: none;
+  color: #1a3c4b;
+  font-size: 1.08rem;
+  padding: 13px 32px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  transition: background 0.18s, color 0.18s, transform 0.13s;
+  position: relative;
+  outline: none;
+}
+.navItem:hover,
+.navItem:focus {
+  background: #e3e9f7;
+  color: #007f86;
+  transform: translateX(4px) scale(1.03);
+  box-shadow: 0 2px 8px 0 rgba(90, 201, 216, 0.08);
+}
+.active {
+  background: #e3e9f7;
+  color: #007f86;
+  font-weight: 700;
+  box-shadow: 0 2px 8px 0 rgba(90, 201, 216, 0.1);
+}
+.navIcon {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  color: #8b9bb4;
+}
+
+.logout {
+  margin-top: 32px;
+  background: none;
+  color: #e57373;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+.logout:hover {
+  color: #b71c1c;
+  background: #fbe9e7;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fcfdfd;
+  min-height: 100vh;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(90, 201, 216, 0.08);
+  padding: 32px 28px 28px 28px;
+  flex: 1;
+  min-width: 320px;
+  transition: box-shadow 0.18s, transform 0.13s;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  box-shadow: 0 4px 24px 0 rgba(90, 201, 216, 0.13);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.search:focus {
+  border: 1.5px solid #eebbc3;
+  box-shadow: 0 2px 12px 0 rgba(238, 187, 195, 0.1);
+}
+
+.headerIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 0;
+  margin-left: auto;
+  min-width: 0;
+  flex-shrink: 1;
+}
+.bellIcon {
+  color: #232946;
+  background: #fff;
+  border-radius: 50%;
+  padding: 7px 8px 5px 8px;
+  box-shadow: 0 2px 8px 0 rgba(35, 41, 70, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin-right: 8px;
+}
+.avatar {
+  color: #232946;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px 5px 2px 5px;
+  box-shadow: 0 2px 8px 0 rgba(35, 41, 70, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin-right: 8px;
+}
+.profileWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin-left: 0;
+}
+.profileName {
+  font-weight: 700;
+  font-size: 1.13rem;
+  color: #232946;
+}
+.profileRole {
+  font-size: 0.97rem;
+  color: #6e6e6e;
+}
+
+.dashboardOverview {
+  padding: 32px 40px;
+}
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-top: 24px;
+}
+.card {
+  background: linear-gradient(120deg, #fff 80%, #e3e9f7 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(35, 41, 70, 0.1);
+  padding: 36px 32px 32px 32px;
+  flex: 1;
+  min-width: 320px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  box-shadow: 0 8px 32px 0 rgba(35, 41, 70, 0.16);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #232946;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+
+.sectionWrap {
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.activityTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a3c4b;
+  margin-bottom: 1.5rem;
+}
+.activityTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.07);
+}
+.activityTable th,
+.activityTable td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid #e3f6f9;
+}
+.activityTable th {
+  background: #f8fafc;
+  color: #007f86;
+  font-weight: 600;
 }
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  background: #e3f6f9;
   color: #007f86;
-  margin-bottom: 2.5rem;
 }
 .nav {
   display: flex;
@@ -31,13 +279,28 @@
   font-size: 1.08rem;
   padding: 0.6rem 1rem;
   border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  outline: none;
+  border: none;
 }
 .navItem:hover,
 .navItem.active {
   background: #e3f6f9;
   color: #007f86;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.08);
+  transform: translateY(-2px) scale(1.03);
+}
+.navItem:focus {
+  box-shadow: 0 0 0 2px #5ac9d8;
+  background: #e3f6f9;
+}
+.navText {
+  font-size: 1.08rem;
+  transition: color 0.2s;
 }
 .logout {
   margin-top: auto;
@@ -48,11 +311,15 @@
   cursor: pointer;
   padding: 0.7rem 0;
 }
-.main {
-  flex: 1;
+.pageContent {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 40px 1.5rem;
   display: flex;
   flex-direction: column;
-  padding: 2rem 2.5rem;
+  gap: 20px;
+  box-sizing: border-box;
 }
 .header {
   display: flex;
@@ -116,47 +383,46 @@
   margin-top: 2.5rem;
 }
 .requestsTable {
+  min-width: 1100px;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.07);
+  box-shadow: none;
+  margin-bottom: 0;
 }
-.requestsTable th,
-.requestsTable td {
-  padding: 0.9rem 1.1rem;
-  text-align: left;
-  border-bottom: 1px solid #e3f6f9;
+
+/* Table container for horizontal scroll and alignment */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(90, 201, 216, 0.08);
+  padding: 0;
+  margin: 0;
+  min-height: 320px;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.requestsTable th {
-  background: #f8fafc;
-  color: #007f86;
-  font-weight: 600;
+
+/* Make all admin cards/containers equal height and aligned */
+.card,
+.tableContainer {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
-.requestsTable tr:last-child td {
-  border-bottom: none;
-}
-.approveBtn {
-  background: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.approveBtn:hover {
-  background: #218838;
-}
-.pending {
-  color: #ff9800;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.approved {
-  color: #28a745;
-  font-weight: 600;
-  text-transform: capitalize;
+
+/* Responsive: allow table to scroll on small screens */
+@media (max-width: 1200px) {
+  .requestsTable {
+    min-width: 900px;
+  }
 }

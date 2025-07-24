@@ -8,11 +8,6 @@ import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredential
 import TrackRequest from "../pages/TrackRequest";
 import AdminLogin from "../pages/AdminLogin";
 import AdminDashboard from "../pages/AdminDashboard";
-import AccessRequests from "../pages/AccessRequests/AccessRequests";
-import UserManagement from "../pages/UserManagement/UserManagement";
-import ComplianceReports from "../pages/ComplianceReports/ComplianceReports";
-import SystemAdministration from "../pages/SystemAdministration/SystemAdministration";
-import Settings from "../pages/Settings/Settings";
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -26,14 +21,6 @@ const AppRoutes: React.FC = () => (
     {/* Admin Flow */}
     <Route path="/login" element={<AdminLogin />} />
     <Route path="/admin" element={<AdminDashboard />} />
-    <Route path="/admin/access-requests" element={<AccessRequests />} />
-    <Route path="/admin/user-management" element={<UserManagement />} />
-    <Route path="/admin/compliance-reports" element={<ComplianceReports />} />
-    <Route
-      path="/admin/system-administration"
-      element={<SystemAdministration />}
-    />
-    <Route path="/admin/settings" element={<Settings />} />
   </Routes>
 );
 

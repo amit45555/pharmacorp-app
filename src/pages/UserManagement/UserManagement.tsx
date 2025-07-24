@@ -1,30 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./UserManagement.module.css";
+import { useAuth } from "../../context/AuthContext";
+import { can } from "../../utils/rbac";
 
-const mockUsers = [
-  {
-    id: "EMP001",
-    name: "John Smith",
-    department: "Quality Control",
-    role: "Lab Analyst",
-    status: "Active",
-    email: "john.smith@pharmacorp.com",
-  },
-  {
-    id: "EMP002",
-    name: "Sarah Johnson",
-    department: "R&D",
-    role: "Data Reviewer",
-    status: "Inactive",
-    email: "sarah.johnson@pharmacorp.com",
-  },
-];
+type User = {
+  id: string;
+  name: string;
+  department: string;
+  role: string;
+  status: string;
+  email: string;
+};
 
-const UserManagement: React.FC = () => {
-  const [users] = useState(mockUsers);
+interface UserManagementProps {
+  users: User[];
+  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+}
+
+const UserManagement: React.FC<UserManagementProps> = ({ users, setUsers }) => {
+  const { user } = useAuth();
+  const role = user?.role || "admin";
+
+  // Example handler for future API integration
+  // const handleEdit = (id: string) => { ... }
 
   return (
-    <div className={styles.container}>
+    <>
       <h1 className={styles.title}>User Management</h1>
       <div className={styles.filtersRow}>
         <input className={styles.search} placeholder="Search users..." />
@@ -35,48 +36,52 @@ const UserManagement: React.FC = () => {
           <option>All Roles</option>
         </select>
       </div>
-      <table className={styles.usersTable}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.department}</td>
-              <td>
-                <span className={styles.roleBadge}>{user.role}</span>
-              </td>
-              <td>
-                <span
-                  className={
-                    user.status === "Active"
-                      ? styles.statusActive
-                      : styles.statusInactive
-                  }
-                >
-                  {user.status}
-                </span>
-              </td>
-              <td>
-                <button className={styles.actionBtn}>Edit</button>
-                <button className={styles.actionBtn}>Reset Password</button>
-              </td>
+      <div className={styles.tableContainer}>
+        <table className={styles.usersTable}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Department</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.department}</td>
+                <td>
+                  <span className={styles.roleBadge}>{user.role}</span>
+                </td>
+                <td>
+                  <span
+                    className={
+                      user.status === "Active"
+                        ? styles.statusActive
+                        : styles.statusInactive
+                    }
+                  >
+                    {user.status}
+                  </span>
+                </td>
+                <td>
+                  {can(role, "users:edit") && (
+                    <button className={styles.actionBtn}>Edit</button>
+                  )}
+                  <button className={styles.actionBtn}>Reset Password</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
