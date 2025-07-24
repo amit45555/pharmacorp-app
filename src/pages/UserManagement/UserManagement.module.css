@@ -1,0 +1,83 @@
+.container {
+  padding: 32px;
+}
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #007f86;
+  margin-bottom: 1.5rem;
+}
+.filtersRow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.search {
+  width: 320px;
+  padding: 0.7rem 1rem;
+  border-radius: 7px;
+  border: 1.5px solid #cfd8dc;
+  font-size: 15px;
+}
+.filter {
+  padding: 0.7rem 1rem;
+  border-radius: 7px;
+  border: 1.5px solid #cfd8dc;
+  font-size: 15px;
+}
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.07);
+}
+.usersTable th,
+.usersTable td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid #e3f6f9;
+}
+.usersTable th {
+  background: #f8fafc;
+  color: #007f86;
+  font-weight: 600;
+}
+.usersTable tr:last-child td {
+  border-bottom: none;
+}
+.roleBadge {
+  background: #e3f6f9;
+  color: #007f86;
+  border-radius: 16px;
+  padding: 0.2rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.statusActive {
+  background: #e3f6f9;
+  color: #28a745;
+  border-radius: 16px;
+  padding: 0.2rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.statusInactive {
+  background: #e3f6f9;
+  color: #c00;
+  border-radius: 16px;
+  padding: 0.2rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.actionBtn {
+  background: #5ac9d8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
