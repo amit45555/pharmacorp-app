@@ -9,53 +9,46 @@ import { formSteps, FormField } from "../../data/formFields";
 const ReviewSubmit: React.FC = () => {
   const { data } = useFormContext();
   const navigate = useNavigate();
-  const [userStatus, setUserStatus] = useState<
-    "active" | "inactive" | "checking"
-  >("checking");
-
+  const [userStatus, setUserStatus] = useState<"active" | "inactive" | "checking">("checking");
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-
   const isValidFile = (file: File) => {
-  const allowedTypes = [
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "image/jpeg",
-    "image/png"
-  ];
-  return allowedTypes.includes(file.type) && file.size <= 10 * 1024 * 1024; // 10MB
-};
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "image/jpeg",
+      "image/png"
+    ];
+    return allowedTypes.includes(file.type) && file.size <= 10 * 1024 * 1024; // 10MB
+  };
 
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = Array.from(e.dataTransfer.files);
+    const validFiles = files.filter(file => isValidFile(file));
+    setUploadedFiles(prev => [...prev, ...validFiles]);
+  };
 
-const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
-  e.preventDefault();
-  e.stopPropagation();
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(file => isValidFile(file));
+    setUploadedFiles(prev => [...prev, ...validFiles]);
+  };
 
-  const files = Array.from(e.dataTransfer.files);
-  const validFiles = files.filter(file => isValidFile(file));
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
 
-  setUploadedFiles((prev) => [...prev, ...validFiles]);
-};
+  const handleBrowseClick = () => {
+    fileInputRef.current?.click();
+  };
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const files = Array.from(e.target.files || []);
-  const validFiles = files.filter(file => isValidFile(file));
-
-  setUploadedFiles((prev) => [...prev, ...validFiles]);
-};
-
-
-const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-  e.preventDefault();
-};
-
-const handleBrowseClick = () => {
-  fileInputRef.current?.click();
-};
-
+  const recordData: Record<string, any> = data as Record<string, any>;
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -67,26 +60,37 @@ const handleBrowseClick = () => {
     // eslint-disable-next-line
   }, [data.employeeCode]);
 
+  useEffect(() => {
+    const trainingStatus = recordData["trainingStatus"]?.toLowerCase();
+    const isTrainingCompleted = trainingStatus?.includes("yes");
+    if (isTrainingCompleted) {
+      setIsSubmitDisabled(uploadedFiles.length === 0);
+    } else {
+      setIsSubmitDisabled(false);
+    }
+  }, [uploadedFiles, recordData]);
+
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
+    const trainingStatus = recordData["trainingStatus"]?.toLowerCase();
+    const isTrainingCompleted = trainingStatus?.includes("yes");
+    if (isTrainingCompleted && uploadedFiles.length === 0) {
+      setSubmitError("File upload is required when training is completed.");
+      setIsSubmitDisabled(true);
+      return;
+    }
+    setSubmitError("Please upload at least one file.");
+    setIsSubmitDisabled(false);
+    navigate("/generate-credentials");
+  };
 
-  const trainingStatus = recordData["trainingStatus"]?.toLowerCase();
 
-  const isTrainingCompleted = trainingStatus?.includes("yes");
-
-  if (isTrainingCompleted && uploadedFiles.length === 0) {
-    alert("Please upload a document as training is completed.");
-    return;
-  }
-
-  navigate("/generate-credentials");
+  const handleRemoveFile = (index: number) => {
+  setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
 };
 
 
-  // Gather all fields from previous steps
   const reviewFields: FormField[] = formSteps.flatMap((step) => step.fields);
-
-  // Add credential info if present in context (simulate as extra fields)
   const credentialFields = [
     { name: "userId", label: "User ID" },
     { name: "password", label: "Generated Password" },
@@ -95,40 +99,26 @@ const handleBrowseClick = () => {
     { name: "validUntil", label: "Valid Until" },
   ];
 
-  const recordData: Record<string, any> = data as Record<string, any>;
-
-
-  
-// ... your other imports
-
-
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>PharmaCorp</h1>
       <p className={styles.subtitle}>User Access Management System</p>
-
       <div style={{ marginBottom: "2rem" }}>
         <Stepper
           steps={formSteps.map((s: { title: string }) => s.title)}
           currentStep={2}
         />
       </div>
-
       <form className={styles.card} onSubmit={handleSubmit}>
-        {/* Zing HR status check */}
         {userStatus === "inactive" && (
           <div style={{ color: "#c00", marginBottom: 12, fontWeight: 500 }}>
-            Warning: This user is marked as <b>inactive</b> in Zing HR. You
-            cannot submit a request for an inactive user.
+            Warning: This user is marked as <b>inactive</b> in Zing HR. You cannot submit a request for an inactive user.
           </div>
         )}
         <h2 className={styles.formTitle}>Review & Submit</h2>
-        {/* Request Status */}
         <div style={{ marginBottom: "1.2rem" }}>
           <strong>Status:</strong> {recordData.requestStatus || "draft"}
         </div>
-        {/* Logs Timeline */}
         {Array.isArray(recordData.logs) && recordData.logs.length > 0 && (
           <div style={{ marginBottom: "1.2rem" }}>
             <strong>Logs:</strong>
@@ -158,7 +148,6 @@ const handleBrowseClick = () => {
             )}
           </div>
         ))}
-        {/* Show credential info if present */}
         {credentialFields.map((field) =>
           recordData[field.name] ? (
             <div className={styles.reviewItem} key={field.name}>
@@ -167,96 +156,95 @@ const handleBrowseClick = () => {
             </div>
           ) : null
         )}
-       
-        {/* Document Attachment */}
-<div className={styles.attachmentSection}>
-  <label className={styles.sectionLabel}>Document Attachment</label>
-  <div
-    className={styles.uploadBox}
-    onDrop={handleFileDrop}
-    onDragOver={handleDragOver}
-
-   
-    onClick={handleBrowseClick}
-  >
-    <div className={styles.folderIcon} />
-    <p>
-      Drag and drop files here or{" "}
-      <span className={styles.browse}>browse</span>
-    </p>
-    <p className={styles.uploadHint}>
-      Accepted formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)
-    </p>
-
-    {uploadedFiles.length > 0 && (
-      <ul className={styles.fileList}>
-        {uploadedFiles.map((file, idx) => (
-          <li key={idx} className={styles.fileItem}>
-            📄 {file.name}
-          </li>
-        ))}
-      </ul>
-    )}
-
-    <input
-      type="file"
-      ref={fileInputRef}
-      style={{ display: "none" }}
-      multiple
-      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-      onChange={handleFileChange}
-    />
-  </div>
-</div>
-
-
-
-{/* Remarks */}
-<div className={styles.remarksSection}>
-  <label htmlFor="remarks" className={styles.sectionLabel}>Remarks</label>
-  <textarea
-    id="remarks"
-    className={styles.remarksInput}
-    placeholder="Additional comments, special instructions, or business justification..."
-  />
-</div>
-
-{/* Agreement */}
-<div className={styles.checkboxWrapper}>
-  <input type="checkbox" id="certify" required />
-  <label htmlFor="certify">
-    I certify that the information provided is accurate and I agree to the{" "}
-    <a
-  href="/terms-and-conditions"
-  target="_blank"
-  rel="noopener noreferrer"
-  className={styles.link}
->
-  terms and conditions
-</a> for system access *
-  </label>
-</div>
-
- <div style={{ display: "flex", gap: 280, marginTop: 18 }}>
+        <div className={styles.attachmentSection}>
+          <label className={styles.sectionLabel}>Document Attachment</label>
           
-           <button
-              type="button"
-              className={styles.backButton}
-              onClick={() => navigate("/")}
-            >
-              Back
-            </button>
-          <button
-            className={styles.submitButton}
-            type="submit"
-            disabled={userStatus === "inactive" || userStatus === "checking"}
+          <div
+            className={styles.uploadBox}
+            onDrop={handleFileDrop}
+            onDragOver={handleDragOver}
+            onClick={handleBrowseClick}
           >
-            {userStatus === "checking"
-              ? "Checking user status..."
-              : "Submit Request"}
-          </button>
-        </div>
+            <div className={styles.folderIcon} />
+            <p>
+              Drag and drop files here or{" "}
+              <span className={styles.browse}>browse</span>
+            </p>
+            <p className={styles.uploadHint}>
+              Accepted formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)
+            </p>
+            {uploadedFiles.length > 0 && (
+  <ul className={styles.fileList}>
+    {uploadedFiles.map((file, idx) => (
+      <li key={idx} className={styles.fileItem}>
+        📄 {file.name}
+        <button
+          type="button"
+          onClick={() => handleRemoveFile(idx)}
+          className={styles.removeButton}
+        >
+          ✕
+        </button>
+      </li>
+    ))}
+  </ul>
+)}
 
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              multiple
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              onChange={handleFileChange}
+            />
+            
+          </div>
+          {submitError && (
+  <p style={{ color: "red", marginTop: "4px" }}>{submitError}</p>
+)}
+
+        </div>
+       
+        <div className={styles.remarksSection}>
+          <label htmlFor="remarks" className={styles.sectionLabel}>Remarks</label>
+          <textarea
+            id="remarks"
+            className={styles.remarksInput}
+            placeholder="Additional comments, special instructions, or business justification..."
+          />
+        </div>
+        <div className={styles.checkboxWrapper}>
+          <input type="checkbox" id="certify" required />
+          <label htmlFor="certify">
+            I certify that the information provided is accurate and I agree to the{" "}
+            <a
+              href="/terms-and-conditions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              terms and conditions
+            </a> for system access *
+          </label>
+        </div>
+        <div style={{ display: "flex", gap: 280, marginTop: 18 }}>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={() => navigate("/access-details")}
+          >
+            Back
+          </button>
+          <button
+  type="submit"
+  className={styles.submitButton}
+  disabled={isSubmitDisabled}
+>
+  Submit
+</button>
+
+        </div>
       </form>
     </div>
   );
