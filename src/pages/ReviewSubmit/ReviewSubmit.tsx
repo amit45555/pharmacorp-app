@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useFormContext } from "../../context/FormContext";
 import { checkUserActiveStatus } from "../../utils/zingApi";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,50 @@ const ReviewSubmit: React.FC = () => {
     "active" | "inactive" | "checking"
   >("checking");
 
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+
+  const isValidFile = (file: File) => {
+  const allowedTypes = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "image/jpeg",
+    "image/png"
+  ];
+  return allowedTypes.includes(file.type) && file.size <= 10 * 1024 * 1024; // 10MB
+};
+
+
+const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const files = Array.from(e.dataTransfer.files);
+  const validFiles = files.filter(file => isValidFile(file));
+
+  setUploadedFiles((prev) => [...prev, ...validFiles]);
+};
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = Array.from(e.target.files || []);
+  const validFiles = files.filter(file => isValidFile(file));
+
+  setUploadedFiles((prev) => [...prev, ...validFiles]);
+};
+
+
+const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  e.preventDefault();
+};
+
+const handleBrowseClick = () => {
+  fileInputRef.current?.click();
+};
+
+
   useEffect(() => {
     const checkStatus = async () => {
       setUserStatus("checking");
@@ -24,9 +68,20 @@ const ReviewSubmit: React.FC = () => {
   }, [data.employeeCode]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate("/generate-credentials");
-  };
+  e.preventDefault();
+
+  const trainingStatus = recordData["trainingStatus"]?.toLowerCase();
+
+  const isTrainingCompleted = trainingStatus?.includes("yes");
+
+  if (isTrainingCompleted && uploadedFiles.length === 0) {
+    alert("Please upload a document as training is completed.");
+    return;
+  }
+
+  navigate("/generate-credentials");
+};
+
 
   // Gather all fields from previous steps
   const reviewFields: FormField[] = formSteps.flatMap((step) => step.fields);
@@ -41,6 +96,12 @@ const ReviewSubmit: React.FC = () => {
   ];
 
   const recordData: Record<string, any> = data as Record<string, any>;
+
+
+  
+// ... your other imports
+
+
 
   return (
     <div className={styles.container}>
@@ -106,7 +167,85 @@ const ReviewSubmit: React.FC = () => {
             </div>
           ) : null
         )}
-        <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+       
+        {/* Document Attachment */}
+<div className={styles.attachmentSection}>
+  <label className={styles.sectionLabel}>Document Attachment</label>
+  <div
+    className={styles.uploadBox}
+    onDrop={handleFileDrop}
+    onDragOver={handleDragOver}
+
+   
+    onClick={handleBrowseClick}
+  >
+    <div className={styles.folderIcon} />
+    <p>
+      Drag and drop files here or{" "}
+      <span className={styles.browse}>browse</span>
+    </p>
+    <p className={styles.uploadHint}>
+      Accepted formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)
+    </p>
+
+    {uploadedFiles.length > 0 && (
+      <ul className={styles.fileList}>
+        {uploadedFiles.map((file, idx) => (
+          <li key={idx} className={styles.fileItem}>
+            📄 {file.name}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <input
+      type="file"
+      ref={fileInputRef}
+      style={{ display: "none" }}
+      multiple
+      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+      onChange={handleFileChange}
+    />
+  </div>
+</div>
+
+
+
+{/* Remarks */}
+<div className={styles.remarksSection}>
+  <label htmlFor="remarks" className={styles.sectionLabel}>Remarks</label>
+  <textarea
+    id="remarks"
+    className={styles.remarksInput}
+    placeholder="Additional comments, special instructions, or business justification..."
+  />
+</div>
+
+{/* Agreement */}
+<div className={styles.checkboxWrapper}>
+  <input type="checkbox" id="certify" required />
+  <label htmlFor="certify">
+    I certify that the information provided is accurate and I agree to the{" "}
+    <a
+  href="/terms-and-conditions"
+  target="_blank"
+  rel="noopener noreferrer"
+  className={styles.link}
+>
+  terms and conditions
+</a> for system access *
+  </label>
+</div>
+
+ <div style={{ display: "flex", gap: 280, marginTop: 18 }}>
+          
+           <button
+              type="button"
+              className={styles.backButton}
+              onClick={() => navigate("/")}
+            >
+              Back
+            </button>
           <button
             className={styles.submitButton}
             type="submit"
@@ -116,19 +255,8 @@ const ReviewSubmit: React.FC = () => {
               ? "Checking user status..."
               : "Submit Request"}
           </button>
-          <button
-            type="button"
-            className={styles.submitButton}
-            style={{
-              background: "#eee",
-              color: "#007f86",
-              border: "1.5px solid #5ac9d8",
-            }}
-            onClick={() => navigate("/track-request")}
-          >
-            Track Request
-          </button>
         </div>
+
       </form>
     </div>
   );

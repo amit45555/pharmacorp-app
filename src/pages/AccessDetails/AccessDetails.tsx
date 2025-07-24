@@ -83,7 +83,7 @@ const AccessDetails: React.FC = () => {
               Back
             </button>
             <button type="submit" className={styles.continueButton}>
-              Continue ⤳
+              Continue 
             </button>
           </div>
         </form>
