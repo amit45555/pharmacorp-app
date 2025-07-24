@@ -13,13 +13,16 @@ export interface FormField {
 export interface StepForm {
   step: number;
   title: string;
+  subTitle?: string;
   fields: FormField[];
 }
 
 export const formSteps: StepForm[] = [
   {
     step: 1,
-    title: "User Information",
+    title: "User Information & Request Type",
+    subTitle: "Please provide basic user information and specify the request type.",
+    // Fields for user information step
     fields: [
       {
         name: "userName",
@@ -64,7 +67,9 @@ export const formSteps: StepForm[] = [
   },
   {
     step: 2,
-    title: "Access Details",
+    title: "System Access Details",
+    subTitle: "Select the access types and provide details",
+   
     fields: [
       {
         name: "accessTypes",

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./AccessDetails.module.css";
 import Stepper from "../../components/Stepper/Stepper";
 import { formSteps } from "../../data/formFields";
-import DynamicForm from "../../components/DynamicForm";
+import DynamicForm from "../../components/DynamicForm/DynamicForm";
 import { useFormContext } from "../../context/FormContext";
 
 const AccessDetails: React.FC = () => {
@@ -67,7 +67,10 @@ const AccessDetails: React.FC = () => {
         <div style={{ marginBottom: "2rem" }}>
           <Stepper steps={formSteps.map((s) => s.title)} currentStep={1} />
         </div>
+        <div className={styles.formTitleCenter}>
         <h2 className={styles.formTitle}>{stepConfig.title}</h2>
+         <p className={styles.subTitle}>{stepConfig.subTitle}</p>
+        </div>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete="on">
           <DynamicForm
             fields={stepConfig.fields}

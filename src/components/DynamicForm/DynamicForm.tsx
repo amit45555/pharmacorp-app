@@ -1,4 +1,7 @@
-import { FormField } from "../data/formFields";
+import React from "react";
+import { FormField } from "../../data/formFields";
+import styles from "./DynamicForm.module.css";
+
 const DynamicForm: React.FC<{
   fields: FormField[];
   values: Record<string, any>;
@@ -14,13 +17,14 @@ const DynamicForm: React.FC<{
     if (/bulk/i.test(label)) return "📦";
     return "🔹";
   };
+
   return (
     <>
       {fields.map((field) => {
         if (field.type === "text" || field.type === "autocomplete") {
           return (
-            <div key={field.name} style={{ marginBottom: "1.2rem" }}>
-              <label>
+            <div key={field.name} className={styles.formGroup}>
+              <label className={styles.label}>
                 {field.label}
                 {field.required && " *"}
               </label>
@@ -32,20 +36,16 @@ const DynamicForm: React.FC<{
                 required={field.required}
                 autoComplete={field.autoSuggest ? "on" : "off"}
                 onChange={(e) => onChange(field.name, e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "0.7rem 1rem",
-                  borderRadius: 7,
-                  border: "1.5px solid #cfd8dc",
-                }}
+                className={styles.input}
               />
             </div>
           );
         }
+
         if (field.type === "select") {
           return (
-            <div key={field.name} style={{ marginBottom: "1.2rem" }}>
-              <label>
+            <div key={field.name} className={styles.formGroup}>
+              <label className={styles.label}>
                 {field.label}
                 {field.required && " *"}
               </label>
@@ -54,12 +54,7 @@ const DynamicForm: React.FC<{
                 value={values[field.name] || ""}
                 required={field.required}
                 onChange={(e) => onChange(field.name, e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "0.7rem 1rem",
-                  borderRadius: 7,
-                  border: "1.5px solid #cfd8dc",
-                }}
+                className={styles.select}
               >
                 <option value="">Select...</option>
                 {field.options?.map((opt: string) => (
@@ -71,20 +66,21 @@ const DynamicForm: React.FC<{
             </div>
           );
         }
+
         if (field.type === "checkbox") {
           const opts = field.options || [];
           const col1 = opts.slice(0, 4);
           const col2 = opts.slice(4, 8);
           return (
-            <div key={field.name} style={{ marginBottom: "1.2rem" }}>
-              <span className="checkboxGridLabel accessTypeLabel">
+            <div key={field.name} className={styles.formGroup}>
+              <span className={styles.checkboxLabel}>
                 {field.label}
                 {field.required && " *"}
               </span>
-              <div className="checkboxGrid">
-                <div className="checkboxColumn">
+              <div className={styles.checkboxGrid}>
+                <div className={styles.checkboxColumn}>
                   {col1.map((opt: string) => (
-                    <label className="checkboxItem" key={opt}>
+                    <label className={styles.checkboxItem} key={opt}>
                       <input
                         type="checkbox"
                         checked={
@@ -105,14 +101,14 @@ const DynamicForm: React.FC<{
                           }
                         }}
                       />
-                      <span className="checkboxIcon">{getIcon(opt)}</span>
+                      <span className={styles.checkboxIcon}>{getIcon(opt)}</span>
                       <span>{opt}</span>
                     </label>
                   ))}
                 </div>
-                <div className="checkboxColumn">
+                <div className={styles.checkboxColumn}>
                   {col2.map((opt: string) => (
-                    <label className="checkboxItem" key={opt}>
+                    <label className={styles.checkboxItem} key={opt}>
                       <input
                         type="checkbox"
                         checked={
@@ -133,7 +129,7 @@ const DynamicForm: React.FC<{
                           }
                         }}
                       />
-                      <span className="checkboxIcon">{getIcon(opt)}</span>
+                      <span className={styles.checkboxIcon}>{getIcon(opt)}</span>
                       <span>{opt}</span>
                     </label>
                   ))}
@@ -142,6 +138,7 @@ const DynamicForm: React.FC<{
             </div>
           );
         }
+
         return null;
       })}
     </>

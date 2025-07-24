@@ -200,9 +200,8 @@ const ReviewSubmit: React.FC = () => {
             />
             
           </div>
-          {submitError && (
-  <p style={{ color: "red", marginTop: "4px" }}>{submitError}</p>
-)}
+    {submitError && <p className={styles.errorText}>{submitError}</p>}
+
 
         </div>
        

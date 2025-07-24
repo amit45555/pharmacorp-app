@@ -44,10 +44,27 @@
   margin-bottom: 2rem;
 }
 
+
+.formTitleCenter{
+    text-align: center;
+}
+
+
+.subTitle {
+    text-align: center;
+  font-size: 13px;
+  margin-bottom: 0.5rem;
+  color: #333;
+  margin-bottom: 50px;
+  margin-top: 0px;
+  font-weight: 400;
+}
+
 .formTitle {
   font-size: 20px;
   margin-bottom: 0.5rem;
   color: #333;
+  font-weight: 700;
 }
 
 .instruction {

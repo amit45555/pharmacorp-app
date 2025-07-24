@@ -205,3 +205,10 @@
 .removeButton:hover {
   color: #ff3333;
 }
+
+
+.errorText {
+  color: red;
+  font-size: 14px;
+  margin-top: 6px;
+}
