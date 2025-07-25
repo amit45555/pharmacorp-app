@@ -50,34 +50,42 @@ const UserManagement: React.FC<UserManagementProps> = ({ users, setUsers }) => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.department}</td>
-                <td>
-                  <span className={styles.roleBadge}>{user.role}</span>
-                </td>
-                <td>
-                  <span
-                    className={
-                      user.status === "Active"
-                        ? styles.statusActive
-                        : styles.statusInactive
-                    }
-                  >
-                    {user.status}
-                  </span>
-                </td>
-                <td>
-                  {can(role, "users:edit") && (
-                    <button className={styles.actionBtn}>Edit</button>
-                  )}
-                  <button className={styles.actionBtn}>Reset Password</button>
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={7} className={styles.emptyState}>
+                  No users found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.department}</td>
+                  <td>
+                    <span className={styles.roleBadge}>{user.role}</span>
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        user.status === "Active"
+                          ? styles.statusActive
+                          : styles.statusInactive
+                      }
+                    >
+                      {user.status}
+                    </span>
+                  </td>
+                  <td>
+                    {can(role, "users:edit") && (
+                      <button className={styles.actionBtn}>Edit</button>
+                    )}
+                    <button className={styles.actionBtn}>Reset Password</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

@@ -61,43 +61,45 @@ const AccessRequests: React.FC<AccessRequestsProps> = ({
             </tr>
           </thead>
           <tbody>
-            {requests.map((req) => (
-              <tr key={req.id}>
-                <td>{req.id}</td>
-                <td>{req.user}</td>
-                <td>{req.employeeCode}</td>
-                <td>{req.plant}</td>
-                <td>{req.department}</td>
-                <td>
-                  {(() => {
-                    const [app, version] = req.application.split(" v");
-                    return (
-                      <>
-                        <b>{app}</b>
-                        {version && (
-                          <div
-                            style={{ fontSize: 12, color: "#888" }}
-                          >{`v${version}`}</div>
-                        )}
-                      </>
-                    );
-                  })()}
+            {requests.length === 0 ? (
+              <tr>
+                <td colSpan={11} className={styles.emptyState}>
+                  No access requests found.
                 </td>
-                <td>{req.equipmentId}</td>
-                <td>{req.role}</td>
-                <td>
-                  <span className={styles.statusGranted}>
-                    {req.accessStatus}
-                  </span>
-                </td>
-                <td>
-                  <span className={styles.statusClosed}>
-                    {req.requestStatus}
-                  </span>
-                </td>
-                <td>{/* Actions here */}</td>
               </tr>
-            ))}
+            ) : (
+              requests.map((req) => (
+                <tr key={req.id}>
+                  <td>{req.id}</td>
+                  <td>{req.user}</td>
+                  <td>{req.employeeCode}</td>
+                  <td>{req.plant}</td>
+                  <td>{req.department}</td>
+                  <td>
+                    {(() => {
+                      const [app, version] = req.application.split(" v");
+                      return (
+                        <>
+                          <b>{app}</b>
+                          {version && (
+                            <div style={{ fontSize: 12, color: "#888" }}>{`v${version}`}</div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </td>
+                  <td>{req.equipmentId}</td>
+                  <td>{req.role}</td>
+                  <td>
+                    <span className={styles.statusGranted}>{req.accessStatus}</span>
+                  </td>
+                  <td>
+                    <span className={styles.statusClosed}>{req.requestStatus}</span>
+                  </td>
+                  <td>{/* Actions here */}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

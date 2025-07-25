@@ -53,32 +53,40 @@ const ComplianceReports: React.FC<ComplianceReportsProps> = ({
             </tr>
           </thead>
           <tbody>
-            {reports.map((report) => (
-              <tr key={report.id}>
-                <td>{report.id}</td>
-                <td>{report.department}</td>
-                <td>{report.application}</td>
-                <td>{report.period}</td>
-                <td>
-                  <span
-                    className={
-                      report.status === "Compliant"
-                        ? styles.statusCompliant
-                        : styles.statusNonCompliant
-                    }
-                  >
-                    {report.status}
-                  </span>
-                </td>
-                <td>{report.lastAudit}</td>
-                <td>
-                  <button className={styles.actionBtn}>View</button>
-                  {can(role, "compliance:export") && (
-                    <button className={styles.actionBtn}>Export</button>
-                  )}
+            {reports.length === 0 ? (
+              <tr>
+                <td colSpan={7} className={styles.emptyState}>
+                  No compliance reports found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              reports.map((report) => (
+                <tr key={report.id}>
+                  <td>{report.id}</td>
+                  <td>{report.department}</td>
+                  <td>{report.application}</td>
+                  <td>{report.period}</td>
+                  <td>
+                    <span
+                      className={
+                        report.status === "Compliant"
+                          ? styles.statusCompliant
+                          : styles.statusNonCompliant
+                      }
+                    >
+                      {report.status}
+                    </span>
+                  </td>
+                  <td>{report.lastAudit}</td>
+                  <td>
+                    <button className={styles.actionBtn}>View</button>
+                    {can(role, "compliance:export") && (
+                      <button className={styles.actionBtn}>Export</button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

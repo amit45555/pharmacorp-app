@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 import DashboardStats from "./AdminDashboard/DashboardStats";
 import { useAuth } from "../context/AuthContext";
 import { can } from "../utils/rbac";
-import { FaBell, FaCircleUser } from "react-icons/fa6";
+import Sidebar from "../components/Common/Sidebar";
+import { FaChartBar, FaClipboardList, FaUsers, FaCheck, FaCog, FaWrench, FaBell, FaUser } from "react-icons/fa";
 
 // --- Demo/mock data for all admin sections ---
 const initialRequests = [
@@ -119,6 +120,7 @@ const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
   const role = user?.role || "admin";
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
     localStorage.removeItem("role");
@@ -126,136 +128,56 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <aside className={styles.sidebar}>
-        <div className={styles.logo}>
-          <span style={{ fontWeight: 700, fontSize: 24 }}>PharmaCorp</span>
-          <br />
-          <span style={{ fontSize: 13, fontWeight: 400, opacity: 0.7 }}>
-            Access Management System
-          </span>
-        </div>
-        <nav className={styles.nav} aria-label="Admin Navigation">
-          {/* ...existing nav buttons... */}
-          {can(role, "dashboard:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "dashboard" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="Dashboard"
-              title="Dashboard"
-              tabIndex={0}
-              onClick={() => setActiveSection("dashboard")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("dashboard")
-              }
-            >
-              <span className={styles.navIcon}>📊</span>
-              <span className={styles.navText}>Dashboard</span>
-            </button>
-          )}
-          {can(role, "requests:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "requests" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="Access Requests"
-              title="Access Requests"
-              tabIndex={0}
-              onClick={() => setActiveSection("requests")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("requests")
-              }
-            >
-              <span className={styles.navIcon}>📋</span>
-              <span className={styles.navText}>Access Requests</span>
-            </button>
-          )}
-          {can(role, "users:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "users" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="User Management"
-              title="User Management"
-              tabIndex={0}
-              onClick={() => setActiveSection("users")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("users")
-              }
-            >
-              <span className={styles.navIcon}>👥</span>
-              <span className={styles.navText}>User Management</span>
-            </button>
-          )}
-          {can(role, "compliance:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "compliance" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="Compliance Reports"
-              title="Compliance Reports"
-              tabIndex={0}
-              onClick={() => setActiveSection("compliance")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("compliance")
-              }
-            >
-              <span className={styles.navIcon}>✅</span>
-              <span className={styles.navText}>Compliance Reports</span>
-            </button>
-          )}
-          {can(role, "system:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "system" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="System Administration"
-              title="System Administration"
-              tabIndex={0}
-              onClick={() => setActiveSection("system")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("system")
-              }
-            >
-              <span className={styles.navIcon}>⚙️</span>
-              <span className={styles.navText}>System Administration</span>
-            </button>
-          )}
-          {can(role, "settings:view") && (
-            <button
-              className={`${styles.navItem} ${
-                activeSection === "settings" ? styles.active : ""
-              }`}
-              type="button"
-              aria-label="Settings"
-              title="Settings"
-              tabIndex={0}
-              onClick={() => setActiveSection("settings")}
-              onKeyDown={(e) =>
-                (e.key === "Enter" || e.key === " ") &&
-                setActiveSection("settings")
-              }
-            >
-              <span className={styles.navIcon}>🔧</span>
-              <span className={styles.navText}>Settings</span>
-            </button>
-          )}
-        </nav>
-        <button className={styles.logout} onClick={handleLogout}>
-          Logout
-        </button>
-      </aside>
+    <div className={`${styles.container} ${!sidebarOpen ? styles.sidebarClosed : styles.sidebarOpen}`.trim()}>
+      <Sidebar
+        open={sidebarOpen}
+        onToggle={() => setSidebarOpen((open) => !open)}
+        navItems={[
+          {
+            key: "dashboard",
+            icon: FaChartBar,
+            label: "Dashboard",
+            active: activeSection === "dashboard",
+            onClick: () => setActiveSection("dashboard"),
+          },
+          {
+            key: "requests",
+            icon: FaClipboardList,
+            label: "Access Requests",
+            active: activeSection === "requests",
+            onClick: () => setActiveSection("requests"),
+          },
+          {
+            key: "users",
+            icon: FaUsers,
+            label: "User Management",
+            active: activeSection === "users",
+            onClick: () => setActiveSection("users"),
+          },
+          {
+            key: "compliance",
+            icon: FaCheck,
+            label: "Compliance Reports",
+            active: activeSection === "compliance",
+            onClick: () => setActiveSection("compliance"),
+          },
+          {
+            key: "system",
+            icon: FaCog,
+            label: "System Administration",
+            active: activeSection === "system",
+            onClick: () => setActiveSection("system"),
+          },
+          {
+            key: "settings",
+            icon: FaWrench,
+            label: "Settings",
+            active: activeSection === "settings",
+            onClick: () => setActiveSection("settings"),
+          },
+        ].filter(item => can(role, item.key + ':view'))}
+        onLogout={handleLogout}
+      />
       <div className={styles.mainContent}>
         <main>
           <header className={styles.header}>
@@ -281,7 +203,7 @@ const AdminDashboard: React.FC = () => {
                 title="Profile"
                 style={{ marginRight: 8 }}
               >
-                {FaCircleUser({ size: 28 })}
+                {FaUser({ size: 28 })}
               </span>
               <div className={styles.profileWrap} style={{ marginLeft: 0 }}>
                 <span className={styles.profileName}>Dr. Sarah Mitchell</span>
