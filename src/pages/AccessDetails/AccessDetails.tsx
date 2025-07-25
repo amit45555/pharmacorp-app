@@ -64,11 +64,11 @@ const AccessDetails: React.FC = () => {
       <div className={styles.card}>
         <h1 className={styles.title}>PharmaCorp</h1>
         <p className={styles.subtitle}>User Access Management System</p>
-        <div style={{ marginBottom: "2rem" }}>
+        <div style={{ marginBottom: "2rem", marginTop: "4rem", borderBottom: "1px solid #ccc"  }}>
           <Stepper steps={formSteps.map((s) => s.title)} currentStep={1} />
         </div>
         <div className={styles.formTitleCenter}>
-        <h2 className={styles.formTitle}>{stepConfig.title}</h2>
+        <h2 className={styles.formTitle}>System {stepConfig.title}</h2>
          <p className={styles.subTitle}>{stepConfig.subTitle}</p>
         </div>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete="on">

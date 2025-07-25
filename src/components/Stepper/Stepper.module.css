@@ -58,13 +58,15 @@
 
 .label {
   margin-top: 0.2rem;
-  font-size: 0.97rem;
+  font-size: 11px;
   color: inherit;
   text-align: center;
   max-width: 90px;
   word-break: break-word;
   letter-spacing: 0.01em;
   transition: color 0.3s;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
 .connector {

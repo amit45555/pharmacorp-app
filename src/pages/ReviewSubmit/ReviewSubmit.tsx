@@ -103,37 +103,30 @@ const ReviewSubmit: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>PharmaCorp</h1>
       <p className={styles.subtitle}>User Access Management System</p>
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ marginBottom: "2rem" , marginTop: "4rem", borderBottom: "1px solid #ccc" }}>
         <Stepper
           steps={formSteps.map((s: { title: string }) => s.title)}
           currentStep={2}
         />
       </div>
+      <div className={styles.formTitleCenter}>
+        <h2 className={styles.formTitle}> Review & Submit</h2>
+         <p className={styles.subtitle1}>Review your information and provide additional details.</p>
+        </div>
       <form className={styles.card} onSubmit={handleSubmit}>
         {userStatus === "inactive" && (
           <div style={{ color: "#c00", marginBottom: 12, fontWeight: 500 }}>
             Warning: This user is marked as <b>inactive</b> in Zing HR. You cannot submit a request for an inactive user.
           </div>
         )}
-        <h2 className={styles.formTitle}>Review & Submit</h2>
-        <div style={{ marginBottom: "1.2rem" }}>
-          <strong>Status:</strong> {recordData.requestStatus || "draft"}
-        </div>
+      
         {Array.isArray(recordData.logs) && recordData.logs.length > 0 && (
           <div style={{ marginBottom: "1.2rem" }}>
-            <strong>Logs:</strong>
-            <ul style={{ paddingLeft: 18, margin: 0 }}>
-              {recordData.logs.map((log: any, idx: number) => (
-                <li key={idx} style={{ fontSize: 13, color: "#555" }}>
-                  <span style={{ color: "#888", fontSize: 12 }}>
-                    {new Date(log.timestamp).toLocaleString()}:
-                  </span>{" "}
-                  {log.message}
-                </li>
-              ))}
-            </ul>
+           
+             <p><strong>Request Type:</strong> {data.requestType || "Not provided"}</p>
           </div>
         )}
+       
         {reviewFields.map((field: FormField) => (
           <div className={styles.reviewItem} key={field.name}>
             <strong>{field.label}:</strong>{" "}

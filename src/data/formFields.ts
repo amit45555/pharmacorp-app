@@ -20,7 +20,7 @@ export interface StepForm {
 export const formSteps: StepForm[] = [
   {
     step: 1,
-    title: "User Information & Request Type",
+    title: "User Information",
     subTitle: "Please provide basic user information and specify the request type.",
     // Fields for user information step
     fields: [
@@ -56,18 +56,13 @@ export const formSteps: StepForm[] = [
         placeholder: "Start typing department...",
         autoSuggest: true,
       },
-      {
-        name: "requestType",
-        label: "Request Type",
-        type: "select",
-        required: true,
-        options: ["Self", "Others", "Vendor/OEM"],
-      },
+
+     
     ],
   },
   {
     step: 2,
-    title: "System Access Details",
+    title: "Access Details",
     subTitle: "Select the access types and provide details",
    
     fields: [
@@ -127,6 +122,7 @@ export const formSteps: StepForm[] = [
   {
     step: 3,
     title: "Review & Submit",
+    subTitle:"Review your information and provide additional details",
     fields: [], // Review step, no direct fields
   },
   {

@@ -83,6 +83,7 @@ const DynamicForm: React.FC<{
                     <label className={styles.checkboxItem} key={opt}>
                       <input
                         type="checkbox"
+                         
                         checked={
                           Array.isArray(values[field.name]) &&
                           values[field.name].includes(opt)
@@ -107,6 +108,7 @@ const DynamicForm: React.FC<{
                   ))}
                 </div>
                 <div className={styles.checkboxColumn}>
+                    
                   {col2.map((opt: string) => (
                     <label className={styles.checkboxItem} key={opt}>
                       <input

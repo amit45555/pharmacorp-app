@@ -11,6 +11,7 @@ interface FormData {
   accessTypes: string[];
   trainingStatus: string;
   equipmentId: string;
+  requestType: string; // New field for request type,
   appName: string;
   role: string;
   version: string;
@@ -30,8 +31,10 @@ interface FormContextType {
 
 const defaultData: FormData = {
   accessTypes: [],
+  
   trainingStatus: "",
   equipmentId: "",
+  requestType: "",
   appName: "",
   role: "",
   version: "",

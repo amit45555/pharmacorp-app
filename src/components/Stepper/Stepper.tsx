@@ -44,6 +44,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
                   transform: isActive ? "scale(1.08)" : "scale(1)",
                   opacity: isActive || isCompleted ? 1 : 0.5,
                   pointerEvents: "none",
+                  marginTop:" 1rem",
                 }}
               >
                 <span
@@ -68,6 +69,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
                 style={{
                   transition: "background 0.3s",
                   cursor: "default",
+                  
                 }}
               />
             )}
