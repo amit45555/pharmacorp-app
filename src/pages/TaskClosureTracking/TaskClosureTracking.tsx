@@ -107,6 +107,7 @@ const StatusBadge = ({ label }: { label: string }) => {
 const TaskClosureTracking = () => {
   return (
     <div className={styles.wrapper}>
+       
       {/* Left Side */}
       <div className={styles.leftPanel}>
         <div className={styles.header}>
@@ -136,10 +137,10 @@ const TaskClosureTracking = () => {
                   <div className={styles.empId}>{task.empId}</div>
                 </td>
                 <td>
-                  <div>{task.application}</div>
+                  <div  className={styles.application}>{task.application}</div>
                   <div className={styles.version}>{task.version}</div>
                 </td>
-                <td>{task.role}</td>
+                <td  className={styles.role}>{task.role}</td>
                 <td>
                   <StatusBadge label={task.accessStatus} />
                 </td>

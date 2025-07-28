@@ -4,16 +4,20 @@
  justify-content: space-between;
   gap: 2rem;
   padding: 1.5rem;
-  border-radius: 12px;
+ 
   background-color: #fcfcf9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+ 
   font-family: "Segoe UI", sans-serif;
   margin-top: 50px;
+  margin-left: 35px;
 }
+
+
 
 .leftPanel {
   flex: 2;
-  
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+   border-radius: 12px;
 }
 
 .rightSection {
@@ -24,6 +28,8 @@
   overflow-y: auto;
   height: 100%;
  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+   border-radius: 12px;
 }
 
 /* Header and Dropdown */
@@ -50,35 +56,53 @@
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
+   overflow-x: auto;
 }
 
 .taskTable th,
 .taskTable td {
-  padding: 12px 16px;
+  padding: 12px 14px;
   text-align: left;
   border-bottom: 1px solid #eee;
+   border-left: 1px solid #eee;
+    border-top: 1px solid #eee;
+    border-right: 1px solid #eee;
+   
 }
 
 .taskTable th {
   background-color: #f9f9f9;
   color: #333;
   font-weight: 600;
+  font-size: 14px;
 }
 
 /* Text Styling */
 .userName {
   font-weight: 600;
+  font-size: 13px;
 }
 
 .empId {
   color: #999;
-  font-size: 0.875rem;
+  font-size: 13px;
 }
 
 .version {
   color: #999;
-  font-size: 0.75rem;
+ font-size: 13px;
 }
+
+.role{
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.application {
+ font-weight: 500;
+ font-size: 13px;
+}
+
 
 /* Buttons */
 .viewBtn,
@@ -87,7 +111,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 13px;
   margin-right: 6px;
 }
 
@@ -105,7 +129,7 @@
 .badge {
   padding: 4px 12px;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 500;
   display: inline-block;
   text-transform: capitalize;
@@ -116,6 +140,7 @@
 .success {
   background-color: #d1e7e7;
   color: #035d5d;
+  font-size: 13px;
 }
 
 .inprogress,
