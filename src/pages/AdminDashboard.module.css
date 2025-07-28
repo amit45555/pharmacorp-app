@@ -105,8 +105,13 @@
   color: #8b9bb4;
 }
 
+.logoutDesign{
+  margin-top: 110px;
+  margin-left: 20px;
+}
+
 .logout {
-  margin-top: 32px;
+ 
   background: none;
   color: #e57373;
   border: none;
@@ -198,7 +203,7 @@
 }
 
 .dashboardOverview {
-  padding: 32px 40px;
+  margin-left: -20px;
 }
 .dashboardGrid {
   display: grid;
@@ -354,31 +359,78 @@
 .dashboardOverview {
   margin-bottom: 2.5rem;
 }
+
+
 .statsGrid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
-  margin-top: 1.2rem;
+  margin-top: 1.5rem;
 }
+
 .statCard {
-  background: #fff;
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
   box-shadow: 0 2px 8px rgba(90, 201, 216, 0.07);
-  padding: 1.2rem 2rem;
-  min-width: 180px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  position: relative;
+  max-width: 340px;
+ 
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+
+.iconWrapper {
+  background-color: #f1f7fd;
+  padding: 3px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  
+}
+
+.textContent{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+  
 }
+
+.statIcon {
+   font-size: 32px;
+  background-color: #f1f7fd;
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-bottom: 8px;
+  
+}
+
+.statLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
 .statValue {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #007f86;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e2a32;
+  margin: 4px 0;
 }
+
 .statSub {
-  font-size: 0.97rem;
-  color: #888;
+  font-size: 14px;
+  font-weight: 500;
 }
+
+
 .requestsSection {
   margin-top: 2.5rem;
 }

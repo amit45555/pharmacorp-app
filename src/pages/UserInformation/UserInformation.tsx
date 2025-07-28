@@ -21,6 +21,7 @@ const UserInformation: React.FC = () => {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setData((prev) => ({ ...prev, ...values }));

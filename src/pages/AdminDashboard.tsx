@@ -11,7 +11,7 @@ import DashboardStats from "./AdminDashboard/DashboardStats";
 import { useAuth } from "../context/AuthContext";
 import { can } from "../utils/rbac";
 import { FaBell, FaCircleUser } from "react-icons/fa6";
-
+import TaskClosureTracking from "./TaskClosureTracking/TaskClosureTracking";
 // --- Demo/mock data for all admin sections ---
 const initialRequests = [
   {
@@ -251,10 +251,13 @@ const AdminDashboard: React.FC = () => {
               <span className={styles.navText}>Settings</span>
             </button>
           )}
-        </nav>
-        <button className={styles.logout} onClick={handleLogout}>
+          <div className={styles.logoutDesign}>
+          <button className={styles.logout} onClick={handleLogout}>
           Logout
         </button>
+        </div>
+        </nav>
+        
       </aside>
       <div className={styles.mainContent}>
         <main>
@@ -294,39 +297,15 @@ const AdminDashboard: React.FC = () => {
               <section className={styles.dashboardOverview}>
                 <h2 className={styles.sectionTitle}>Dashboard Overview</h2>
                 <div className={styles.statsGrid}>
-                  <div className={styles.statCard}>
-                    <DashboardStats />
-                  </div>
-                </div>
+                 
+                  <DashboardStats />
+                
+                   
+               </div>
+
                 <div className={styles.recentActivitySection}>
-                  <h3 className={styles.activityTitle}>Recent Activity</h3>
-                  <table className={styles.activityTable}>
-                    <thead>
-                      <tr>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {/* Example static data, replace with real data as needed */}
-                      <tr>
-                        <td>John Smith</td>
-                        <td>Approved Access Request</td>
-                        <td>2025-07-22</td>
-                      </tr>
-                      <tr>
-                        <td>Sarah Johnson</td>
-                        <td>Updated User Role</td>
-                        <td>2025-07-21</td>
-                      </tr>
-                      <tr>
-                        <td>Dr. Sarah Mitchell</td>
-                        <td>Generated Compliance Report</td>
-                        <td>2025-07-20</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                 
+                  <TaskClosureTracking/>
                 </div>
               </section>
             )}
