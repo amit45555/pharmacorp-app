@@ -92,6 +92,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           alignItems: "center",
           justifyContent: open ? "flex-start" : "center",
           gap: open ? "8px" : "0",
+          marginBottom: "30px",
+          marginRight: "110px",
         }}
         title={!open ? "Logout" : undefined}
       >
