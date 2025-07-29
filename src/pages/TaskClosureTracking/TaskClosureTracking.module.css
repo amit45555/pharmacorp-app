@@ -20,17 +20,18 @@
    border-radius: 12px;
  padding-left: 20px;
  padding-right: 20px;
- height: 80%;
-  overflow-x: auto;
+ height: auto;
+ overflow-y: auto;
+ 
 }
 
 .rightSection {
   flex: 1;
   padding: 24px;
-  background-color: #ffffff;
+  background-color: #fcfcf9;
   border-left: 1px solid #e0e0e0;
-  overflow-y: auto;
-  height: 100%;
+  overflow-x: auto;
+  height: auto;
  gap: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
    border-radius: 12px;
@@ -55,16 +56,15 @@
 
 /* Table */
 .taskTable {
-  width: 70%;
-  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;
   background-color: #fff;
   border-radius: 12px;
- height: 50%;
+  height: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-left: 20px;
-  margin-right: 20px;
- 
+  margin-bottom: 20px;
 }
+
 
 .taskTable th,
 .taskTable td {
@@ -74,7 +74,7 @@
    border-left: 1px solid #eee;
     border-top: 1px solid #eee;
     border-right: 1px solid #eee;
-  
+ 
 }
 
 .taskTable th {

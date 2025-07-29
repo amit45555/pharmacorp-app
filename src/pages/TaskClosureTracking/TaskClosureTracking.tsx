@@ -116,6 +116,7 @@ const TaskClosureTracking = () => {
             <option>All Status</option>
           </select>
         </div>
+        <div style={{ overflowX: "auto" }}>
         <table className={styles.taskTable}>
           <thead>
             <tr>
@@ -155,6 +156,7 @@ const TaskClosureTracking = () => {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Right Side */}
