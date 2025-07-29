@@ -190,10 +190,12 @@
 
 .viewAllBtn {
   padding: 6px 12px;
-  font-size: 14px;
-  color: #007bff;
-  background-color: transparent;
-  border: 1px solid #007bff;
+  font-size: 13px;
+  
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+  
+ 
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
