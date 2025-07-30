@@ -8,6 +8,7 @@ import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredential
 import TrackRequest from "../pages/TrackRequest";
 import AdminLogin from "../pages/AdminLogin";
 import AdminDashboard from "../pages/AdminDashboard";
+import MainMasterTable from "pages/MainMasterTable/MainMasterTable";
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -19,8 +20,12 @@ const AppRoutes: React.FC = () => (
     <Route path="/track-request" element={<TrackRequest />} />
 
     {/* Admin Flow */}
+
     <Route path="/login" element={<AdminLogin />} />
     <Route path="/admin" element={<AdminDashboard />} />
+     {/* MainMasterTable Flow */}
+    
+    <Route path="/MainMasterTable" element={<MainMasterTable />} />
   </Routes>
 );
 
