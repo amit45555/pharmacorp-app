@@ -21,7 +21,7 @@ body, html, .main-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  position: fixed;
+  position: relative;
   overflow-y: auto;
 }
 
@@ -105,8 +105,8 @@ body, html, .main-container {
 }
 
 .main-content {
-  margin-left: 250px;
-  padding: 20px;
+ 
+  
   width: calc(100% - 250px);
 }
 
@@ -115,9 +115,15 @@ body, html, .main-container {
   margin-bottom: 20px;
 }
 
+
+.dashboard {
+  padding: 25px;
+}
+
 .dashboard h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 28px;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
 .overview-cards {
@@ -203,4 +209,119 @@ body, html, .main-container {
   display: block;
   font-size: 12px;
   color: #888;
+}
+
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 12px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+ 
+  height: 64px;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.header-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.header-icon {
+  font-size: 20px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.header-icon:hover {
+  color: #007bff;
+}
+
+
+
+/* Color-coded icon container inside card */
+.iconBox {
+  font-size: 22px;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+}
+
+/* Card enhancement */
+.overview-card {
+  border-top: 4px solid #007bff;
+  transition: box-shadow 0.3s ease;
+}
+
+.overview-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Chart donut enhancement */
+.donut-placeholder {
+  height: 220px;
+  border-radius: 12px;
+  background: #f0f4f8;
+  position: relative;
+}
+
+.donutCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #777;
+}
+
+/* Activity timeline */
+.activity-list {
+  list-style: none;
+  padding: 0;
+}
+
+.activity-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.activity-icon {
+  background: #0b60c3;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+
+
+.donut-chart-wrapper {
+  height: 250px;
+  width: 100%;
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* Optional: make chart responsive */
+.chart-section {
+  flex: 1;
+  min-width: 300px;
 }
