@@ -216,3 +216,14 @@
   margin-bottom: 0.5rem;
   color: #6c63ff;
 }
+
+
+.dropdown {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background-color: #fff;
+  margin-top: 8px;
+}

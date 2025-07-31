@@ -5,9 +5,7 @@ import Stepper from "../../components/Stepper/Stepper";
 import { formSteps } from "../../data/formFields";
 import DynamicForm from "../../components/DynamicForm/DynamicForm";
 import { useFormContext } from "../../context/FormContext";
-import PersonIcon from '@mui/icons-material/Person';
-import PeopleIcon from '@mui/icons-material/People';
-import BusinessIcon from '@mui/icons-material/Business';
+
 
 
 
@@ -91,29 +89,17 @@ const UserInformation: React.FC = () => {
       
 <div className={styles.requestTypeSection}>
   <label className={styles.requestLabel}>Request for/by *</label>
-  <div className={styles.optionGroup}>
-    <div
-      className={`${styles.optionCard} ${values.requestType === "Self" ? styles.selected : ""}`}
-      onClick={() => handleChange("requestType", "Self")}
-    >
-      <PersonIcon className={styles.icon} />
-      <span>Self</span>
-    </div>
-    <div
-      className={`${styles.optionCard} ${values.requestType === "Others" ? styles.selected : ""}`}
-      onClick={() => handleChange("requestType", "Others")}
-    >
-      <PeopleIcon className={styles.icon} />
-      <span>Others</span>
-    </div>
-    <div
-      className={`${styles.optionCard} ${values.requestType === "Vendor/OEM" ? styles.selected : ""}`}
-      onClick={() => handleChange("requestType", "Vendor/OEM")}
-    >
-      <BusinessIcon className={styles.icon} />
-      <span>Vendor/OEM</span>
-    </div>
-  </div>
+  <select
+    className={styles.dropdown}
+    value={values.requestType || ""}
+    onChange={(e) => handleChange("requestType", e.target.value)}
+    required
+  >
+    <option value="">Select...</option>
+    <option value="Self">Self</option>
+    <option value="Others">Others</option>
+    <option value="Vendor/OEM">Vendor/OEM</option>
+  </select>
 </div>
 
 
