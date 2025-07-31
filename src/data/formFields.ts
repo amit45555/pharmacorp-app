@@ -69,7 +69,7 @@ export const formSteps: StepForm[] = [
       {
         name: "accessTypes",
         label: "Access Request Type",
-        type: "checkbox",
+        type: "select",
         required: true,
         options: [
           "New user creation",
