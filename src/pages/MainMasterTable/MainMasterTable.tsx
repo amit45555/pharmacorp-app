@@ -111,10 +111,13 @@ const DashboardView = () => {
 </div>
 
           <div className={styles.legend}>
-            <span className={styles["legend-item"]}>🟦 Active Applications</span>
+            <span className={styles["legend-item"]}><span className={styles["legend-dot"]} style={{ backgroundColor: "#22c0d3" }}></span> Active Applications</span>
+
+           
             <span className={styles["legend-item"]}>🟨 Inactive Applications</span>
             <span className={styles["legend-item"]}>🟥 Pending Requests</span>
             <span className={styles["legend-item"]}>🟩 Approved Requests</span>
+            
           </div>
         </div>
         <div className={styles["activity-section"]}>
@@ -124,21 +127,21 @@ const DashboardView = () => {
               <div className={styles["activity-icon"]}><SyncIcon fontSize="small" /></div>
               <div>
                 <strong>Added SAP ERP v2.1</strong> for Mumbai Plant
-                <span>29 Jul 2025</span>
+                <span><br/>29 Jul 2025</span>
               </div>
             </li>
             <li>
               <div className={styles["activity-icon"]}><SyncIcon fontSize="small" /></div>
               <div>
                 <strong>Request REQ001</strong> for SAP ERP access
-                <span>29 Jul 2025</span>
+                <span><br/>29 Jul 2025</span>
               </div>
             </li>
             <li>
               <div className={styles["activity-icon"]}><SyncIcon fontSize="small" /></div>
               <div>
                 <strong>Approved REQ002</strong> for QMS access
-                <span>29 Jul 2025</span>
+                <span><br/>29 Jul 2025</span>
               </div>
             </li>
           </ul>
