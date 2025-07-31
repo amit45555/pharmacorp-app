@@ -14,6 +14,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupIcon from '@mui/icons-material/Group';
 import SyncIcon from '@mui/icons-material/Sync';
 import DonutChart from "../../components/Common/DonutChart";
+import PlantMasterTable from "pages/PlantMasterTable/PlantMasterTable";
+import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 const MainMasterTable: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
 
@@ -23,9 +25,9 @@ const MainMasterTable: React.FC = () => {
         return <DashboardView />;
       // Add placeholders or actual components below:
       case "plant":
-        return <div>Plant Master Table</div>;
+        return <div><PlantMasterTable/></div>;
       case "role":
-        return <div>Role Master Table</div>;
+        return <div><RoleMasterTable/></div>;
       case "vendor":
         return <div>Vendor Master Table</div>;
       case "application":

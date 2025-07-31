@@ -1,0 +1,109 @@
+.role-table-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+  padding: 0;
+  overflow: hidden;
+}
+
+.header {
+  background: #eef5fe;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.actions .green {
+  background-color: #198754;
+}
+
+.actions .gray {
+  background-color: #6c757d;
+}
+
+.actions .red {
+  background-color: #dc3545;
+}
+
+.search-container {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  background: #f8fbff;
+}
+
+.search-container input {
+  padding: 8px 12px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #eef5fe;
+}
+
+thead th {
+  padding: 14px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status.active {
+  background-color: #e6f4ea;
+  color: #198754;
+}
+
+.icon {
+  color: #343a40;
+  font-size: 16px;
+  cursor: pointer;
+}
