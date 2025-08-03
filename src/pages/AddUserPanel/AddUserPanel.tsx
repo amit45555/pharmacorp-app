@@ -76,7 +76,9 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
 
       <div className={styles.form}>
         {/* User Details */}
+         <label className={styles.formLabel}>User Details</label>
         <div className={styles.grid}>
+           
           <div>
             <label>Full Name *</label>
             <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
@@ -111,7 +113,7 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
 
         {/* Plant Selection */}
         <div>
-          <label>Plant Selection</label>
+          <label className={styles.formLabel}>Plant Selection</label>
           <div className={styles.plants}>
             {plants.map((plant) => (
               <label key={plant}>
@@ -128,7 +130,7 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
 
         {/* Module Permissions */}
         <div>
-          <label>Module Permissions</label>
+          <label className={styles.formLabel}>Module Permissions</label>
           <div className={styles.table}>
             <div className={styles.rowHeader}>
               <span>Module Name</span>
