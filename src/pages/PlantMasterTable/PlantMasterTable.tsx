@@ -4,7 +4,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
 const plantData = [
   {
     name: "Mumbai Plant",
@@ -34,6 +35,14 @@ const plantData = [
 
 const PlantMasterTable: React.FC = () => {
   return (
+     <div >
+       <header className={styles["main-header"]}>
+  <h2 className={styles["header-title"]}>Plant Master</h2>
+  <div className={styles["header-icons"]}>
+    <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
+    <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
+  </div>
+</header>
     <div className={styles.container}>
       <div className={styles.header}>
         <h3>Plant Master</h3>
@@ -72,6 +81,7 @@ const PlantMasterTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 };

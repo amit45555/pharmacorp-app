@@ -17,7 +17,7 @@ import DonutChart from "../../components/Common/DonutChart";
 import PlantMasterTable from "pages/PlantMasterTable/PlantMasterTable";
 import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
-
+import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 
 const MainMasterTable: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -34,7 +34,7 @@ const MainMasterTable: React.FC = () => {
       case "vendor":
         return <div>Vendor Master Table</div>;
       case "application":
-        return <div>Application Master Table</div>;
+        return <div><ApplicationMasterTable/></div>;
       case "user":
         return <div><UserMasterTable/></div>;
       default:
@@ -83,13 +83,7 @@ const MainMasterTable: React.FC = () => {
       </aside>
        
       <main className={styles["main-content"]}>
-        <header className={styles["main-header"]}>
-  <h2 className={styles["header-title"]}>System Dashboard</h2>
-  <div className={styles["header-icons"]}>
-    <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
-    <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
-  </div>
-</header>
+       
 
         {renderContent()}
       </main>
@@ -99,7 +93,18 @@ const MainMasterTable: React.FC = () => {
 
 const DashboardView = () => {
   return (
-    <div className={styles.dashboard}>
+    
+    
+    <div >
+       <header className={styles["main-header"]}>
+  <h2 className={styles["header-title"]}>System Dashboard</h2>
+  <div className={styles["header-icons"]}>
+    <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
+    <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
+  </div>
+</header>
+  
+   <div className={styles.dashboard1}>
       <h2>System Overview</h2>
       <div className={styles["overview-cards"]}>
         <Card icon={<CalendarMonthIcon fontSize="medium" />} color="#1a8e3a" label="Plants" value="4" sub="+2 this month" />
@@ -151,6 +156,7 @@ const DashboardView = () => {
             </li>
           </ul>
         </div>
+      </div>
       </div>
     </div>
   );

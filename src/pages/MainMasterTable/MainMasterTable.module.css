@@ -117,12 +117,12 @@ body, html, .main-container {
 }
 
 
-.dashboard {
-  padding: 25px;
+.dashboard1 {
+ padding: 25px;
 }
 
-.dashboard h2 {
-  font-size: 28px;
+.dashboard1 h2 {
+  font-size: 25px;
   margin-bottom: 25px;
   font-weight: 600;
 }
@@ -252,14 +252,14 @@ body, html, .main-container {
   padding: 12px 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
  
-  height: 64px;
+  height: 75px;
 }
 
 .header-title {
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0;
+  
 }
 
 .header-icons {
