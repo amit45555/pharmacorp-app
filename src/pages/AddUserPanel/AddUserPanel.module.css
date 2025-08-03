@@ -1,0 +1,111 @@
+.panel {
+  width: 420px;
+  background: #fff;
+  padding: 24px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.closeBtn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+input, select {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.plants {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.plants label {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f8f8f8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rowHeader, .row {
+  display: grid;
+  grid-template-columns: 2fr repeat(4, 1fr);
+  padding: 10px 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row input {
+  margin: 0 auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancelBtn, .saveBtn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: #f0f0f0;
+}
+
+.saveBtn {
+  background: #0b63ce;
+  color: white;
+}

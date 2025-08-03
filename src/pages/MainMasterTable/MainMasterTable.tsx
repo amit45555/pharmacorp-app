@@ -16,6 +16,9 @@ import SyncIcon from '@mui/icons-material/Sync';
 import DonutChart from "../../components/Common/DonutChart";
 import PlantMasterTable from "pages/PlantMasterTable/PlantMasterTable";
 import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
+import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
+
+
 const MainMasterTable: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
 
@@ -33,7 +36,7 @@ const MainMasterTable: React.FC = () => {
       case "application":
         return <div>Application Master Table</div>;
       case "user":
-        return <div>User Master Table</div>;
+        return <div><UserMasterTable/></div>;
       default:
         return null;
     }
