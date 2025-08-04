@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import styles from './AddUserPanel.module.css';
+import React, { useState } from "react";
+import styles from "./AddUserPanel.module.css";
 
-const plants = ['GOA', 'GOA-1', 'Mumbai', 'Delhi', 'Bangalore'];
-const modules = ['Central', 'Role Master', 'Vendor Master', 'Plant Master', 'Application Master', 'Approval Workflow'];
-const permissions = ['Add', 'Edit', 'View', 'Delete'];
+const plants = ["GOA", "GOA-1", "Mumbai", "Delhi", "Bangalore"];
+const modules = [
+  "Central",
+  "Role Master",
+  "Vendor Master",
+  "Plant Master",
+  "Application Master",
+  "Approval Workflow",
+];
+const permissions = ["Add", "Edit", "View", "Delete"];
 
 type UserForm = {
   fullName: string;
@@ -21,21 +28,34 @@ interface AddUserPanelProps {
   onClose: () => void;
   onSave: (user: UserForm) => void;
   initialData?: UserForm | null;
-  mode?: 'add' | 'edit';
+  mode?: "add" | "edit";
 }
 
-const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: AddUserPanelProps) => {
-  const [form, setForm] = useState<UserForm>(
-    initialData || {
-      fullName: '',
-      email: '',
-      empCode: '',
-      department: '',
-      status: 'Active',
+const AddUserPanel = ({
+  onClose,
+  onSave,
+  initialData = null,
+  mode = "add",
+}: AddUserPanelProps) => {
+  const [form, setForm] = useState<UserForm>(() => {
+    const base = initialData || {
+      fullName: "",
+      email: "",
+      empCode: "",
+      department: "",
+      status: "Active",
       plants: [],
       permissions: {},
-    }
-  );
+    };
+    // Ensure base.permissions is always an object
+    const safePermissions = base.permissions || {};
+    // Ensure all modules exist as keys in permissions
+    const permissionsWithAllModules = modules.reduce((acc, mod) => {
+      acc[mod] = safePermissions[mod] || [];
+      return acc;
+    }, {} as { [key: string]: string[] });
+    return { ...base, permissions: permissionsWithAllModules };
+  });
 
   const handleCheckboxChange = (plant: string) => {
     setForm((prev) => ({
@@ -70,30 +90,45 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
   return (
     <form className={styles.panel} onSubmit={handleSubmit}>
       <div className={styles.header}>
-        <h2>{mode === 'edit' ? `Edit User - ${form.fullName}` : 'Add New User'}</h2>
-        <button type="button" className={styles.closeBtn} onClick={onClose}>×</button>
+        <h2>
+          {mode === "edit" ? `Edit User - ${form.fullName}` : "Add New User"}
+        </h2>
+        <button type="button" className={styles.closeBtn} onClick={onClose}>
+          ×
+        </button>
       </div>
 
       <div className={styles.form}>
         {/* User Details */}
-         <label className={styles.formLabel}>User Details</label>
+        <label className={styles.formLabel}>User Details</label>
         <div className={styles.grid}>
-           
           <div>
             <label>Full Name *</label>
-            <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
+            <input
+              value={form.fullName}
+              onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            />
           </div>
           <div>
             <label>Email *</label>
-            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <input
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
           </div>
           <div>
             <label>Employee Code *</label>
-            <input value={form.empCode} onChange={(e) => setForm({ ...form, empCode: e.target.value })} />
+            <input
+              value={form.empCode}
+              onChange={(e) => setForm({ ...form, empCode: e.target.value })}
+            />
           </div>
           <div>
             <label>Department *</label>
-            <select value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })}>
+            <select
+              value={form.department}
+              onChange={(e) => setForm({ ...form, department: e.target.value })}
+            >
               <option value="">Select Department</option>
               <option value="IT">IT</option>
               <option value="QA">QA</option>
@@ -104,7 +139,10 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
           </div>
           <div>
             <label>Status *</label>
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
+            <select
+              value={form.status}
+              onChange={(e) => setForm({ ...form, status: e.target.value })}
+            >
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
             </select>
@@ -134,7 +172,9 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
           <div className={styles.table}>
             <div className={styles.rowHeader}>
               <span>Module Name</span>
-              {permissions.map((perm) => <span key={perm}>{perm}</span>)}
+              {permissions.map((perm) => (
+                <span key={perm}>{perm}</span>
+              ))}
             </div>
             {modules.map((mod) => (
               <div className={styles.row} key={mod}>
@@ -154,9 +194,11 @@ const AddUserPanel = ({ onClose, onSave, initialData = null, mode = 'add' }: Add
 
         {/* Buttons */}
         <div className={styles.actions}>
-          <button type="button" className={styles.cancelBtn} onClick={onClose}>Cancel</button>
+          <button type="button" className={styles.cancelBtn} onClick={onClose}>
+            Cancel
+          </button>
           <button type="submit" className={styles.saveBtn}>
-            {mode === 'edit' ? 'Update User' : 'Save User'}
+            {mode === "edit" ? "Update User" : "Save User"}
           </button>
         </div>
       </div>
