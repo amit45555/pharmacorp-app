@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./ApplicationMasterTable.module.css";
 import { Eye } from "lucide-react";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const applications = [
   {
@@ -47,6 +49,14 @@ const applications = [
 
 export default function ApplicationMasterTable() {
   return (
+    <div >
+       <header className={styles["main-header"]}>
+  <h2 className={styles["header-title"]}>Application Master</h2>
+  <div className={styles["header-icons"]}>
+    <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
+    <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
+  </div>
+</header>
     <div className={styles.container}>
       <div className={styles.header}>
         <h2>Application Master</h2>
@@ -92,6 +102,7 @@ export default function ApplicationMasterTable() {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 }

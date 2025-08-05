@@ -22,6 +22,8 @@ type UserForm = {
   permissions: {
     [key: string]: string[];
   };
+ centralPermission: boolean;
+comment: string; 
 };
 
 interface AddUserPanelProps {
@@ -46,10 +48,10 @@ const AddUserPanel = ({
       status: "Active",
       plants: [],
       permissions: {},
+    centralPermission: false,
+     comment: "",
     };
-    // Ensure base.permissions is always an object
-    const safePermissions = base.permissions || {};
-    // Ensure all modules exist as keys in permissions
+    const safePermissions: { [key: string]: string[] } = base.permissions || {};
     const permissionsWithAllModules = modules.reduce((acc, mod) => {
       acc[mod] = safePermissions[mod] || [];
       return acc;
@@ -99,7 +101,6 @@ const AddUserPanel = ({
       </div>
 
       <div className={styles.form}>
-        {/* User Details */}
         <label className={styles.formLabel}>User Details</label>
         <div className={styles.grid}>
           <div>
@@ -149,7 +150,6 @@ const AddUserPanel = ({
           </div>
         </div>
 
-        {/* Plant Selection */}
         <div>
           <label className={styles.formLabel}>Plant Selection</label>
           <div className={styles.plants}>
@@ -166,33 +166,83 @@ const AddUserPanel = ({
           </div>
         </div>
 
-        {/* Module Permissions */}
         <div>
-          <label className={styles.formLabel}>Module Permissions</label>
-          <div className={styles.table}>
-            <div className={styles.rowHeader}>
-              <span>Module Name</span>
-              {permissions.map((perm) => (
-                <span key={perm}>{perm}</span>
-              ))}
-            </div>
-            {modules.map((mod) => (
-              <div className={styles.row} key={mod}>
-                <span>{mod}</span>
-                {permissions.map((perm) => (
-                  <input
-                    key={perm}
-                    type="checkbox"
-                    checked={form.permissions[mod]?.includes(perm) || false}
-                    onChange={() => handlePermissionToggle(mod, perm)}
-                  />
-                ))}
-              </div>
+  <label className={styles.formLabel}>Central Permission</label>
+  <div className={styles.centralTable}>
+    <div className={styles.rowCheckbox}>
+      <input
+        type="checkbox"
+        id="centralPermission"
+        checked={form.centralPermission}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            centralPermission: e.target.checked,
+          })
+        }
+      />
+      <label htmlFor="centralPermission">Enable Central Permission</label>
+    </div>
+  </div>
+</div>
+
+       {(form.plants.length > 0 || form.centralPermission) && (
+  <div>
+    <label className={styles.formLabel}>Module Permissions</label>
+    <div className={styles.table}>
+      <div className={styles.rowHeader}>
+        <span>Module Name</span>
+        {permissions.map((perm) => (
+          <span key={perm}>{perm}</span>
+        ))}
+      </div>
+
+      {/* Show central only if centralPermission is checked */}
+      {form.centralPermission && (
+        <div className={styles.row} key="Central">
+          <span>Central</span>
+          {permissions.map((perm) => (
+            <input
+              key={perm}
+              type="checkbox"
+              checked={form.permissions["Central"]?.includes(perm) || false}
+              onChange={() => handlePermissionToggle("Central", perm)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Show other modules only if any plant is selected */}
+      {form.plants.length > 0 &&
+        ["Role Master", "Vendor Master", "Plant Master", "Application Master"].map((mod) => (
+          <div className={styles.row} key={mod}>
+            <span>{mod}</span>
+            {permissions.map((perm) => (
+              <input
+                key={perm}
+                type="checkbox"
+                checked={form.permissions[mod]?.includes(perm) || false}
+                onChange={() => handlePermissionToggle(mod, perm)}
+              />
             ))}
           </div>
-        </div>
+        ))}
+    </div>
+  </div>
+)}
 
-        {/* Buttons */}
+
+<div className={styles.commentBox}>
+  <label htmlFor="comment">Comment</label>
+  <textarea
+    id="comment"
+    placeholder="Enter comment here..."
+    value={form.comment}
+    onChange={(e) => setForm({ ...form, comment: e.target.value })}
+  />
+</div>
+
+
         <div className={styles.actions}>
           <button type="button" className={styles.cancelBtn} onClick={onClose}>
             Cancel

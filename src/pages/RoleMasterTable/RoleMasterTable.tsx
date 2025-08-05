@@ -1,6 +1,8 @@
 import React from "react";
 import styles from"./RoleMasterTable.module.css";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const roles = [
   {
@@ -37,6 +39,14 @@ const roles = [
 
 export default function RoleMasterTable() {
   return (
+    <div >
+           <header className={styles["main-header"]}>
+      <h2 className={styles["header-title"]}>Role Master</h2>
+      <div className={styles["header-icons"]}>
+        <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
+        <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
+      </div>
+    </header>
     <div className={styles.roleTableContainer}>
       <div className={styles.header}>
         <h2>Role Master</h2>
@@ -53,8 +63,8 @@ export default function RoleMasterTable() {
         </div>
       </div>
 
-      <div className={styles.searchContainer}>
-        <input type="text" placeholder="Search..." />
+      <div className={styles.searchContainerBox}>
+        <input type="text" placeholder="Search..." className={styles.searchContainer}/>
       </div>
 
       <table>
@@ -89,6 +99,7 @@ export default function RoleMasterTable() {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }
