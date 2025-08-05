@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./UserMasterTable.module.css"; // Adjust the path and extension if needed
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa6";
 import AddUserPanel from "pages/AddUserPanel/AddUserPanel";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -72,6 +73,9 @@ const UserMasterTable = () => {
   const [panelMode, setPanelMode] = useState<"add" | "edit">("add");
   const [editUserIdx, setEditUserIdx] = useState<number | null>(null);
   const [editUserData, setEditUserData] = useState<any>(null);
+  // Activity log modal state
+  const [showActivityModal, setShowActivityModal] = useState(false);
+  const [activityLogsUser, setActivityLogsUser] = useState<any>(null);
 
   // Filtering logic state/hooks
   const [filterColumn, setFilterColumn] = useState("fullName");
@@ -99,28 +103,27 @@ const UserMasterTable = () => {
   }, [showFilterPopover]);
 
   const filteredUsers = users.filter((user: any) => {
-  if (!filterValue.trim()) return true;
-  const value = filterValue.toLowerCase();
-  switch (filterColumn) {
-    case "fullName":
-      return user.fullName?.toLowerCase().includes(value);
-    case "email":
-      return user.email?.toLowerCase().includes(value);
-    case "empCode":
-      return user.empCode?.toLowerCase().includes(value); // ✅ FIXED
-    case "department":
-      return user.department?.toLowerCase().includes(value);
-    case "plants":
-      return user.plants?.some((plant: string) =>
-        plant.toLowerCase().includes(value)
-      ); // ✅ FIXED
-    case "status":
-      return user.status?.toLowerCase().includes(value);
-    default:
-      return true;
-  }
-});
-
+    if (!filterValue.trim()) return true;
+    const value = filterValue.toLowerCase();
+    switch (filterColumn) {
+      case "fullName":
+        return user.fullName?.toLowerCase().includes(value);
+      case "email":
+        return user.email?.toLowerCase().includes(value);
+      case "empCode":
+        return user.empCode?.toLowerCase().includes(value); // ✅ FIXED
+      case "department":
+        return user.department?.toLowerCase().includes(value);
+      case "plants":
+        return user.plants?.some((plant: string) =>
+          plant.toLowerCase().includes(value)
+        ); // ✅ FIXED
+      case "status":
+        return user.status?.toLowerCase().includes(value);
+      default:
+        return true;
+    }
+  });
 
   return (
     <div>
@@ -181,7 +184,7 @@ const UserMasterTable = () => {
                     >
                       <option value="fullName">Name</option>
                       <option value="email">Email</option>
-                       <option value="empCode">Employee Code</option>
+                      <option value="empCode">Employee Code</option>
                       <option value="department">Department</option>
                       <option value="plants">Assigned Plants</option>
                       <option value="status">Status</option>
@@ -280,17 +283,16 @@ const UserMasterTable = () => {
                     </span>
                   </td>
                   <td>
-                    <div className={styles.activityLog}>
-                      <div>
-                        <strong>By:</strong> {user.activityLogs.approver}
-                      </div>
-                      <div>
-                        <strong>Comment:</strong> {user.activityLogs.reason}
-                      </div>
-                      <div>
-                        <strong>Date:</strong> {user.activityLogs.dateTime}
-                      </div>
-                    </div>
+                    <button
+                      className={styles.actionBtn}
+                      title="View Activity Logs"
+                      onClick={() => {
+                        setActivityLogsUser(user);
+                        setShowActivityModal(true);
+                      }}
+                    >
+                      {FaRegClock({ size: 17 })}
+                    </button>
                   </td>
                   <td>
                     <button
@@ -323,6 +325,92 @@ const UserMasterTable = () => {
           </div>
         </div>
       </div>
+      {/* Activity Logs Modal */}
+      {showActivityModal && activityLogsUser && (
+        <div
+          className={styles.panelOverlay}
+          style={{ zIndex: 2000, background: "rgba(0,0,0,0.18)" }}
+        >
+          <div
+            className={styles.panelWrapper}
+            style={{
+              maxWidth: 800,
+              width: "90%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              position: "fixed",
+              top: 60,
+              borderRadius: 16,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <h3 style={{ margin: 0 }}>Activity Logs</h3>
+              <button
+                className={styles.actionBtnDelete}
+                onClick={() => setShowActivityModal(false)}
+                style={{ fontWeight: 700, fontSize: 18 }}
+              >
+                X
+              </button>
+            </div>
+            <div style={{ marginBottom: 12, fontWeight: 500 }}>
+              Username:{" "}
+              <span style={{ color: "#0b63ce" }}>
+                {activityLogsUser.fullName}
+              </span>{" "}
+              &nbsp; | &nbsp; Emp ID:{" "}
+              <span style={{ color: "#0b63ce" }}>
+                {activityLogsUser.empCode}
+              </span>
+            </div>
+            <div style={{ overflowX: "auto" }}>
+              <table className={styles.userTable} style={{ minWidth: 900 }}>
+                <thead>
+                  <tr>
+                    <th>Plant</th>
+                    <th>Role details</th>
+                    <th>Access details</th>
+                    <th>Access status</th>
+                    <th>Access given by (with access time)</th>
+                    <th>Actions performed</th>
+                    <th>Timestamp</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(Array.isArray(activityLogsUser.activityLogs)
+                    ? activityLogsUser.activityLogs
+                    : [activityLogsUser.activityLogs]
+                  ).map((log: any, i: number) => (
+                    <tr key={i}>
+                      <td>{activityLogsUser.plants?.join(", ") || "-"}</td>
+                      <td>{activityLogsUser.roleDetails || "-"}</td>
+                      <td>{log.accessDetails || "-"}</td>
+                      <td>
+                        {log.accessStatus || activityLogsUser.status || "-"}
+                      </td>
+                      <td>
+                        {log.approver}
+                        {log.dateTime ? ` (${log.dateTime})` : ""}
+                      </td>
+                      <td>{log.action || "N/A"}</td>
+                      <td>{log.timestamp || log.dateTime || "-"}</td>
+                      <td>{log.reason || log.comment || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Right Slide-in Panel for Add/Edit */}
       {showPanel && (
         <div className={styles.panelOverlay}>
