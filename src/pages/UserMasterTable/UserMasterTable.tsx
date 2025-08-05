@@ -26,10 +26,11 @@ const UserMasterTable = () => {
     },
       
     },
+
     {
       fullName: 'Sneha Desai',
       email: 'sneha.desai@unichemlab.com',
-      empCode: 'EMP004',
+      empCode: 'EMP002',
       department: 'HR',
       plants: ['GOA', 'Mumbai'],
       status: 'Inactive',
@@ -38,6 +39,38 @@ const UserMasterTable = () => {
       approver: "Admin2",
       reason: "Revoked for inactivity",
       dateTime: "2025-08-01 10:10",
+    },
+      
+    },
+
+    {
+      fullName: "Amit Nagpure",
+      email: "amit.nagpure@unichem.com",
+      empCode: "EMP003",
+      department: "Finance",
+      plants: [ "Mumbai"],
+      status: "Active",
+      centralMaster: true,
+    activityLogs: {
+      approver: "Admin1",
+      reason: "Granted access for audit",
+      dateTime: "2025-08-04 14:25",
+    },
+      
+    },
+
+    {
+      fullName: "Pankaj Patel",
+      email: "pankaj.patel@unichem.com",
+      empCode: "EMP004",
+      department: "QA",
+      plants: ["Delhi",  "Mumbai"],
+      status: "Inactive",
+     
+    activityLogs: {
+      approver: "Admin1",
+      reason: "Granted access for audit",
+      dateTime: "2025-08-04 14:25",
     },
       
     },
