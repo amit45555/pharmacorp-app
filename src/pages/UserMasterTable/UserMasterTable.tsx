@@ -99,21 +99,28 @@ const UserMasterTable = () => {
   }, [showFilterPopover]);
 
   const filteredUsers = users.filter((user: any) => {
-    if (!filterValue.trim()) return true;
-    const value = filterValue.toLowerCase();
-    switch (filterColumn) {
-      case "fullName":
-        return user.fullName?.toLowerCase().includes(value);
-      case "email":
-        return user.email?.toLowerCase().includes(value);
-      case "department":
-        return user.department?.toLowerCase().includes(value);
-      case "status":
-        return user.status?.toLowerCase().includes(value);
-      default:
-        return true;
-    }
-  });
+  if (!filterValue.trim()) return true;
+  const value = filterValue.toLowerCase();
+  switch (filterColumn) {
+    case "fullName":
+      return user.fullName?.toLowerCase().includes(value);
+    case "email":
+      return user.email?.toLowerCase().includes(value);
+    case "empCode":
+      return user.empCode?.toLowerCase().includes(value); // ✅ FIXED
+    case "department":
+      return user.department?.toLowerCase().includes(value);
+    case "plants":
+      return user.plants?.some((plant: string) =>
+        plant.toLowerCase().includes(value)
+      ); // ✅ FIXED
+    case "status":
+      return user.status?.toLowerCase().includes(value);
+    default:
+      return true;
+  }
+});
+
 
   return (
     <div>
@@ -174,7 +181,9 @@ const UserMasterTable = () => {
                     >
                       <option value="fullName">Name</option>
                       <option value="email">Email</option>
+                       <option value="empCode">Employee Code</option>
                       <option value="department">Department</option>
+                      <option value="plants">Assigned Plants</option>
                       <option value="status">Status</option>
                     </select>
                   </div>
