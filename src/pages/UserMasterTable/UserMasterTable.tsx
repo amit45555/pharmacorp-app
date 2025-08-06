@@ -16,13 +16,33 @@ const UserMasterTable = () => {
       plants: ["GOA", "GOA-1", "Mumbai"],
       status: "Active",
       centralMaster: true,
-      activityLogs: {
-        approver: "Admin1",
-        reason: "Granted access for audit",
-        dateTime: "2025-08-04 14:25",
-      },
+      activityLogs: [
+        {
+          action: "Edit",
+          oldValue: "Role: User",
+          newValue: "Role: Admin",
+          approver: "Admin1",
+          dateTime: "2025-08-04 14:25",
+          reason: "Role upgraded for audit",
+        },
+        {
+          action: "Delete",
+          oldValue: "Status: Active",
+          newValue: "Status: Deleted",
+          approver: "Admin2",
+          dateTime: "2025-08-05 10:10",
+          reason: "User left organization",
+        },
+        {
+          action: "View",
+          oldValue: "-",
+          newValue: "-",
+          approver: "Admin3",
+          dateTime: "2025-08-06 09:00",
+          reason: "Viewed for compliance check",
+        },
+      ],
     },
-
     {
       fullName: "Sneha Desai",
       email: "sneha.desai@unichemlab.com",
@@ -30,14 +50,26 @@ const UserMasterTable = () => {
       department: "HR",
       plants: ["GOA", "Mumbai"],
       status: "Inactive",
-
-      activityLogs: {
-        approver: "Admin2",
-        reason: "Revoked for inactivity",
-        dateTime: "2025-08-01 10:10",
-      },
+      centralMaster: false,
+      activityLogs: [
+        {
+          action: "Edit",
+          oldValue: "Department: HR",
+          newValue: "Department: Admin",
+          approver: "Admin2",
+          dateTime: "2025-08-01 10:10",
+          reason: "Transferred department",
+        },
+        {
+          action: "View",
+          oldValue: "-",
+          newValue: "-",
+          approver: "Admin1",
+          dateTime: "2025-08-02 11:00",
+          reason: "Viewed for access review",
+        },
+      ],
     },
-
     {
       fullName: "Amit Nagpure",
       email: "amit.nagpure@unichem.com",
@@ -46,13 +78,25 @@ const UserMasterTable = () => {
       plants: ["Mumbai"],
       status: "Active",
       centralMaster: true,
-      activityLogs: {
-        approver: "Admin1",
-        reason: "Granted access for audit",
-        dateTime: "2025-08-04 14:25",
-      },
+      activityLogs: [
+        {
+          action: "Edit",
+          oldValue: "Central Master: No",
+          newValue: "Central Master: Yes",
+          approver: "Admin1",
+          dateTime: "2025-08-04 14:25",
+          reason: "Granted central access",
+        },
+        {
+          action: "Delete",
+          oldValue: "Status: Active",
+          newValue: "Status: Deleted",
+          approver: "Admin2",
+          dateTime: "2025-08-05 10:10",
+          reason: "User removed",
+        },
+      ],
     },
-
     {
       fullName: "Pankaj Patel",
       email: "pankaj.patel@unichem.com",
@@ -60,12 +104,17 @@ const UserMasterTable = () => {
       department: "QA",
       plants: ["Delhi", "Mumbai"],
       status: "Inactive",
-
-      activityLogs: {
-        approver: "Admin1",
-        reason: "Granted access for audit",
-        dateTime: "2025-08-04 14:25",
-      },
+      centralMaster: false,
+      activityLogs: [
+        {
+          action: "View",
+          oldValue: "-",
+          newValue: "-",
+          approver: "Admin1",
+          dateTime: "2025-08-04 14:25",
+          reason: "Viewed for audit",
+        },
+      ],
     },
   ]);
 
@@ -374,13 +423,10 @@ const UserMasterTable = () => {
               <table className={styles.userTable} style={{ minWidth: 900 }}>
                 <thead>
                   <tr>
-                    <th>Plant</th>
-                    <th>Role details</th>
-                    <th>Access details</th>
-                    <th>Access status</th>
-                    <th>Access given by (with access time)</th>
-                    <th>Actions performed</th>
-                    <th>Timestamp</th>
+                    <th>Action Performed</th>
+                    <th>Old Change</th>
+                    <th>New Change</th>
+                    <th>Action Performed By (Timestamp)</th>
                     <th>Comments</th>
                   </tr>
                 </thead>
@@ -390,18 +436,15 @@ const UserMasterTable = () => {
                     : [activityLogsUser.activityLogs]
                   ).map((log: any, i: number) => (
                     <tr key={i}>
-                      <td>{activityLogsUser.plants?.join(", ") || "-"}</td>
-                      <td>{activityLogsUser.roleDetails || "-"}</td>
-                      <td>{log.accessDetails || "-"}</td>
+                      <td>{log.action || "-"}</td>
+                      <td>{log.oldValue !== undefined ? log.oldValue : "-"}</td>
+                      <td>{log.newValue !== undefined ? log.newValue : "-"}</td>
                       <td>
-                        {log.accessStatus || activityLogsUser.status || "-"}
+                        {log.approver || "-"}
+                        {log.dateTime || log.timestamp
+                          ? ` (${log.dateTime || log.timestamp})`
+                          : ""}
                       </td>
-                      <td>
-                        {log.approver}
-                        {log.dateTime ? ` (${log.dateTime})` : ""}
-                      </td>
-                      <td>{log.action || "N/A"}</td>
-                      <td>{log.timestamp || log.dateTime || "-"}</td>
                       <td>{log.reason || log.comment || "-"}</td>
                     </tr>
                   ))}
@@ -437,7 +480,16 @@ const UserMasterTable = () => {
                     {
                       ...userData,
                       centralMaster: userData.centralPermission ?? false,
-                      activityLogs: logDetails,
+                      activityLogs: [
+                        {
+                          action: "Edit",
+                          oldValue: "-",
+                          newValue: "-",
+                          approver: logDetails.approver,
+                          dateTime: logDetails.dateTime,
+                          reason: logDetails.reason,
+                        },
+                      ],
                     },
                   ]);
                 } else if (panelMode === "edit" && editUserIdx !== null) {
@@ -447,7 +499,16 @@ const UserMasterTable = () => {
                         ? {
                             ...userData,
                             centralMaster: userData.centralPermission ?? false,
-                            activityLogs: logDetails,
+                            activityLogs: [
+                              {
+                                action: "Edit",
+                                oldValue: "-",
+                                newValue: "-",
+                                approver: logDetails.approver,
+                                dateTime: logDetails.dateTime,
+                                reason: logDetails.reason,
+                              },
+                            ],
                           }
                         : u
                     )
