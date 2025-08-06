@@ -18,7 +18,7 @@ import PlantMasterTable from "pages/PlantMasterTable/PlantMasterTable";
 import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
-
+import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
 const MainMasterTable: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
 
@@ -37,6 +37,9 @@ const MainMasterTable: React.FC = () => {
         return <div><ApplicationMasterTable/></div>;
       case "user":
         return <div><UserMasterTable/></div>;
+      case "workflow":
+        return <div><WorkflowBuilder /></div>;
+  
       default:
         return null;
     }
@@ -68,6 +71,13 @@ const MainMasterTable: React.FC = () => {
   <button className={`${styles["nav-button"]} ${activeTab === "user" ? styles.active : ""}`} onClick={() => setActiveTab("user")}> 
     <PersonIcon fontSize="small" /> User Master
   </button>
+          <div className={styles["sidebar-group"]}>CONFIGURATION</div>
+  <button
+  className={`${styles["nav-button"]} ${activeTab === "workflow" ? styles.active : ""}`}
+  onClick={() => setActiveTab("workflow")}
+>
+  <AssignmentIcon fontSize="small" /> Workflow Builder
+</button>
 
           <div className={styles["sidebar-footer"]}>
             <div className={styles["admin-info"]}>

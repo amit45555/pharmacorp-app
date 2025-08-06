@@ -25,6 +25,8 @@ type UserForm = {
   };
   centralPermission: boolean;
   comment: string;
+  corporateAccessEnabled: boolean;
+
 };
 
 interface AddUserPanelProps {
@@ -41,24 +43,28 @@ const AddUserPanel = ({
   mode = "add",
 }: AddUserPanelProps) => {
   const [form, setForm] = useState<UserForm>(() => {
-    const base = initialData || {
-      fullName: "",
-      email: "",
-      empCode: "",
-      department: "",
-      status: "Active",
-      plants: [],
-      permissions: {},
-      centralPermission: false,
-      comment: "",
-    };
-    const safePermissions: { [key: string]: string[] } = base.permissions || {};
-    const permissionsWithAllModules = modules.reduce((acc, mod) => {
-      acc[mod] = safePermissions[mod] || [];
-      return acc;
-    }, {} as { [key: string]: string[] });
-    return { ...base, permissions: permissionsWithAllModules };
-  });
+  const base: UserForm = initialData ?? {
+    fullName: "",
+    email: "",
+    empCode: "",
+    department: "",
+    status: "Active",
+    plants: [],
+    permissions: {},
+    centralPermission: false,
+    comment: "",
+    corporateAccessEnabled: false,
+  };
+
+  const safePermissions: { [key: string]: string[] } = base.permissions || {};
+  const permissionsWithAllModules = modules.reduce((acc, mod) => {
+    acc[mod] = safePermissions[mod] || [];
+    return acc;
+  }, {} as { [key: string]: string[] });
+
+  return { ...base, permissions: permissionsWithAllModules };
+});
+
 
   const handleCheckboxChange = (plant: string) => {
     setForm((prev) => ({
@@ -183,9 +189,96 @@ const AddUserPanel = ({
               ))}
             </div>
           </div>
+             
+{form.plants.map((plant) => (
+  <div key={plant} className={`${styles.plantTableWrapper} ${styles.fadeIn}`}>
+    <label className={styles.sectionTitle}>Module Permissions for {plant}</label>
+    <div className={styles.table}>
+      <div className={styles.rowHeader}>
+        <span>Module Name</span>
+        {permissions.map((perm) => (
+          <span key={perm}>{perm}</span>
+        ))}
+      </div>
+     {["Role Master", "Vendor Master", "Plant Master", "Application Master", "Approval Workflow"].map((mod) => {
+  const moduleKey = `${plant}-${mod}`;
+  return (
+    <div className={styles.row} key={moduleKey}>
+      <span>{mod}</span>
+      {permissions.map((perm) => {
+        const isApprovalWorkflow = mod === "Approval Workflow";
+        const isDisabled = isApprovalWorkflow && (perm === "Add" || perm === "Delete");
+
+        return (
+          <input
+            key={perm}
+            type="checkbox"
+            checked={form.permissions[moduleKey]?.includes(perm) || false}
+            disabled={isDisabled}
+            onChange={() =>
+              !isDisabled && handlePermissionToggle(moduleKey, perm)
+            }
+          />
+        );
+      })}
+    </div>
+  );
+})}
+
+    </div>
+  </div>
+))}
+
+<div>
+  <label className={styles.formLabel}>Corporate Access</label>
+  <div className={styles.centralTable}>
+    <div className={styles.rowCheckbox}>
+      <input
+        type="checkbox"
+        id="corporateAccess"
+        checked={form.corporateAccessEnabled}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            corporateAccessEnabled: e.target.checked,
+          })
+        }
+      />
+      <label htmlFor="corporateAccess">Enable Corporate Access</label>
+    </div>
+  </div>
+</div>
+
+{form.corporateAccessEnabled && (
+  <div className={`${styles.centralSection} ${styles.fadeIn}`}>
+    <label className={styles.sectionTitle}>Module Permissions for Corporate Access</label>
+    <div className={styles.table}>
+      <div className={styles.rowHeader}>
+        <span>Module Name</span>
+        {permissions.map((perm) => (
+          <span key={perm}>{perm}</span>
+        ))}
+      </div>
+      {["Role Master", "Vendor Master", "Plant Master", "Application Master", "Approval Workflow"].map((mod) => (
+        <div className={styles.row} key={`corporate-${mod}`}>
+          <span>{mod}</span>
+          {permissions.map((perm) => (
+            <input
+              key={perm}
+              type="checkbox"
+              checked={form.permissions[`corporate-${mod}`]?.includes(perm) || false}
+              onChange={() => handlePermissionToggle(`corporate-${mod}`, perm)}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
 
           <div>
-            <label className={styles.formLabel}>Central Permission</label>
+            <label className={styles.formLabel}>Central Master Permission</label>
             <div className={styles.centralTable}>
               <div className={styles.rowCheckbox}>
                 <input
@@ -200,64 +293,40 @@ const AddUserPanel = ({
                   }
                 />
                 <label htmlFor="centralPermission">
-                  Enable Central Permission
+                  Enable Central Master Permission
                 </label>
               </div>
             </div>
           </div>
 
-          {(form.plants.length > 0 || form.centralPermission) && (
-            <div>
-              <label className={styles.formLabel}>Module Permissions</label>
-              <div className={styles.table}>
-                <div className={styles.rowHeader}>
-                  <span>Module Name</span>
-                  {permissions.map((perm) => (
-                    <span key={perm}>{perm}</span>
-                  ))}
-                </div>
+         {form.centralPermission && (
+  <div className={`${styles.centralSection} ${styles.fadeIn}`}>
+    <label className={styles.sectionTitle}>Module Permissions for Central Master</label>
+    <div className={styles.table}>
+      <div className={styles.rowHeader}>
+        <span>Module Name</span>
+        {permissions.map((perm) => (
+          <span key={perm}>{perm}</span>
+        ))}
+      </div>
+      {["Role Master", "Vendor Master", "Plant Master", "Application Master", "Approval Workflow"].map((mod) => (
+        <div className={styles.row} key={`central-${mod}`}>
+          <span>{mod}</span>
+          {permissions.map((perm) => (
+  <input
+    key={perm}
+    type="checkbox"
+    checked={form.permissions[mod]?.includes(perm) || false}
+    onChange={() => handlePermissionToggle(mod, perm)}
+  />
+))}
 
-                {form.centralPermission && (
-                  <div className={styles.row} key="Central">
-                    <span>Central</span>
-                    {permissions.map((perm) => (
-                      <input
-                        key={perm}
-                        type="checkbox"
-                        checked={
-                          form.permissions["Central"]?.includes(perm) || false
-                        }
-                        onChange={() =>
-                          handlePermissionToggle("Central", perm)
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-                {form.plants.length > 0 &&
-                  ["Role Master", "Vendor Master", "Plant Master", "Application Master"].map(
-                    (mod) => (
-                      <div className={styles.row} key={mod}>
-                        <span>{mod}</span>
-                        {permissions.map((perm) => (
-                          <input
-                            key={perm}
-                            type="checkbox"
-                            checked={
-                              form.permissions[mod]?.includes(perm) || false
-                            }
-                            onChange={() =>
-                              handlePermissionToggle(mod, perm)
-                            }
-                          />
-                        ))}
-                      </div>
-                    )
-                  )}
-              </div>
-            </div>
-          )}
 
           <div className={styles.commentBox}>
             <label htmlFor="comment">Comment</label>

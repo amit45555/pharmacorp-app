@@ -15,7 +15,8 @@ const UserMasterTable = () => {
       department: "IT",
       plants: ["GOA", "GOA-1", "Mumbai"],
       status: "Active",
-      centralMaster: true,
+      centralMaster: ["Role Master"], // ✅ based on selected checkboxes
+
       activityLogs: [
         {
           action: "Edit",
@@ -50,7 +51,8 @@ const UserMasterTable = () => {
       department: "HR",
       plants: ["GOA", "Mumbai"],
       status: "Inactive",
-      centralMaster: false,
+      centralMaster: ["Role Master", "Plant Master"], // ✅ based on selected checkboxes
+
       activityLogs: [
         {
           action: "Edit",
@@ -77,7 +79,8 @@ const UserMasterTable = () => {
       department: "Finance",
       plants: ["Mumbai"],
       status: "Active",
-      centralMaster: true,
+      centralMaster: [ "Plant Master"], // ✅ based on selected checkboxes
+
       activityLogs: [
         {
           action: "Edit",
@@ -104,7 +107,8 @@ const UserMasterTable = () => {
       department: "QA",
       plants: ["Delhi", "Mumbai"],
       status: "Inactive",
-      centralMaster: false,
+      centralMaster: ["Role Master", "Plant Master"], // ✅ based on selected checkboxes
+
       activityLogs: [
         {
           action: "View",
@@ -173,6 +177,22 @@ const UserMasterTable = () => {
         return true;
     }
   });
+
+
+  const centralModules = [
+  "Role Master",
+  "Vendor Master",
+  "Plant Master",
+  "Application Master",
+  "Approval Workflow",
+];
+
+const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
+  return centralModules.filter(
+    (mod) => permissions[mod]?.length > 0
+  );
+};
+
 
   return (
     <div>
@@ -322,15 +342,18 @@ const UserMasterTable = () => {
                       {user.status}
                     </span>
                   </td>
-                  <td>
-                    <span
-                      className={
-                        user.centralMaster ? styles.active : styles.inactive
-                      }
-                    >
-                      {user.centralMaster ? "Yes" : "No"}
-                    </span>
-                  </td>
+                 <td>
+  {Array.isArray(user.centralMaster) && user.centralMaster.length > 0 ? (
+    user.centralMaster.map((mod: string, index: number) => (
+      <span key={index} className={styles.plantBadge}>
+        {mod}
+      </span>
+    ))
+  ) : (
+    <span className={styles.inactive}>-</span>
+  )}
+</td>
+
                   <td>
                     <button
                       className={styles.actionBtn}
@@ -474,12 +497,16 @@ const UserMasterTable = () => {
                     .replace("T", " "),
                 };
 
+                
+
+
                 if (panelMode === "add") {
                   setUsers((prev) => [
                     ...prev,
                     {
                       ...userData,
-                      centralMaster: userData.centralPermission ?? false,
+                     centralMaster: getEnabledCentralModules(userData.permissions),
+
                       activityLogs: [
                         {
                           action: "Edit",
@@ -498,7 +525,8 @@ const UserMasterTable = () => {
                       i === editUserIdx
                         ? {
                             ...userData,
-                            centralMaster: userData.centralPermission ?? false,
+                           centralMaster: getEnabledCentralModules(userData.permissions),
+
                             activityLogs: [
                               {
                                 action: "Edit",
