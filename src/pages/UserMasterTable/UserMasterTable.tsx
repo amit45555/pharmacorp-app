@@ -306,6 +306,7 @@ const UserMasterTable = () => {
               overflowY: "auto",
               borderRadius: 8,
               boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
+             
               height: "100",
             }}
           >
