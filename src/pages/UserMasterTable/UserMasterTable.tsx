@@ -488,8 +488,8 @@ const UserMasterTable = () => {
                 <thead>
                   <tr>
                     <th>Action Performed</th>
-                    <th>Old Change</th>
-                    <th>New Change</th>
+                    <th>Old Value</th>
+                    <th>New Value</th>
                     <th>Action Performed By</th>
                     <th>Date/Time (IST)</th>
                     <th>Comments</th>
