@@ -397,14 +397,7 @@ const UserMasterTable = () => {
             </table>
           </div>
           {/* Footer */}
-          <div className={styles.footer}>
-            <p>Showing 1 to 8 of 8 entries</p>
-            <div className={styles.pagination}>
-              <button disabled>{"<"}</button>
-              <button className={styles.activePage}>1</button>
-              <button>{">"}</button>
-            </div>
-          </div>
+          
         </div>
       </div>
       {/* Activity Logs Modal */}
