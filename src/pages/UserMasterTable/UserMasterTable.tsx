@@ -522,6 +522,12 @@ const UserMasterTable = () => {
                     ? activityLogsUser.activityLogs
                     : [activityLogsUser.activityLogs]
                   )
+                    .filter((log: any) => {
+                      // Only show Edit, Delete, Add actions
+                      const allowed = ["edit", "delete", "add"];
+                      const actionType = (log.action || "").toLowerCase();
+                      return allowed.some((type) => actionType.includes(type));
+                    })
                     .filter(
                       (log: any) =>
                         !activityLogsUser.approverFilter ||
