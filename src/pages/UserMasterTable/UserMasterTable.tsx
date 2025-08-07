@@ -475,6 +475,28 @@ const UserMasterTable = () => {
                 </span>
               </span>
             </div>
+            {/* Filter for Action Performed By (approver) */}
+            <div style={{ marginBottom: 10 }}>
+              <input
+                type="text"
+                placeholder="Filter by Action Performed By"
+                value={activityLogsUser.approverFilter || ""}
+                onChange={(e) => {
+                  setActivityLogsUser({
+                    ...activityLogsUser,
+                    approverFilter: e.target.value,
+                  });
+                }}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  fontSize: 14,
+                  width: 220,
+                  marginRight: 12,
+                }}
+              />
+            </div>
             <div
               style={{
                 overflowY: "auto",
@@ -499,35 +521,53 @@ const UserMasterTable = () => {
                   {(Array.isArray(activityLogsUser.activityLogs)
                     ? activityLogsUser.activityLogs
                     : [activityLogsUser.activityLogs]
-                  ).map((log: any, i: number) => {
-                    // Format date to IST dd/mm/yy HH:mm
-                    let dateObj = new Date(log.dateTime || log.timestamp);
-                    let istDate = new Date(
-                      dateObj.getTime() + 5.5 * 60 * 60 * 1000
-                    );
-                    let day = String(istDate.getDate()).padStart(2, "0");
-                    let month = String(istDate.getMonth() + 1).padStart(2, "0");
-                    let year = String(istDate.getFullYear()).slice(-2);
-                    let hours = String(istDate.getHours()).padStart(2, "0");
-                    let minutes = String(istDate.getMinutes()).padStart(2, "0");
-                    let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
-                    return (
-                      <tr key={i}>
-                        <td>{log.action || "-"}</td>
-                        <td>
-                          {log.oldValue !== undefined ? log.oldValue : "-"}
-                        </td>
-                        <td>
-                          {log.newValue !== undefined ? log.newValue : "-"}
-                        </td>
-                        <td>{log.approver || "-"}</td>
-                        <td>
-                          {log.dateTime || log.timestamp ? formattedDate : "-"}
-                        </td>
-                        <td>{log.reason || log.comment || "-"}</td>
-                      </tr>
-                    );
-                  })}
+                  )
+                    .filter(
+                      (log: any) =>
+                        !activityLogsUser.approverFilter ||
+                        (log.approver || "")
+                          .toLowerCase()
+                          .includes(
+                            activityLogsUser.approverFilter.toLowerCase()
+                          )
+                    )
+                    .map((log: any, i: number) => {
+                      // Format date to IST dd/mm/yy HH:mm
+                      let dateObj = new Date(log.dateTime || log.timestamp);
+                      let istDate = new Date(
+                        dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                      );
+                      let day = String(istDate.getDate()).padStart(2, "0");
+                      let month = String(istDate.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      let year = String(istDate.getFullYear()).slice(-2);
+                      let hours = String(istDate.getHours()).padStart(2, "0");
+                      let minutes = String(istDate.getMinutes()).padStart(
+                        2,
+                        "0"
+                      );
+                      let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                      return (
+                        <tr key={i}>
+                          <td>{log.action || "-"}</td>
+                          <td>
+                            {log.oldValue !== undefined ? log.oldValue : "-"}
+                          </td>
+                          <td>
+                            {log.newValue !== undefined ? log.newValue : "-"}
+                          </td>
+                          <td>{log.approver || "-"}</td>
+                          <td>
+                            {log.dateTime || log.timestamp
+                              ? formattedDate
+                              : "-"}
+                          </td>
+                          <td>{log.reason || log.comment || "-"}</td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
