@@ -2,13 +2,12 @@
 .container {
   display: flex;
   flex-direction: row;
- min-height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  /* background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%); */ 
+  /* background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%); */
   overflow-x: auto !important;
   max-width: 100vw;
   overflow: hidden;
-  
 }
 
 .mainContent {
@@ -57,7 +56,6 @@
   left: 0;
   top: 0;
   overflow-y: auto;
-
 }
 
 .logo {
@@ -111,13 +109,12 @@
   color: #8b9bb4;
 }
 
-.logoutDesign{
+.logoutDesign {
   margin-top: 110px;
   margin-left: 20px;
 }
 
 .logout {
-
   background: none;
   color: #e57373;
   border: none;
@@ -361,7 +358,6 @@
   margin-bottom: 2.5rem;
 }
 
-
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -381,13 +377,11 @@
   transition: box-shadow 0.2s, transform 0.15s;
   position: relative;
   max-width: 340px;
- 
 }
 
 .statCard:hover {
   transform: translateY(-5px);
 }
-
 
 .iconWrapper {
   background-color: #f1f7fd;
@@ -397,22 +391,19 @@
   align-items: center;
   justify-content: center;
   margin-right: 16px;
-  
 }
 
-.textContent{
+.textContent {
   display: flex;
   flex-direction: column;
-  
 }
 
 .statIcon {
-   font-size: 32px;
+  font-size: 32px;
   background-color: #f1f7fd;
   border-radius: 12px;
   padding: 0.5rem;
   margin-bottom: 8px;
-  
 }
 
 .statLabel {
@@ -432,7 +423,6 @@
   font-size: 14px;
   font-weight: 500;
 }
-
 
 .requestsSection {
   margin-top: 2.5rem;

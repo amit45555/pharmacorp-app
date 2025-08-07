@@ -79,7 +79,7 @@ const UserMasterTable = () => {
       department: "Finance",
       plants: ["Mumbai"],
       status: "Active",
-      centralMaster: [ "Plant Master"], // ✅ based on selected checkboxes
+      centralMaster: ["Plant Master"], // ✅ based on selected checkboxes
 
       activityLogs: [
         {
@@ -178,21 +178,19 @@ const UserMasterTable = () => {
     }
   });
 
-
   const centralModules = [
-  "Role Master",
-  "Vendor Master",
-  "Plant Master",
-  "Application Master",
-  "Approval Workflow",
-];
+    "Role Master",
+    "Vendor Master",
+    "Plant Master",
+    "Application Master",
+    "Approval Workflow",
+  ];
 
-const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
-  return centralModules.filter(
-    (mod) => permissions[mod]?.length > 0
-  );
-};
-
+  const getEnabledCentralModules = (permissions: {
+    [key: string]: string[];
+  }) => {
+    return centralModules.filter((mod) => permissions[mod]?.length > 0);
+  };
 
   return (
     <div>
@@ -301,91 +299,103 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
             )}
           </div>
           {/* Table */}
-          <table className={styles.userTable}>
-            <thead>
-              <tr>
-                <th>User Name</th>
-                <th>Email</th>
-                <th>Employee Code</th>
-                <th>Department</th>
-                <th>Assigned Plants</th>
-                <th>Status</th>
-                <th>Central Master</th>
-                <th>Activity Logs</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user: any, idx: number) => (
-                <tr key={idx}>
-                  <td>
-                    <strong>{user.fullName}</strong>
-                  </td>
-                  <td>{user.email}</td>
-                  <td>{user.empCode}</td>
-                  <td>{user.department}</td>
-                  <td>
-                    {user.plants.map((plant: string, i: number) => (
-                      <span key={i} className={styles.plantBadge}>
-                        {plant}
-                      </span>
-                    ))}
-                  </td>
-                  <td>
-                    <span
-                      className={
-                        user.status === "Active"
-                          ? styles.activeBadge
-                          : styles.inactiveBadge
-                      }
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                 <td>
-  {Array.isArray(user.centralMaster) && user.centralMaster.length > 0 ? (
-    user.centralMaster.map((mod: string, index: number) => (
-      <span key={index} className={styles.plantBadge}>
-        {mod}
-      </span>
-    ))
-  ) : (
-    <span className={styles.inactive}>-</span>
-  )}
-</td>
 
-                  <td>
-                    <button
-                      className={styles.actionBtn}
-                      title="View Activity Logs"
-                      onClick={() => {
-                        setActivityLogsUser(user);
-                        setShowActivityModal(true);
-                      }}
-                    >
-                      {FaRegClock({ size: 17 })}
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className={styles.actionBtn}
-                      onClick={() => {
-                        setPanelMode("edit");
-                        setEditUserIdx(idx);
-                        setEditUserData(filteredUsers[idx]);
-                        setShowPanel(true);
-                      }}
-                    >
-                      {FaEdit({ size: 17 })}
-                    </button>
-                    <button className={styles.actionBtnDelete}>
-                      {FaTrash({ size: 17 })}
-                    </button>
-                  </td>
+          <div
+            style={{
+              maxHeight: 500,
+              overflowY: "auto",
+              borderRadius: 8,
+              boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
+              height: "100",
+            }}
+          >
+            <table className={styles.userTable}>
+              <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Employee Code</th>
+                  <th>Department</th>
+                  <th>Assigned Plants</th>
+                  <th>Status</th>
+                  <th>Central Master</th>
+                  <th>Activity Logs</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user: any, idx: number) => (
+                  <tr key={idx}>
+                    <td>
+                      <strong>{user.fullName}</strong>
+                    </td>
+                    <td>{user.email}</td>
+                    <td>{user.empCode}</td>
+                    <td>{user.department}</td>
+                    <td>
+                      {user.plants.map((plant: string, i: number) => (
+                        <span key={i} className={styles.plantBadge}>
+                          {plant}
+                        </span>
+                      ))}
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          user.status === "Active"
+                            ? styles.activeBadge
+                            : styles.inactiveBadge
+                        }
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td>
+                      {Array.isArray(user.centralMaster) &&
+                      user.centralMaster.length > 0 ? (
+                        user.centralMaster.map((mod: string, index: number) => (
+                          <span key={index} className={styles.plantBadge}>
+                            {mod}
+                          </span>
+                        ))
+                      ) : (
+                        <span className={styles.inactive}>-</span>
+                      )}
+                    </td>
+
+                    <td>
+                      <button
+                        className={styles.actionBtn}
+                        title="View Activity Logs"
+                        onClick={() => {
+                          setActivityLogsUser(user);
+                          setShowActivityModal(true);
+                        }}
+                      >
+                        {FaRegClock({ size: 17 })}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className={styles.actionBtn}
+                        onClick={() => {
+                          setPanelMode("edit");
+                          setEditUserIdx(idx);
+                          setEditUserData(filteredUsers[idx]);
+                          setShowPanel(true);
+                        }}
+                      >
+                        {FaEdit({ size: 17 })}
+                      </button>
+                      <button className={styles.actionBtnDelete}>
+                        {FaTrash({ size: 17 })}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {/* Footer */}
           <div className={styles.footer}>
             <p>Showing 1 to 8 of 8 entries</p>
@@ -406,13 +416,17 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
           <div
             className={styles.panelWrapper}
             style={{
-              maxWidth: 800,
-              width: "90%",
-              left: "50%",
+              maxWidth: 1000,
+              width: "95%",
+              left: "53%",
               transform: "translateX(-50%)",
               position: "fixed",
-              top: 60,
+              top: 176,
               borderRadius: 16,
+              boxShadow: "0 8px 32px rgba(11,99,206,0.18)",
+              padding: "24px 18px 18px 18px",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <div
@@ -423,33 +437,61 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
                 marginBottom: 16,
               }}
             >
-              <h3 style={{ margin: 0 }}>Activity Logs</h3>
+              <div style={{ fontWeight: 700, fontSize: 20 }}>Activity Log</div>
               <button
-                className={styles.actionBtnDelete}
+                style={{
+                  background: "#e3e9f7",
+                  border: "none",
+                  borderRadius: 8,
+                  padding: "6px 14px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  fontSize: 18,
+                }}
                 onClick={() => setShowActivityModal(false)}
-                style={{ fontWeight: 700, fontSize: 18 }}
               >
-                X
+                ×
               </button>
             </div>
-            <div style={{ marginBottom: 12, fontWeight: 500 }}>
-              Username:{" "}
-              <span style={{ color: "#0b63ce" }}>
-                {activityLogsUser.fullName}
-              </span>{" "}
-              &nbsp; | &nbsp; Emp ID:{" "}
-              <span style={{ color: "#0b63ce" }}>
-                {activityLogsUser.empCode}
+            <div
+              style={{
+                marginBottom: 12,
+                fontWeight: 500,
+                fontSize: 15,
+                color: "#333",
+              }}
+            >
+              <span>
+                Username:{" "}
+                <span style={{ color: "#0b63ce" }}>
+                  {activityLogsUser.fullName}
+                </span>
+              </span>
+              &nbsp; | &nbsp;
+              <span>
+                Emp ID:{" "}
+                <span style={{ color: "#0b63ce" }}>
+                  {activityLogsUser.empCode}
+                </span>
               </span>
             </div>
-            <div style={{ overflowX: "auto" }}>
+            <div
+              style={{
+                overflowY: "auto",
+                maxHeight: 350,
+                minWidth: "100%",
+                borderRadius: 8,
+                boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
+              }}
+            >
               <table className={styles.userTable} style={{ minWidth: 900 }}>
                 <thead>
                   <tr>
                     <th>Action Performed</th>
                     <th>Old Change</th>
                     <th>New Change</th>
-                    <th>Action Performed By (Timestamp)</th>
+                    <th>Action Performed By</th>
+                    <th>Date/Time (IST)</th>
                     <th>Comments</th>
                   </tr>
                 </thead>
@@ -457,20 +499,35 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
                   {(Array.isArray(activityLogsUser.activityLogs)
                     ? activityLogsUser.activityLogs
                     : [activityLogsUser.activityLogs]
-                  ).map((log: any, i: number) => (
-                    <tr key={i}>
-                      <td>{log.action || "-"}</td>
-                      <td>{log.oldValue !== undefined ? log.oldValue : "-"}</td>
-                      <td>{log.newValue !== undefined ? log.newValue : "-"}</td>
-                      <td>
-                        {log.approver || "-"}
-                        {log.dateTime || log.timestamp
-                          ? ` (${log.dateTime || log.timestamp})`
-                          : ""}
-                      </td>
-                      <td>{log.reason || log.comment || "-"}</td>
-                    </tr>
-                  ))}
+                  ).map((log: any, i: number) => {
+                    // Format date to IST dd/mm/yy HH:mm
+                    let dateObj = new Date(log.dateTime || log.timestamp);
+                    let istDate = new Date(
+                      dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                    );
+                    let day = String(istDate.getDate()).padStart(2, "0");
+                    let month = String(istDate.getMonth() + 1).padStart(2, "0");
+                    let year = String(istDate.getFullYear()).slice(-2);
+                    let hours = String(istDate.getHours()).padStart(2, "0");
+                    let minutes = String(istDate.getMinutes()).padStart(2, "0");
+                    let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                    return (
+                      <tr key={i}>
+                        <td>{log.action || "-"}</td>
+                        <td>
+                          {log.oldValue !== undefined ? log.oldValue : "-"}
+                        </td>
+                        <td>
+                          {log.newValue !== undefined ? log.newValue : "-"}
+                        </td>
+                        <td>{log.approver || "-"}</td>
+                        <td>
+                          {log.dateTime || log.timestamp ? formattedDate : "-"}
+                        </td>
+                        <td>{log.reason || log.comment || "-"}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -497,21 +554,26 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
                     .replace("T", " "),
                 };
 
-                
-
-
                 if (panelMode === "add") {
                   setUsers((prev) => [
                     ...prev,
                     {
                       ...userData,
-                     centralMaster: getEnabledCentralModules(userData.permissions),
-
+                      centralMaster: getEnabledCentralModules(
+                        userData.permissions
+                      ),
                       activityLogs: [
                         {
-                          action: "Edit",
+                          action: "Add",
                           oldValue: "-",
-                          newValue: "-",
+                          newValue: JSON.stringify({
+                            department: userData.department,
+                            plants: userData.plants,
+                            status: userData.status,
+                            centralMaster: getEnabledCentralModules(
+                              userData.permissions
+                            ),
+                          }),
                           approver: logDetails.approver,
                           dateTime: logDetails.dateTime,
                           reason: logDetails.reason,
@@ -521,25 +583,66 @@ const getEnabledCentralModules = (permissions: { [key: string]: string[] }) => {
                   ]);
                 } else if (panelMode === "edit" && editUserIdx !== null) {
                   setUsers((prev) =>
-                    prev.map((u, i) =>
-                      i === editUserIdx
-                        ? {
-                            ...userData,
-                           centralMaster: getEnabledCentralModules(userData.permissions),
+                    prev.map((u, i) => {
+                      if (i !== editUserIdx) return u;
+                      const newCentralMaster = getEnabledCentralModules(
+                        userData.permissions
+                      );
+                      let logs = Array.isArray(u.activityLogs)
+                        ? [...u.activityLogs]
+                        : [];
 
-                            activityLogs: [
-                              {
-                                action: "Edit",
-                                oldValue: "-",
-                                newValue: "-",
-                                approver: logDetails.approver,
-                                dateTime: logDetails.dateTime,
-                                reason: logDetails.reason,
-                              },
-                            ],
-                          }
-                        : u
-                    )
+                      // Compare only allowed fields
+                      if (u.department !== userData.department) {
+                        logs.push({
+                          action: "Edit department",
+                          oldValue: u.department,
+                          newValue: userData.department,
+                          approver: logDetails.approver,
+                          dateTime: logDetails.dateTime,
+                          reason: logDetails.reason,
+                        });
+                      }
+                      if (u.status !== userData.status) {
+                        logs.push({
+                          action: "Edit status",
+                          oldValue: u.status,
+                          newValue: userData.status,
+                          approver: logDetails.approver,
+                          dateTime: logDetails.dateTime,
+                          reason: logDetails.reason,
+                        });
+                      }
+                      if (u.plants.join(", ") !== userData.plants.join(", ")) {
+                        logs.push({
+                          action: "Edit plants",
+                          oldValue: u.plants.join(", "),
+                          newValue: userData.plants.join(", "),
+                          approver: logDetails.approver,
+                          dateTime: logDetails.dateTime,
+                          reason: logDetails.reason,
+                        });
+                      }
+                      if (
+                        u.centralMaster.join(", ") !==
+                        newCentralMaster.join(", ")
+                      ) {
+                        logs.push({
+                          action: "Edit centralMaster",
+                          oldValue: u.centralMaster.join(", "),
+                          newValue: newCentralMaster.join(", "),
+                          approver: logDetails.approver,
+                          dateTime: logDetails.dateTime,
+                          reason: logDetails.reason,
+                        });
+                      }
+
+                      return {
+                        ...userData,
+                        centralMaster: newCentralMaster,
+                        activityLogs: logs,
+                      };
+                    })
                   );
                 }
 

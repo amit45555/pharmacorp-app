@@ -4,10 +4,13 @@
   box-sizing: border-box;
 }
 
-body, html, .main-container {
+body,
+html,
+.main-container {
   height: 100%;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: #f9f9f9;
+  overflow: hidden;
 }
 
 .main-container {
@@ -22,7 +25,7 @@ body, html, .main-container {
   flex-direction: column;
   height: 100vh;
   position: relative;
-  overflow-y:  auto;
+  overflow-y: auto;
 }
 
 .sidebar-header {
@@ -30,7 +33,7 @@ body, html, .main-container {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-group {
@@ -62,7 +65,7 @@ body, html, .main-container {
 .sidebar-footer {
   margin-top: auto;
   padding: 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .admin-info {
@@ -106,8 +109,6 @@ body, html, .main-container {
 }
 
 .main-content {
- 
-  
   width: calc(100% - 250px);
 }
 
@@ -116,9 +117,8 @@ body, html, .main-container {
   margin-bottom: 20px;
 }
 
-
 .dashboard1 {
- padding: 25px;
+  padding: 25px;
 }
 
 .dashboard1 h2 {
@@ -140,7 +140,7 @@ body, html, .main-container {
   padding: 16px;
   display: flex;
   gap: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .icon {
@@ -173,22 +173,20 @@ body, html, .main-container {
   gap: 20px;
 }
 
-.chart-section, 
+.chart-section,
 .activity-section {
   flex: 1;
   background: white;
   padding: 20px;
   border-radius: 12px;
   min-width: 300px;
-
 }
-  .activity-section {
+.activity-section {
   background-color: #ffffff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
-
 }
 
 .activity-section h3 {
@@ -225,7 +223,7 @@ body, html, .main-container {
 
 .activity-list li {
   margin-bottom: 10px;
-   display: flex;
+  display: flex;
   align-items: flex-start;
   padding: 16px;
   border-bottom: 1px solid #edf2f7;
@@ -238,11 +236,7 @@ body, html, .main-container {
 .activity-list span {
   font-size: 0.85rem;
   color: #718096;
-  
 }
-
-
-
 
 .main-header {
   display: flex;
@@ -251,7 +245,7 @@ body, html, .main-container {
   background-color: #ffffff;
   padding: 12px 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
- 
+
   height: 75px;
 }
 
@@ -259,7 +253,6 @@ body, html, .main-container {
   font-size: 28px;
   font-weight: 600;
   color: #1a1a1a;
-  
 }
 
 .header-icons {
@@ -277,8 +270,6 @@ body, html, .main-container {
 .header-icon:hover {
   color: #007bff;
 }
-
-
 
 /* Color-coded icon container inside card */
 .iconBox {
@@ -300,7 +291,7 @@ body, html, .main-container {
 }
 
 .overview-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Chart donut enhancement */
@@ -345,8 +336,6 @@ body, html, .main-container {
   margin-right: 12px;
 }
 
-
-
 .donut-chart-wrapper {
   height: 250px;
   width: 100%;
@@ -360,8 +349,6 @@ body, html, .main-container {
   flex: 1;
   min-width: 300px;
 }
-
-
 
 .legend-item {
   display: flex;
