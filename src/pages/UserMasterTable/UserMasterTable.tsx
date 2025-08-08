@@ -182,8 +182,8 @@ const UserMasterTable = () => {
     "Role Master",
     "Vendor Master",
     "Plant Master",
-    "Application Master",
-    "Approval Workflow",
+     "Approval Workflow1",
+    "Approval Workflow2",
   ];
 
   const getEnabledCentralModules = (permissions: {
@@ -503,7 +503,7 @@ const UserMasterTable = () => {
               <table className={styles.userTable} style={{ minWidth: 900 }}>
                 <thead>
                   <tr>
-                    <th>Action Performed</th>
+                    <th>Action </th>
                     <th>Old Value</th>
                     <th>New Value</th>
                     <th>Action Performed By</th>
