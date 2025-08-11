@@ -515,20 +515,129 @@ const UserMasterTable = () => {
               }}
             >
               <div style={{ fontWeight: 700, fontSize: 20 }}>Activity Log</div>
-              <button
-                style={{
-                  background: "#e3e9f7",
-                  border: "none",
-                  borderRadius: 8,
-                  padding: "6px 14px",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                  fontSize: 18,
-                }}
-                onClick={() => setShowActivityModal(false)}
-              >
-                ×
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  className={styles.exportPdfBtn}
+                  onClick={() => {
+                    const doc = new jsPDF({ orientation: "landscape" });
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, "0");
+                    const dd = String(today.getDate()).padStart(2, "0");
+                    const fileName = `activity_log_${yyyy}-${mm}-${dd}.pdf`;
+                    // Table headers
+                    const headers = [
+                      [
+                        "Action",
+                        "Old Value",
+                        "New Value",
+                        "Action Performed By",
+                        "Date/Time (IST)",
+                        "Comments",
+                      ],
+                    ];
+                    // Filtered logs
+                    const allowed = ["edit", "delete", "add"];
+                    const logs = (
+                      Array.isArray(activityLogsUser.activityLogs)
+                        ? activityLogsUser.activityLogs
+                        : [activityLogsUser.activityLogs]
+                    )
+                      .filter((log: any) => {
+                        const actionType = (log.action || "").toLowerCase();
+                        return allowed.some((type) =>
+                          actionType.includes(type)
+                        );
+                      })
+                      .filter(
+                        (log: any) =>
+                          !activityLogsUser.approverFilter ||
+                          (log.approver || "")
+                            .toLowerCase()
+                            .includes(
+                              activityLogsUser.approverFilter.toLowerCase()
+                            )
+                      );
+                    // Table rows
+                    const rows = logs.map((log: any) => {
+                      let dateObj = new Date(log.dateTime || log.timestamp);
+                      let istDate = new Date(
+                        dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                      );
+                      let day = String(istDate.getDate()).padStart(2, "0");
+                      let month = String(istDate.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      let year = String(istDate.getFullYear()).slice(-2);
+                      let hours = String(istDate.getHours()).padStart(2, "0");
+                      let minutes = String(istDate.getMinutes()).padStart(
+                        2,
+                        "0"
+                      );
+                      let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                      return [
+                        log.action || "-",
+                        log.oldValue !== undefined ? log.oldValue : "-",
+                        log.newValue !== undefined ? log.newValue : "-",
+                        log.approver || "-",
+                        log.dateTime || log.timestamp ? formattedDate : "-",
+                        log.reason || log.comment || "-",
+                      ];
+                    });
+                    doc.setFontSize(18);
+                    doc.text("Activity Log", 14, 18);
+                    autoTable(doc, {
+                      head: headers,
+                      body: rows,
+                      startY: 28,
+                      styles: {
+                        fontSize: 11,
+                        cellPadding: 3,
+                        halign: "left",
+                        valign: "middle",
+                      },
+                      headStyles: {
+                        fillColor: [11, 99, 206],
+                        textColor: 255,
+                        fontStyle: "bold",
+                      },
+                      alternateRowStyles: {
+                        fillColor: [240, 245, 255],
+                      },
+                      margin: { left: 14, right: 14 },
+                      tableWidth: "auto",
+                    });
+                    doc.save(fileName);
+                  }}
+                  aria-label="Export activity log to PDF"
+                  type="button"
+                >
+                  <span
+                    role="img"
+                    aria-label="Export PDF"
+                    style={{ fontSize: 18 }}
+                  >
+                    🗎
+                  </span>
+                  Export PDF
+                </button>
+                <button
+                  style={{
+                    background: "#e3e9f7",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "6px 14px",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    fontSize: 18,
+                  }}
+                  onClick={() => setShowActivityModal(false)}
+                  aria-label="Close activity log"
+                >
+                  ×
+                </button>
+              </div>
             </div>
             <div
               style={{
