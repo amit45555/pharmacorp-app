@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import styles from "./RoleMasterTable.module.css";
-import {  FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
+import AddRolePanel from "../AddRolePanel/AddRolePanel"; // Use your actual import!
 
-const rolesData = [
+interface Role {
+  name: string;
+  description: string;
+  status: string;
+}
+
+const initialRoles: Role[] = [
   { name: "Read Only", description: "View access to system data", status: "ACTIVE" },
   { name: "User", description: "Standard user access with edit capabilities", status: "ACTIVE" },
   { name: "Administrator", description: "Full administrative access", status: "ACTIVE" },
@@ -13,125 +20,155 @@ const rolesData = [
 ];
 
 export default function RoleMasterTable() {
-  const [filters, setFilters] = useState({ name: "", description: "", status: "" });
+  // Table data
+  const [roles, setRoles] = useState<Role[]>(initialRoles);
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
-  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
-  const [filterColumn, setFilterColumn] = useState("name");
+  // Add/Edit panel
+  const [showPanel, setShowPanel] = useState(false);
+  const [panelMode, setPanelMode] = useState<"add" | "edit">("add");
+  const [editRoleIdx, setEditRoleIdx] = useState<number | null>(null);
+  const [form, setForm] = useState<Role>({ name: "", description: "", status: "ACTIVE" });
+
+  // === 🟦 NEW FILTER PANE STATE ===
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [filterColumn, setFilterColumn] = useState<"name"|"description"|"status">("name");
   const [filterValue, setFilterValue] = useState("");
 
-  const filteredRoles = rolesData.filter((role) => {
-    let match = true;
-    if (filters.name) match = match && role.name.toLowerCase().includes(filters.name.toLowerCase());
-    if (filters.description) match = match && role.description.toLowerCase().includes(filters.description.toLowerCase());
-    if (filters.status) match = match && role.status.toLowerCase() === filters.status.toLowerCase();
+  // Table controls
+  const handleAddRole = () => {
+    setPanelMode("add");
+    setEditRoleIdx(null);
+    setForm({ name: "", description: "", status: "ACTIVE" });
+    setShowPanel(true);
+  };
 
-    if (filterValue) {
-      if (filterColumn === "name") match = match && role.name.toLowerCase().includes(filterValue.toLowerCase());
-      if (filterColumn === "description") match = match && role.description.toLowerCase().includes(filterValue.toLowerCase());
-      if (filterColumn === "status") match = match && role.status.toLowerCase().includes(filterValue.toLowerCase());
+  const handleEditRole = (idx: number) => {
+    setPanelMode("edit");
+    setEditRoleIdx(idx);
+    setForm({ ...roles[idx] });
+    setShowPanel(true);
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleClosePanel = () => setShowPanel(false);
+
+  const handleSave = () => {
+    if (panelMode === "add") {
+      setRoles([...roles, form]);
+    } else if (panelMode === "edit" && editRoleIdx !== null) {
+      const updated = [...roles];
+      updated[editRoleIdx] = form;
+      setRoles(updated);
     }
-    return match;
+    setShowPanel(false);
+  };
+
+  const handleDelete = (idx: number) => {
+    const updated = [...roles];
+    updated.splice(idx, 1);
+    setRoles(updated);
+    setExpandedRow(null);
+  };
+
+  // -=-=-=- 🟦 Filter logic (only column/value) -=-=-=-
+  const filteredRoles = roles.filter(role => {
+    if (!filterValue) return true;
+    const val = filterValue.toLowerCase();
+
+    if (filterColumn === "name") return role.name.toLowerCase().includes(val);
+    if (filterColumn === "description") return role.description.toLowerCase().includes(val);
+    if (filterColumn === "status") return role.status.toLowerCase().includes(val);
+    return true;
   });
-
- 
-
-  const toggleActions = (idx: number) => {
-    setExpandedRow((prev) => (prev === idx ? null : idx));
-  };
-
-  const applyAdvancedFilter = () => {
-    setShowAdvancedFilter(false);
-  };
-
-  const clearAdvancedFilter = () => {
-    setFilterColumn("name");
-    setFilterValue("");
-    setShowAdvancedFilter(false); // also hide when cleared
-  };
 
   return (
     <div>
-      {/* Header */}
+      {/* Top header */}
       <header className={styles["main-header"]}>
         <h2 className={styles["header-title"]}>Role Master</h2>
         <div className={styles["header-icons"]}>
-          <span className={styles["header-icon"]}>
-            <NotificationsIcon fontSize="small" />
-          </span>
-          <span className={styles["header-icon"]}>
-            <SettingsIcon fontSize="small" />
-          </span>
+          <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
+          <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
         </div>
       </header>
-
+      
+      {/* Table controls */}
       <div className={styles.headerTopRow}>
-          <h2>Role Master</h2>
+        <button
+          className={styles.filterBtn}
+          onClick={() => setShowFilterPanel(true)}
+        >
+          🔍 Filter
+        </button>
+        <button className={styles.addUserBtn} onClick={handleAddRole}>
+          + Add Role
+        </button>
+      </div>
 
-         
-           <button
-      className={styles.addUserBtn}
-      // attach your addRole handler here
-      onClick={() => {/* handle add role modal/dialog */}}
-    >
-      + Add Role
-    </button>
-        </div>
-        <div>
-
-         {/* Filter button */}
-          <button
-            className={styles.filterBtn}
-            onClick={() => setShowAdvancedFilter((prev) => !prev)}
-          >
-            🔍 Filter
-          </button>
-        </div>
-      {/* Table */}
-      <div className={styles.roleTableContainer}>
-        
-
-        {/* Advanced Filter Panel */}
-        {showAdvancedFilter && (
-          <div className={styles.advancedFilter}>
-            <div className={styles.filterHeader}>
-              <h4>Advanced Filter</h4>
-
-             <span
-                      onClick={() => setShowAdvancedFilter(false)}
-                      title="Close Filter"
-                      className={styles.closeIcon}
-                    >
-                       {FaTimes({ size: 17 })}
-                    </span>
-
-             
+      {/* 🟩 FILTER PANEL (UI matches your screenshot) */}
+      {showFilterPanel && (
+        <div className={styles.advancedFilterOverlay}>
+          <div className={styles.advancedFilterPanel}>
+            <div className={styles.advancedFilterHeader}>
+              <span>Advanced Filter</span>
+              <button
+                type="button"
+                style={{ background: 'none', border: 'none', fontSize: 18, cursor: "pointer" }}
+                onClick={() => setShowFilterPanel(false)}
+                aria-label="Close"
+              >✕</button>
             </div>
-
-            <div className={styles.filterRowBox}>
+            <div className={styles.advancedFilterRow}>
               <label>Column</label>
-              <select value={filterColumn} onChange={(e) => setFilterColumn(e.target.value)}>
+              <select
+                value={filterColumn}
+                onChange={e => setFilterColumn(
+                  e.target.value as "name" | "description" | "status"
+                )}
+              >
                 <option value="name">Name</option>
                 <option value="description">Description</option>
                 <option value="status">Status</option>
               </select>
             </div>
-            <div className={styles.filterRowBox}>
+            <div className={styles.advancedFilterRow}>
               <label>Value</label>
               <input
                 type="text"
                 placeholder={`Enter ${filterColumn}`}
                 value={filterValue}
-                onChange={(e) => setFilterValue(e.target.value)}
+                onChange={e => setFilterValue(e.target.value)}
               />
             </div>
-            <div className={styles.filterActions}>
-              <button onClick={applyAdvancedFilter} className={styles.applyBtn}>Apply</button>
-              <button onClick={clearAdvancedFilter} className={styles.clearBtn}>Clear</button>
+            <div style={{ marginTop: 16, display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                className={styles.saveBtn}
+                onClick={() => setShowFilterPanel(false)}
+                type="button"
+              >Apply</button>
+              <button
+                className={styles.cancelBtn}
+                onClick={() => {
+                  setFilterValue("");
+                  setShowFilterPanel(false);
+                }}
+                type="button"
+              >Clear</button>
             </div>
           </div>
-        )}
+          <div
+            className={styles.advancedFilterBackdrop}
+            onClick={() => setShowFilterPanel(false)}
+          />
+        </div>
+      )}
 
+      {/* Table */}
+      <div className={styles.roleTableContainer}>
         <table>
           <thead>
             <tr>
@@ -142,47 +179,78 @@ export default function RoleMasterTable() {
               <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
-            {filteredRoles.map((role, idx) => (
-              <tr key={idx}>
-                <td><input type="checkbox" /></td>
-                <td>{role.name}</td>
-                <td>{role.description}</td>
-                <td>
-                  <span className={`${styles.status} ${styles.active}`}>
-                    {role.status}
-                  </span>
-                </td>
-                <td>
-                  {expandedRow === idx ? (
-                    <div className={styles.inlineMenu}>
-                     
-                      <button className={`${styles.btn} ${styles.gray}`}>
-                        {FaEdit({ size: 14 })} Edit
-                      </button>
-                      <button className={`${styles.btn} ${styles.red}`}>
-                        {FaTrash({ size: 14 })} Delete
-                      </button>
-                      <button className={`${styles.btn} ${styles.blue}`}>
-                         {FaEye({ size: 14 })} View
-                      </button>
-                    </div>
-                  ) : (
-                    <span
-                      onClick={() => toggleActions(idx)}
-                      title="Show Actions"
-                      className={styles.icon}
-                    >
-                       {FaEye({ size: 17 })}
-                    </span>
-                  )}
+            {filteredRoles.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center", color: "#888" }}>
+                  No roles found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredRoles.map((role, idx) => (
+                <tr key={idx}>
+                  <td><input type="checkbox" /></td>
+                  <td>{role.name}</td>
+                  <td>{role.description}</td>
+                  <td>
+                    <span className={`${styles.status} ${styles.active}`}>{role.status}</span>
+                  </td>
+                  <td>
+                    {expandedRow === idx ? (
+                      <div className={styles.inlineMenu}>
+                        <button className={`${styles.btn} ${styles.gray}`} onClick={() => handleEditRole(idx)}>
+                          <FaEdit size={14} /> Edit
+                        </button>
+                        <button className={`${styles.btn} ${styles.red}`} onClick={() => handleDelete(idx)}>
+                          <FaTrash size={14} /> Delete
+                        </button>
+                        <button className={`${styles.btn} ${styles.blue}`}>
+                          <FaEye size={14} /> View
+                        </button>
+                      </div>
+                    ) : (
+                      <span onClick={() => setExpandedRow(idx)} title="Show Actions" className={styles.icon}>
+                        <FaEye size={17} />
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Add/Edit Slide-in Panel */}
+      <AddRolePanel
+        open={showPanel}
+        title={panelMode === "add" ? "Add Role" : "Edit Role"}
+        onClose={handleClosePanel}
+      >
+        <form className={styles.roleForm} onSubmit={e => { e.preventDefault(); handleSave(); }}>
+          <div className={styles.formGroup}>
+            <label>Role Name</label>
+            <input name="name" value={form.name} onChange={handleFormChange} required />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Description</label>
+            <input name="description" value={form.description} onChange={handleFormChange} required />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Status</label>
+            <select name="status" value={form.status} onChange={handleFormChange}>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+            </select>
+          </div>
+          <div className={styles.formActions}>
+            <button type="submit" className={styles.saveBtn}>
+              {panelMode === "add" ? "Add" : "Update"}
+            </button>
+            <button type="button" className={styles.cancelBtn} onClick={handleClosePanel}>Cancel</button>
+          </div>
+        </form>
+      </AddRolePanel>
     </div>
   );
 }
