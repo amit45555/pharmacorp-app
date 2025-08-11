@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./RoleMasterTable.module.css";
-import { FaPlus, FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
+import {  FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -34,9 +34,7 @@ export default function RoleMasterTable() {
     return match;
   });
 
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-  };
+ 
 
   const toggleActions = (idx: number) => {
     setExpandedRow((prev) => (prev === idx ? null : idx));
@@ -67,12 +65,21 @@ export default function RoleMasterTable() {
         </div>
       </header>
 
-      {/* Table */}
-      <div className={styles.roleTableContainer}>
-        <div className={styles.header}>
+      <div className={styles.headerTopRow}>
           <h2>Role Master</h2>
 
-          {/* Filter button */}
+         
+           <button
+      className={styles.addUserBtn}
+      // attach your addRole handler here
+      onClick={() => {/* handle add role modal/dialog */}}
+    >
+      + Add Role
+    </button>
+        </div>
+        <div>
+
+         {/* Filter button */}
           <button
             className={styles.filterBtn}
             onClick={() => setShowAdvancedFilter((prev) => !prev)}
@@ -80,6 +87,9 @@ export default function RoleMasterTable() {
             🔍 Filter
           </button>
         </div>
+      {/* Table */}
+      <div className={styles.roleTableContainer}>
+        
 
         {/* Advanced Filter Panel */}
         {showAdvancedFilter && (
@@ -147,9 +157,7 @@ export default function RoleMasterTable() {
                 <td>
                   {expandedRow === idx ? (
                     <div className={styles.inlineMenu}>
-                      <button className={`${styles.btn} ${styles.green}`}>
-                        {FaPlus({ size: 14 })} Add
-                      </button>
+                     
                       <button className={`${styles.btn} ${styles.gray}`}>
                         {FaEdit({ size: 14 })} Edit
                       </button>

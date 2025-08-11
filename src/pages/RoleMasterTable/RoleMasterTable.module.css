@@ -266,6 +266,7 @@ tbody td {
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  margin: 20px;
 }
 .filterBtn:hover {
   background-color: #1d4ed8;
@@ -274,7 +275,8 @@ tbody td {
 .advancedFilter {
  position: absolute;
   top: 50px; /* adjust depending on your header height */
-  right: 16px; /* aligns with Filter button */
+  left: 30px;
+  /* aligns with Filter button */
   background: #fff;
   border: 1px solid #ddd;
   padding: 14px;
@@ -342,4 +344,31 @@ tbody td {
 
 .closeIcon:hover {
   color: red;
+}
+
+
+.headerTopRow {
+  
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.addUserBtn {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(90,96,120,.07);
+  transition: background 0.18s;
+}
+
+.addUserBtn:hover {
+  background-color: #1747b6;
 }
