@@ -76,6 +76,33 @@
 .filterButton:hover {
   background: #084a9e;
 }
+/* Export to PDF button styles */
+.exportPdfBtn {
+  background: #fff;
+  color: #0b63ce;
+  border: 2px solid #0b63ce;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 12px;
+  box-shadow: 0 2px 8px rgba(11, 99, 206, 0.08);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.exportPdfBtn:hover {
+  background: #0b63ce;
+  color: #fff;
+  border-color: #084a9e;
+}
+.exportPdfBtn:active {
+  background: #084a9e;
+  color: #fff;
+  border-color: #084a9e;
+}
 .filterPopover {
   position: absolute;
   top: 60px;
@@ -232,8 +259,7 @@
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
- 
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .userTable th {

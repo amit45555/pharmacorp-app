@@ -6,6 +6,9 @@ import AddUserPanel from "pages/AddUserPanel/AddUserPanel";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 const UserMasterTable = () => {
   const [users, setUsers] = useState([
     {
@@ -182,9 +185,71 @@ const UserMasterTable = () => {
     "Role Master",
     "Vendor Master",
     "Plant Master",
-     "Approval Workflow1",
+    "Approval Workflow1",
     "Approval Workflow2",
   ];
+
+  // PDF Export Handler
+  const handleExportPDF = () => {
+    const doc = new jsPDF({ orientation: "landscape" });
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const fileName = `UserMasterTable_${yyyy}-${mm}-${dd}.pdf`;
+
+    // Table headers
+    const headers = [
+      [
+        "User Name",
+        "Email",
+        "Employee Code",
+        "Department",
+        "Assigned Plants",
+        "Status",
+        "Central Master",
+      ],
+    ];
+    // Table rows
+    const rows = filteredUsers.map((user: any) => [
+      user.fullName,
+      user.email,
+      user.empCode,
+      user.department,
+      Array.isArray(user.plants) ? user.plants.join(", ") : "-",
+      user.status,
+      Array.isArray(user.centralMaster) && user.centralMaster.length > 0
+        ? user.centralMaster.join(", ")
+        : "-",
+    ]);
+
+    // Title
+    doc.setFontSize(18);
+    doc.text("User Master Table", 14, 18);
+    // Table
+    autoTable(doc, {
+      head: headers,
+      body: rows,
+      startY: 28,
+      styles: {
+        fontSize: 11,
+        cellPadding: 3,
+        halign: "left",
+        valign: "middle",
+      },
+      headStyles: {
+        fillColor: [11, 99, 206],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [240, 245, 255],
+      },
+      margin: { left: 14, right: 14 },
+      tableWidth: "auto",
+    });
+    doc.save(fileName);
+  };
 
   const getEnabledCentralModules = (permissions: {
     [key: string]: string[];
@@ -213,16 +278,34 @@ const UserMasterTable = () => {
               <h2>User Management</h2>
               <p>Manage user accounts, permissions, and plant access</p>
             </div>
-            <button
-              className={styles.addUser}
-              onClick={() => {
-                setPanelMode("add");
-                setEditUserData(null);
-                setShowPanel(true);
-              }}
-            >
-              + Add User
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <button
+                className={styles.addUser}
+                onClick={() => {
+                  setPanelMode("add");
+                  setEditUserData(null);
+                  setShowPanel(true);
+                }}
+                aria-label="Add User"
+              >
+                + Add User
+              </button>
+              <button
+                className={styles.exportPdfBtn}
+                onClick={handleExportPDF}
+                aria-label="Export table to PDF"
+                type="button"
+              >
+                <span
+                  role="img"
+                  aria-label="Export PDF"
+                  style={{ fontSize: 18 }}
+                >
+                  🗎
+                </span>
+                Export to PDF
+              </button>
+            </div>
           </div>
           {/* Professional Filter Button with Popover */}
           <div className={styles.controls}>
@@ -230,6 +313,7 @@ const UserMasterTable = () => {
               className={styles.filterButton}
               onClick={() => setShowFilterPopover((prev) => !prev)}
               type="button"
+              aria-label="Filter users"
             >
               <span role="img" aria-label="filter">
                 🔎
@@ -306,7 +390,7 @@ const UserMasterTable = () => {
               overflowY: "auto",
               borderRadius: 8,
               boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
-             
+
               height: "100",
             }}
           >
@@ -398,7 +482,6 @@ const UserMasterTable = () => {
             </table>
           </div>
           {/* Footer */}
-          
         </div>
       </div>
       {/* Activity Logs Modal */}
