@@ -91,6 +91,9 @@ tbody td {
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
+
+
+
 .status {
   padding: 4px 10px;
   border-radius: 20px;
@@ -98,10 +101,19 @@ tbody td {
   font-weight: 600;
   display: inline-block;
 }
+/* ACTIVE - green badge */
 .status.active {
   background-color: #e6f4ea;
   color: #198754;
 }
+/* INACTIVE - red badge */
+.status.inactive {
+  background-color: #ffeaea;
+  color: #e74c3c;
+}
+
+
+
 .icon {
   color: #343a40;
   font-size: 16px;
@@ -192,7 +204,7 @@ tbody td {
 .advancedFilterPanel {
   position: absolute;
   top: 110px;
-  right: 50px;
+left: 16px;
   background: #fff;
   border: 1px solid #e3e3e3;
   border-radius: 10px;
@@ -223,3 +235,83 @@ tbody td {
   z-index: 1300;
 }
 
+/* Icon for Activity Log column */
+.activityLogIcon {
+  color: #1d3557;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef5fe;
+  padding: 5px 7px;
+  font-size: 18px;
+  transition: background .16s, color .18s;
+  cursor: pointer;
+}
+.activityLogIcon:hover, .activityLogIcon:focus {
+  background: #cde7ff;
+  color: #1565c0;
+  outline: none;
+}
+
+/* Modal for Activity Logs */
+.activityLogModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1800;
+}
+.activityLogModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(56,70,98,0.15);
+  z-index: 1800;
+}
+.activityLogModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 330px;
+  max-width: 94vw;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(28,40,74,.15);
+  z-index: 1810;
+  display: flex;
+  flex-direction: column;
+  max-height: 65vh;
+  overflow: hidden;
+}
+.activityLogModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #eef5fe;
+  border-bottom: 1px solid #e3e3e3;
+}
+.activityLogModalClose {
+  background: none;
+  border: none;
+  color: #7a869a;
+  font-size: 21px;
+  cursor: pointer;
+  transition: color .17s;
+}
+.activityLogModalClose:hover {
+  color: #e74c3c;
+}
+.activityLogModalBody {
+  padding: 22px 24px 18px 24px;
+  color: #426485;
+  font-size: 15px;
+  max-height: 275px;
+  overflow-y: auto;
+}
+.activityLogContent {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 15px;
+}

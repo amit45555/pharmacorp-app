@@ -83,7 +83,7 @@
   border: 2px solid #0b63ce;
   border-radius: 6px;
   padding: 8px 20px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   margin-left: 12px;
@@ -92,6 +92,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  height: 37px;
 }
 .exportPdfBtn:hover {
   background: #0b63ce;

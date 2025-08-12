@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./RoleMasterTable.module.css";
-import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
+import {
+  FaEdit, FaTrash, FaEye, FaTimes, FaRegClock
+} from "react-icons/fa";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddRolePanel from "../AddRolePanel/AddRolePanel"; // Use your actual import!
@@ -9,15 +11,43 @@ interface Role {
   name: string;
   description: string;
   status: string;
+  activityLogs: string;
 }
 
 const initialRoles: Role[] = [
-  { name: "Read Only", description: "View access to system data", status: "ACTIVE" },
-  { name: "User", description: "Standard user access with edit capabilities", status: "ACTIVE" },
-  { name: "Administrator", description: "Full administrative access", status: "ACTIVE" },
-  { name: "Super Admin", description: "Complete system control", status: "ACTIVE" },
-  { name: "Operator", description: "Operational access for daily tasks", status: "ACTIVE" },
+  { name: "Read Only", description: "View access to system data", status: "ACTIVE", activityLogs: "Viewed by Admin" },
+  { name: "User", description: "Standard user access with edit capabilities", status: "ACTIVE", activityLogs: "Edited 2 days ago" },
+  { name: "Administrator", description: "Full administrative access", status: "ACTIVE", activityLogs: "Created on Aug 1" },
+  { name: "Super Admin", description: "Complete system control", status: "ACTIVE", activityLogs: "No recent actions" },
+  { name: "Operator", description: "Operational access for daily tasks", status: "INACTIVE", activityLogs: "Logged in today" },
 ];
+
+// ===== Activity Logs Modal Component =====
+function ActivityLogModal({ open, value, onClose }: { open: boolean; value: string; onClose: () => void; }) {
+  if (!open) return null;
+  return (
+    <div className={styles.activityLogModalOverlay}>
+      <div className={styles.activityLogModal}>
+        <div className={styles.activityLogModalHeader}>
+          <span>Activity Logs</span>
+          <button
+            className={styles.activityLogModalClose}
+            onClick={onClose}
+            title="Close"
+            aria-label="Close"
+          >
+            <FaTimes />
+          </button>
+        </div>
+        <div className={styles.activityLogModalBody}>
+          {value && <div className={styles.activityLogContent}>{value}</div>}
+          {!value && <div style={{ color: "#888", fontStyle: "italic" }}>No activity logs available.</div>}
+        </div>
+      </div>
+      <div className={styles.activityLogModalBackdrop} onClick={onClose} />
+    </div>
+  );
+}
 
 export default function RoleMasterTable() {
   // Table data
@@ -28,32 +58,38 @@ export default function RoleMasterTable() {
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<"add" | "edit">("add");
   const [editRoleIdx, setEditRoleIdx] = useState<number | null>(null);
-  const [form, setForm] = useState<Role>({ name: "", description: "", status: "ACTIVE" });
+  const [form, setForm] = useState<Role>({
+    name: "",
+    description: "",
+    status: "ACTIVE",
+    activityLogs: ""
+  });
 
-  // === 🟦 NEW FILTER PANE STATE ===
+  // Filter pane state (unchanged)
   const [showFilterPanel, setShowFilterPanel] = useState(false);
-  const [filterColumn, setFilterColumn] = useState<"name"|"description"|"status">("name");
+  const [filterColumn, setFilterColumn] = useState<"name"|"description"|"status"|"activityLogs">("name");
   const [filterValue, setFilterValue] = useState("");
+
+  // Activity logs modal state
+  const [showActivityLogModal, setShowActivityLogModal] = useState(false);
+  const [activeLogValue, setActiveLogValue] = useState<string>("");
 
   // Table controls
   const handleAddRole = () => {
     setPanelMode("add");
     setEditRoleIdx(null);
-    setForm({ name: "", description: "", status: "ACTIVE" });
+    setForm({ name: "", description: "", status: "ACTIVE", activityLogs: "" });
     setShowPanel(true);
   };
-
   const handleEditRole = (idx: number) => {
     setPanelMode("edit");
     setEditRoleIdx(idx);
     setForm({ ...roles[idx] });
     setShowPanel(true);
   };
-
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const handleClosePanel = () => setShowPanel(false);
 
   const handleSave = () => {
@@ -74,14 +110,14 @@ export default function RoleMasterTable() {
     setExpandedRow(null);
   };
 
-  // -=-=-=- 🟦 Filter logic (only column/value) -=-=-=-
+  // Filter logic
   const filteredRoles = roles.filter(role => {
     if (!filterValue) return true;
     const val = filterValue.toLowerCase();
-
     if (filterColumn === "name") return role.name.toLowerCase().includes(val);
     if (filterColumn === "description") return role.description.toLowerCase().includes(val);
     if (filterColumn === "status") return role.status.toLowerCase().includes(val);
+    if (filterColumn === "activityLogs") return role.activityLogs.toLowerCase().includes(val);
     return true;
   });
 
@@ -95,7 +131,7 @@ export default function RoleMasterTable() {
           <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
         </div>
       </header>
-      
+
       {/* Table controls */}
       <div className={styles.headerTopRow}>
         <button
@@ -109,7 +145,7 @@ export default function RoleMasterTable() {
         </button>
       </div>
 
-      {/* 🟩 FILTER PANEL (UI matches your screenshot) */}
+      {/* Filter Panel (unchanged) */}
       {showFilterPanel && (
         <div className={styles.advancedFilterOverlay}>
           <div className={styles.advancedFilterPanel}>
@@ -127,12 +163,13 @@ export default function RoleMasterTable() {
               <select
                 value={filterColumn}
                 onChange={e => setFilterColumn(
-                  e.target.value as "name" | "description" | "status"
+                  e.target.value as "name" | "description" | "status" | "activityLogs"
                 )}
               >
                 <option value="name">Name</option>
                 <option value="description">Description</option>
                 <option value="status">Status</option>
+                <option value="activityLogs">Activity Logs</option>
               </select>
             </div>
             <div className={styles.advancedFilterRow}>
@@ -176,13 +213,14 @@ export default function RoleMasterTable() {
               <th>Role Name</th>
               <th>Description</th>
               <th>Status</th>
+              <th style={{ textAlign: "center" }}>Activity Logs</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredRoles.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: "center", color: "#888" }}>
+                <td colSpan={6} style={{ textAlign: "center", color: "#888" }}>
                   No roles found.
                 </td>
               </tr>
@@ -193,7 +231,29 @@ export default function RoleMasterTable() {
                   <td>{role.name}</td>
                   <td>{role.description}</td>
                   <td>
-                    <span className={`${styles.status} ${styles.active}`}>{role.status}</span>
+                    <span
+                      className={
+                        `${styles.status} ${role.status === "ACTIVE"
+                          ? styles.active
+                          : styles.inactive}`
+                      }
+                    >
+                      {role.status}
+                    </span>
+                  </td>
+                  {/* Activity Logs column with icon */}
+                  <td style={{ textAlign: "center" }}>
+                    <span
+                      className={styles.activityLogIcon}
+                      title="View Activity Logs"
+                      onClick={() => {
+                        setActiveLogValue(role.activityLogs);
+                        setShowActivityLogModal(true);
+                      }}
+                      tabIndex={0}
+                    >
+                      <FaRegClock size={17} />
+                    </span>
                   </td>
                   <td>
                     {expandedRow === idx ? (
@@ -221,7 +281,14 @@ export default function RoleMasterTable() {
         </table>
       </div>
 
-      {/* Add/Edit Slide-in Panel */}
+      {/* Activity Logs Modal */}
+      <ActivityLogModal
+        open={showActivityLogModal}
+        value={activeLogValue}
+        onClose={() => setShowActivityLogModal(false)}
+      />
+
+      {/* Add/Edit Panel (existing) */}
       <AddRolePanel
         open={showPanel}
         title={panelMode === "add" ? "Add Role" : "Edit Role"}
@@ -243,6 +310,7 @@ export default function RoleMasterTable() {
               <option value="INACTIVE">INACTIVE</option>
             </select>
           </div>
+          
           <div className={styles.formActions}>
             <button type="submit" className={styles.saveBtn}>
               {panelMode === "add" ? "Add" : "Update"}
