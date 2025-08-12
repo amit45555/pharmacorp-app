@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import styles from "./AdminLogin.module.css";
+import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
 
-const AdminLogin: React.FC = () => {
+const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -46,4 +46,4 @@ const AdminLogin: React.FC = () => {
   );
 };
 
-export default AdminLogin;
+export default Login;

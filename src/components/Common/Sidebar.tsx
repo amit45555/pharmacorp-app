@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../pages/AdminDashboard.module.css";
+import styles from "../../pages/ApproverDashboard.module.css";
 import type { IconType } from "react-icons";
 import { FaHeartbeat, FaSignOutAlt } from "react-icons/fa";
 

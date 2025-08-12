@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../AdminDashboard.module.css";
+import styles from "../ApproverDashboard.module.css";
 
 const mockActivity = [
   {

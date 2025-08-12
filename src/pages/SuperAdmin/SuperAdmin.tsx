@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./MainMasterTable.module.css";
+import styles from "./SuperAdmin.module.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FactoryIcon from "@mui/icons-material/Factory";
 import SecurityIcon from "@mui/icons-material/Security";
@@ -19,7 +19,7 @@ import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
-const MainMasterTable: React.FC = () => {
+const SuperAdmin: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   const renderContent = () => {
@@ -289,4 +289,4 @@ const Card = ({ icon, label, value, sub, color }: any) => (
   </div>
 );
 
-export default MainMasterTable;
+export default SuperAdmin;

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../AdminDashboard.module.css";
+import styles from "../ApproverDashboard.module.css";
 
 const DashboardStats: React.FC = () => {
   const stats = [
@@ -45,14 +45,14 @@ const DashboardStats: React.FC = () => {
       {stats.map((stat) => (
         <div className={styles.statCard} key={stat.label}>
           <div className={styles.iconWrapper}>
-          <div className={styles.statIcon}>{stat.icon}</div>
+            <div className={styles.statIcon}>{stat.icon}</div>
           </div>
           <div className={styles.textContent}>
-          <div className={styles.statLabel}>{stat.label}</div>
-          <div className={styles.statValue}>{stat.value}</div>
-          <div className={styles.statSub} style={{ color: stat.subColor }}>
-            {stat.change}
-          </div>
+            <div className={styles.statLabel}>{stat.label}</div>
+            <div className={styles.statValue}>{stat.value}</div>
+            <div className={styles.statSub} style={{ color: stat.subColor }}>
+              {stat.change}
+            </div>
           </div>
         </div>
       ))}
@@ -61,4 +61,3 @@ const DashboardStats: React.FC = () => {
 };
 
 export default DashboardStats;
-

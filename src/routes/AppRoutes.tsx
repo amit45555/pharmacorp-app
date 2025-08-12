@@ -6,9 +6,9 @@ import AccessDetails from "../pages/AccessDetails/AccessDetails";
 import ReviewSubmit from "../pages/ReviewSubmit/ReviewSubmit";
 import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredentials";
 import TrackRequest from "../pages/TrackRequest";
-import AdminLogin from "../pages/AdminLogin";
-import AdminDashboard from "../pages/AdminDashboard";
-import MainMasterTable from "pages/MainMasterTable/MainMasterTable";
+import Login from "../pages/Login";
+import ApproverDashboard from "../pages/ApproverDashboard";
+import SuperAdmin from "pages/SuperAdmin/SuperAdmin";
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -21,11 +21,11 @@ const AppRoutes: React.FC = () => (
 
     {/* Admin Flow */}
 
-    <Route path="/login" element={<AdminLogin />} />
-    <Route path="/admin" element={<AdminDashboard />} />
-     {/* MainMasterTable Flow */}
-    
-    <Route path="/MainMasterTable" element={<MainMasterTable />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/approver" element={<ApproverDashboard />} />
+    {/* MainMasterTable Flow */}
+
+    <Route path="/superadmin" element={<SuperAdmin />} />
   </Routes>
 );
 

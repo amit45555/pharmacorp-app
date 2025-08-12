@@ -5,13 +5,22 @@ import SystemAdministration from "./SystemAdministration/SystemAdministration";
 import Settings from "./Settings/Settings";
 
 import React, { useState } from "react";
-import styles from "./AdminDashboard.module.css";
+import styles from "./ApproverDashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import DashboardStats from "./AdminDashboard/DashboardStats";
 import { useAuth } from "../context/AuthContext";
 import { can } from "../utils/rbac";
 import Sidebar from "../components/Common/Sidebar";
-import { FaChartBar, FaClipboardList, FaUsers, FaCheck, FaCog, FaWrench, FaBell, FaUser } from "react-icons/fa";
+import {
+  FaChartBar,
+  FaClipboardList,
+  FaUsers,
+  FaCheck,
+  FaCog,
+  FaWrench,
+  FaBell,
+  FaUser,
+} from "react-icons/fa";
 import TaskClosureTracking from "./TaskClosureTracking/TaskClosureTracking";
 
 // --- Demo/mock data for all admin sections ---
@@ -111,7 +120,7 @@ const initialSettings = {
   autoLock: false,
 };
 
-const AdminDashboard: React.FC = () => {
+const ApproverDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
   const [requests, setRequests] = useState(initialRequests);
   const [users, setUsers] = useState(initialUsers);
@@ -129,7 +138,11 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className={`${styles.container} ${!sidebarOpen ? styles.sidebarClosed : styles.sidebarOpen}`.trim()}>
+    <div
+      className={`${styles.container} ${
+        !sidebarOpen ? styles.sidebarClosed : styles.sidebarOpen
+      }`.trim()}
+    >
       <Sidebar
         open={sidebarOpen}
         onToggle={() => setSidebarOpen((open) => !open)}
@@ -176,7 +189,7 @@ const AdminDashboard: React.FC = () => {
             active: activeSection === "settings",
             onClick: () => setActiveSection("settings"),
           },
-        ].filter(item => can(role, item.key + ':view'))}
+        ].filter((item) => can(role, item.key + ":view"))}
         onLogout={handleLogout}
       />
       <div className={styles.mainContent}>
@@ -217,15 +230,11 @@ const AdminDashboard: React.FC = () => {
               <section className={styles.dashboardOverview}>
                 <h2 className={styles.sectionTitle}>Dashboard Overview</h2>
                 <div className={styles.statsGrid}>
-                 
                   <DashboardStats />
-                
-                   
-               </div>
+                </div>
 
                 <div className={styles.recentActivitySection}>
-                 
-                  <TaskClosureTracking/>
+                  <TaskClosureTracking />
                 </div>
               </section>
             )}
@@ -277,4 +286,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default ApproverDashboard;
