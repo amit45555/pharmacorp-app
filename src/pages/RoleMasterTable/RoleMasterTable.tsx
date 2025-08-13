@@ -205,7 +205,7 @@ export default function RoleMasterTable() {
           <option value="name">Name</option>
           <option value="description">Description</option>
           <option value="status">Status</option>
-          <option value="activityLogs">Activity Logs</option>
+          
         </select>
       </div>
       <div className={styles.advancedFilterRow}>
@@ -267,7 +267,7 @@ export default function RoleMasterTable() {
                   {/* Select row checkbox */}
                   <td>
                     <input
-                      type="checkbox"
+                      type="radio"
                       checked={selectedRow === idx}
                       onChange={() => handleSelectRow(idx)}
                       aria-label={`Select ${role.name}`}
