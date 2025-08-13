@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
+import { mockUsers } from "../data/mockUsers";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -10,10 +11,31 @@ const Login: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo: hardcoded admin login
-    if (username === "admin" && password === "admin123") {
-      localStorage.setItem("role", "admin");
-      navigate("/admin");
+    // Find user in mockUsers
+    const foundUser = mockUsers.find(
+      (u) => u.username === username && u.password === password
+    );
+    if (foundUser) {
+      // Store user info in localStorage if needed
+      localStorage.setItem("role", foundUser.role);
+      localStorage.setItem("username", foundUser.username);
+      // Route based on role
+      switch (foundUser.role) {
+        case "superAdmin":
+          navigate("/superAdmin");
+          break;
+        case "approver":
+          navigate("/approver");
+          break;
+        case "plantAdmin":
+          navigate("/plantAdmin");
+          break;
+        case "user":
+          navigate("/userForm");
+          break;
+        default:
+          navigate("/");
+      }
     } else {
       setError("Invalid credentials");
     }

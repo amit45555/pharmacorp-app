@@ -13,7 +13,7 @@ import SuperAdmin from "pages/SuperAdmin/SuperAdmin";
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
-    <Route path="/" element={<UserInformation />} />
+    <Route path="/user-information" element={<UserInformation />} />
     <Route path="/access-details" element={<AccessDetails />} />
     <Route path="/review-submit" element={<ReviewSubmit />} />
     <Route path="/generate-credentials" element={<GenerateCredentials />} />
@@ -21,9 +21,9 @@ const AppRoutes: React.FC = () => (
 
     {/* Admin Flow */}
 
-    <Route path="/login" element={<Login />} />
+    <Route path="/" element={<Login />} />
     <Route path="/approver" element={<ApproverDashboard />} />
-    {/* MainMasterTable Flow */}
+    {/* SuperAdmin Flow */}
 
     <Route path="/superadmin" element={<SuperAdmin />} />
   </Routes>
