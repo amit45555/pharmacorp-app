@@ -1,3 +1,286 @@
+.animatedBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+}
+.loginMain {
+  z-index: 1;
+}
+.gradientLayer {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(120deg, #ffffff 0%, #8ce7f3 60%, #3cf5ff 100%);
+  animation: gradientShift 8s ease-in-out infinite alternate;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+.particleLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  pointer-events: none;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  width: 12px;
+  height: 12px;
+  animation: particleMove 12s linear infinite;
+  filter: blur(2px);
+}
+/* Randomize particle positions and delays */
+.particle:nth-child(1) {
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
+}
+.particle:nth-child(2) {
+  top: 20%;
+  left: 70%;
+  animation-delay: 2s;
+}
+.particle:nth-child(3) {
+  top: 35%;
+  left: 40%;
+  animation-delay: 1s;
+}
+.particle:nth-child(4) {
+  top: 50%;
+  left: 80%;
+  animation-delay: 3s;
+}
+.particle:nth-child(5) {
+  top: 60%;
+  left: 25%;
+  animation-delay: 2.5s;
+}
+.particle:nth-child(6) {
+  top: 75%;
+  left: 60%;
+  animation-delay: 1.5s;
+}
+.particle:nth-child(7) {
+  top: 85%;
+  left: 10%;
+  animation-delay: 4s;
+}
+.particle:nth-child(8) {
+  top: 90%;
+  left: 50%;
+  animation-delay: 2.2s;
+}
+.particle:nth-child(9) {
+  top: 15%;
+  left: 85%;
+  animation-delay: 3.5s;
+}
+.particle:nth-child(10) {
+  top: 30%;
+  left: 60%;
+  animation-delay: 1.8s;
+}
+.particle:nth-child(11) {
+  top: 45%;
+  left: 20%;
+  animation-delay: 2.7s;
+}
+.particle:nth-child(12) {
+  top: 55%;
+  left: 75%;
+  animation-delay: 0.8s;
+}
+.particle:nth-child(13) {
+  top: 65%;
+  left: 35%;
+  animation-delay: 3.2s;
+}
+.particle:nth-child(14) {
+  top: 80%;
+  left: 90%;
+  animation-delay: 2.9s;
+}
+.particle:nth-child(15) {
+  top: 95%;
+  left: 30%;
+  animation-delay: 1.1s;
+}
+.particle:nth-child(16) {
+  top: 40%;
+  left: 10%;
+  animation-delay: 2.4s;
+}
+.particle:nth-child(17) {
+  top: 70%;
+  left: 50%;
+  animation-delay: 3.7s;
+}
+.particle:nth-child(18) {
+  top: 85%;
+  left: 75%;
+  animation-delay: 1.3s;
+}
+@keyframes particleMove {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3) translateY(-18px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.7;
+  }
+}
+.animatedBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+}
+.waveSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 320px;
+  z-index: 1;
+  animation: waveFloat 8s ease-in-out infinite alternate;
+}
+@keyframes waveFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(18px);
+  }
+}
+.gradientOverlay {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(120deg, #e0f7fa 0%, #5ac9d8 60%, #007f86 100%);
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  animation: gradientShift 12s ease-in-out infinite alternate;
+}
+@keyframes gradientShift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(30deg);
+  }
+}
+
+.input {
+  transition: border 0.2s, box-shadow 0.2s;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(90, 201, 216, 0.07);
+}
+.input:focus {
+  border: 1.5px solid #5ac9d8;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.13);
+}
+.input:active {
+  border: 1.5px solid #007f86;
+}
+.loginButton {
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #5ac9d8 60%, #3fb1c0 100%);
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.13);
+  border-radius: 9px;
+  padding: 0.85rem 1.1rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  color: #fff;
+  font-family: "Segoe UI", "Arial", sans-serif;
+}
+.loginButton:hover {
+  background: linear-gradient(90deg, #3fb1c0 60%, #5ac9d8 100%);
+  box-shadow: 0 4px 16px rgba(90, 201, 216, 0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+.loginButton:active {
+  background: linear-gradient(90deg, #007f86 60%, #5ac9d8 100%);
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.13);
+  transform: scale(0.98);
+}
+.error {
+  color: #c00;
+  font-size: 1rem;
+  text-align: center;
+  background: rgba(255, 0, 0, 0.07);
+  border-radius: 7px;
+  padding: 0.5rem 0.8rem;
+  margin-top: -0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 600px) {
+  .loginMain {
+    min-height: 100vh;
+    max-width: 100vw;
+    padding: 0 0.5rem;
+    z-index: 1;
+  }
+  .loginCard {
+    padding: 2rem 1rem 1.5rem 1rem;
+    max-width: 98vw;
+    border-radius: 16px;
+  }
+  .loginTitle {
+    font-size: 1.4rem;
+  }
+  .input {
+    font-size: 1rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 7px;
+  }
+  .loginButton {
+    font-size: 1rem;
+    padding: 0.7rem 0.8rem;
+    border-radius: 7px;
+  }
+}
+.logoLiteImg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.6em;
+  height: 2.2rem;
+  position: relative;
+  top: -0.38em;
+}
 .idamsHeading {
   display: flex;
   align-items: flex-end;
