@@ -74,4 +74,19 @@ export const mockUsers: MockUser[] = [
       "roleMaster:edit",
     ]),
   },
+  // User Master Admin with all userMaster permissions only
+  {
+    id: 6,
+    username: "usermaster1",
+    password: "usermaster123",
+    role: "plantAdmin",
+    permissions: ensureViewPermissions([
+      "dashboard:view",
+      "userMaster:view",
+      "userMaster:add",
+      "userMaster:edit",
+      "userMaster:update",
+      "userMaster:delete",
+    ]),
+  },
 ];
