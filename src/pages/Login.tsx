@@ -19,22 +19,23 @@ const Login: React.FC = () => {
       // Store user info in localStorage if needed
       localStorage.setItem("role", foundUser.role);
       localStorage.setItem("username", foundUser.username);
-      // Route based on role
-      switch (foundUser.role) {
-        case "superAdmin":
-          navigate("/superAdmin");
-          break;
-        case "approver":
-          navigate("/approver");
-          break;
-        case "plantAdmin":
-          navigate("/plantAdmin");
-          break;
-        case "user":
-          navigate("/userForm");
-          break;
-        default:
-          navigate("/");
+      // Route based on role, but plantAdmin always goes to /superAdmin
+      if (foundUser.role === "plantAdmin") {
+        navigate("/superAdmin");
+      } else {
+        switch (foundUser.role) {
+          case "superAdmin":
+            navigate("/superAdmin");
+            break;
+          case "approver":
+            navigate("/approver");
+            break;
+          case "user":
+            navigate("/userForm");
+            break;
+          default:
+            navigate("/");
+        }
       }
     } else {
       setError("Invalid credentials");

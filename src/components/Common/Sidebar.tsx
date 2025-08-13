@@ -16,6 +16,7 @@ interface SidebarProps {
   onToggle: () => void;
   navItems: SidebarNavItem[];
   onLogout: () => void;
+  disabledKeys?: string[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -23,7 +24,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggle,
   navItems,
   onLogout,
+  disabledKeys = [],
 }) => {
+  const isDisabled = (key: string) => disabledKeys.includes(key);
   return (
     <aside
       className={`${styles.sidebar} ${
@@ -66,20 +69,27 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Navigation Items */}
       <nav className={styles.nav} aria-label="Admin Navigation">
-        {navItems.map((item) => (
-          <button
-            key={item.key}
-            className={`${styles.navItem} ${item.active ? styles.active : ""}`}
-            type="button"
-            aria-label={item.label}
-            title={item.label}
-            tabIndex={0}
-            onClick={item.onClick}
-          >
-            <span className={styles.navIcon}>{item.icon({ size: 20 })}</span>
-            {open && <span className={styles.navText}>{item.label}</span>}
-          </button>
-        ))}
+        {navItems.map((item) => {
+          const disabled = isDisabled(item.key);
+          return (
+            <button
+              key={item.key}
+              className={`${styles.navItem} ${
+                item.active ? styles.active : ""
+              }`}
+              type="button"
+              aria-label={item.label}
+              title={item.label}
+              tabIndex={disabled ? -1 : 0}
+              onClick={disabled ? undefined : item.onClick}
+              disabled={disabled}
+              style={disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}}
+            >
+              <span className={styles.navIcon}>{item.icon({ size: 20 })}</span>
+              {open && <span className={styles.navText}>{item.label}</span>}
+            </button>
+          );
+        })}
       </nav>
 
       {/* Logout Button */}

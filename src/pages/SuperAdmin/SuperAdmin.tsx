@@ -19,14 +19,75 @@ import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
+
+import { mockUsers } from "../../data/mockUsers";
+
+const getCurrentUser = () => {
+  const username = localStorage.getItem("username");
+  if (!username) return null;
+  return mockUsers.find((u) => u.username === username) || null;
+};
+
 const SuperAdmin: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const user = getCurrentUser();
+  // Map sidebar keys to permission strings
+  const sidebarConfig = [
+    {
+      key: "dashboard",
+      label: "Dashboard",
+      icon: <DashboardIcon fontSize="small" />,
+      perm: "dashboard:view",
+    },
+    {
+      key: "plant",
+      label: "Plant Master",
+      icon: <FactoryIcon fontSize="small" />,
+      perm: "plantMaster:view",
+    },
+    {
+      key: "role",
+      label: "Role Master",
+      icon: <SecurityIcon fontSize="small" />,
+      perm: "roleMaster:view",
+    },
+    {
+      key: "vendor",
+      label: "Vendor Master",
+      icon: <ListAltIcon fontSize="small" />,
+      perm: "vendorMaster:view",
+    },
+    {
+      key: "application",
+      label: "Application Master",
+      icon: <AppsIcon fontSize="small" />,
+      perm: "applicationMaster:view",
+    },
+    {
+      key: "user",
+      label: "User Master",
+      icon: <PersonIcon fontSize="small" />,
+      perm: "userMaster:view",
+    },
+    {
+      key: "workflow",
+      label: "Approval Workflow",
+      icon: <AssignmentIcon fontSize="small" />,
+      perm: "workflow:view",
+    },
+  ];
+  // Only plantadmin2 will have limited permissions, others see all
+  const disabledKeys =
+    user && user.role === "plantAdmin"
+      ? sidebarConfig
+          .filter((item) => !user.permissions.includes(item.perm))
+          .map((item) => item.key)
+      : [];
 
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
         return <DashboardView />;
-      // Add placeholders or actual components below:
       case "plant":
         return (
           <div>
@@ -59,7 +120,6 @@ const SuperAdmin: React.FC = () => {
             <WorkflowBuilder />
           </div>
         );
-
       default:
         return null;
     }
@@ -75,73 +135,34 @@ const SuperAdmin: React.FC = () => {
         </div>
         <nav>
           <div className={styles["sidebar-group"]}>OVERVIEW</div>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "dashboard" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("dashboard")}
-          >
-            <DashboardIcon fontSize="small" /> Dashboard
-          </button>
-
-          <div className={styles["sidebar-group"]}>MASTER DATA</div>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "plant" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("plant")}
-          >
-            <FactoryIcon fontSize="small" /> Plant Master
-          </button>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "role" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("role")}
-          >
-            <SecurityIcon fontSize="small" /> Role Master
-          </button>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "vendor" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("vendor")}
-          >
-            <ListAltIcon fontSize="small" /> Vendor Master
-          </button>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "application" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("application")}
-          >
-            <AppsIcon fontSize="small" /> Application Master
-          </button>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "user" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("user")}
-          >
-            <PersonIcon fontSize="small" /> User Master
-          </button>
-          <div className={styles["sidebar-group"]}>CONFIGURATION</div>
-          <button
-            className={`${styles["nav-button"]} ${
-              activeTab === "workflow" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("workflow")}
-          >
-            <AssignmentIcon fontSize="small" />
-            Approval Workflow
-          </button>
-
+          {sidebarConfig.map((item, idx) => (
+            <button
+              key={item.key}
+              className={`${styles["nav-button"]} ${
+                activeTab === item.key ? styles.active : ""
+              }`}
+              onClick={() =>
+                !disabledKeys.includes(item.key) && setActiveTab(item.key)
+              }
+              disabled={disabledKeys.includes(item.key)}
+              style={
+                disabledKeys.includes(item.key)
+                  ? { opacity: 0.5, cursor: "not-allowed" }
+                  : {}
+              }
+            >
+              {item.icon} {item.label}
+            </button>
+            // Add sidebar group dividers as needed
+          ))}
           <div className={styles["sidebar-footer"]}>
             <div className={styles["admin-info"]}>
               <div className={styles.avatar}>A</div>
               <div>
-                <strong>admin</strong>
-                <div className={styles.subtext}>Super Admin</div>
+                <strong>{user ? user.username : "admin"}</strong>
+                <div className={styles.subtext}>
+                  {user ? user.role : "Super Admin"}
+                </div>
               </div>
             </div>
             <button className={styles["logout-button"]}>
@@ -150,7 +171,6 @@ const SuperAdmin: React.FC = () => {
           </div>
         </nav>
       </aside>
-
       <main className={styles["main-content"]}>{renderContent()}</main>
     </div>
   );

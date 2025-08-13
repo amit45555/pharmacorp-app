@@ -52,11 +52,26 @@ export const mockUsers: MockUser[] = [
     role: "plantAdmin",
     permissions: ensureViewPermissions(["dashboard:view", "plants:edit"]),
   },
+
   {
     id: 4,
     username: "user1",
     password: "user123",
     role: "user",
     permissions: ensureViewPermissions(["userform:submit"]),
+  },
+  // Plant Admin with limited permissions
+  {
+    id: 5,
+    username: "plantadmin2",
+    password: "plantadmin456",
+    role: "plantAdmin",
+    permissions: ensureViewPermissions([
+      "dashboard:view",
+      "plantMaster:view",
+      "plantMaster:edit",
+      "roleMaster:view",
+      "roleMaster:edit",
+    ]),
   },
 ];
