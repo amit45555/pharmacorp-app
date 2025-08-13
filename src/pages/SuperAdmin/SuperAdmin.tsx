@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./SuperAdmin.module.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FactoryIcon from "@mui/icons-material/Factory";
@@ -31,6 +32,13 @@ const getCurrentUser = () => {
 const SuperAdmin: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const user = getCurrentUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    navigate("/");
+  };
   // Map sidebar keys to permission strings
   const sidebarConfig = [
     {
@@ -165,7 +173,7 @@ const SuperAdmin: React.FC = () => {
                 </div>
               </div>
             </div>
-            <button className={styles["logout-button"]}>
+            <button className={styles["logout-button"]} onClick={handleLogout}>
               <LogoutIcon fontSize="small" /> Logout
             </button>
           </div>
