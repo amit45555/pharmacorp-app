@@ -52,7 +52,7 @@ function ActivityLogModal({ open, value, onClose }: { open: boolean; value: stri
 export default function RoleMasterTable() {
   // Table data
   const [roles, setRoles] = useState<Role[]>(initialRoles);
-  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   // Add/Edit panel
   const [showPanel, setShowPanel] = useState(false);
@@ -65,7 +65,7 @@ export default function RoleMasterTable() {
     activityLogs: ""
   });
 
-  // Filter pane state (unchanged)
+  // Filter pane state
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [filterColumn, setFilterColumn] = useState<"name"|"description"|"status"|"activityLogs">("name");
   const [filterValue, setFilterValue] = useState("");
@@ -74,17 +74,18 @@ export default function RoleMasterTable() {
   const [showActivityLogModal, setShowActivityLogModal] = useState(false);
   const [activeLogValue, setActiveLogValue] = useState<string>("");
 
-  // Table controls
+  // Handle Add/Edit/Delete controls
   const handleAddRole = () => {
     setPanelMode("add");
     setEditRoleIdx(null);
     setForm({ name: "", description: "", status: "ACTIVE", activityLogs: "" });
     setShowPanel(true);
   };
-  const handleEditRole = (idx: number) => {
+  const handleEditRole = () => {
+    if (selectedRow === null) return;
     setPanelMode("edit");
-    setEditRoleIdx(idx);
-    setForm({ ...roles[idx] });
+    setEditRoleIdx(selectedRow);
+    setForm({ ...roles[selectedRow] });
     setShowPanel(true);
   };
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -103,11 +104,17 @@ export default function RoleMasterTable() {
     setShowPanel(false);
   };
 
-  const handleDelete = (idx: number) => {
+  const handleDeleteRole = () => {
+    if (selectedRow === null) return;
     const updated = [...roles];
-    updated.splice(idx, 1);
+    updated.splice(selectedRow, 1);
     setRoles(updated);
-    setExpandedRow(null);
+    setSelectedRow(null);
+  };
+
+  // Row selection logic
+  const handleSelectRow = (idx: number) => {
+    setSelectedRow(idx === selectedRow ? null : idx);
   };
 
   // Filter logic
@@ -120,6 +127,12 @@ export default function RoleMasterTable() {
     if (filterColumn === "activityLogs") return role.activityLogs.toLowerCase().includes(val);
     return true;
   });
+
+  // Show info modal for "View"
+  const handleViewRole = () => {
+    if (selectedRow === null) return;
+    alert(`Role Details:\n\nName: ${roles[selectedRow].name}\nDescription: ${roles[selectedRow].description}\nStatus: ${roles[selectedRow].status}\nActivity Logs: ${roles[selectedRow].activityLogs}`);
+  };
 
   return (
     <div>
@@ -134,100 +147,132 @@ export default function RoleMasterTable() {
 
       {/* Table controls */}
       <div className={styles.headerTopRow}>
+        <div className={styles.actionHeaderRow}>
+         <button className={styles.addUserBtn} onClick={handleAddRole}>
+          + Add Role
+        </button>
         <button
           className={styles.filterBtn}
           onClick={() => setShowFilterPanel(true)}
         >
           🔍 Filter
         </button>
-        <button className={styles.addUserBtn} onClick={handleAddRole}>
-          + Add Role
-        </button>
+       
+        {/*---------- Actions Row (header wide controls) ----------*/}
+      
+          <button
+            className={`${styles.btn} ${styles.editBtn}`}
+            disabled={selectedRow === null}
+            onClick={handleEditRole}
+            title="Edit selected role"
+          >
+            <FaEdit size={14} /> Edit
+          </button>
+          <button
+            className={`${styles.btn} ${styles.deleteBtn}`}
+            disabled={selectedRow === null}
+            onClick={handleDeleteRole}
+            title="Delete selected role"
+           
+          >
+            <FaTrash size={14} /> Delete
+          </button>
+         
+        </div>
+        {/*-------------------------------------------------------*/}
       </div>
 
       {/* Filter Panel (unchanged) */}
-      {showFilterPanel && (
-        <div className={styles.advancedFilterOverlay}>
-          <div className={styles.advancedFilterPanel}>
-            <div className={styles.advancedFilterHeader}>
-              <span>Advanced Filter</span>
-              <button
-                type="button"
-                style={{ background: 'none', border: 'none', fontSize: 18, cursor: "pointer" }}
-                onClick={() => setShowFilterPanel(false)}
-                aria-label="Close"
-              >✕</button>
-            </div>
-            <div className={styles.advancedFilterRow}>
-              <label>Column</label>
-              <select
-                value={filterColumn}
-                onChange={e => setFilterColumn(
-                  e.target.value as "name" | "description" | "status" | "activityLogs"
-                )}
-              >
-                <option value="name">Name</option>
-                <option value="description">Description</option>
-                <option value="status">Status</option>
-                <option value="activityLogs">Activity Logs</option>
-              </select>
-            </div>
-            <div className={styles.advancedFilterRow}>
-              <label>Value</label>
-              <input
-                type="text"
-                placeholder={`Enter ${filterColumn}`}
-                value={filterValue}
-                onChange={e => setFilterValue(e.target.value)}
-              />
-            </div>
-            <div style={{ marginTop: 16, display: "flex", gap: 10, justifyContent: "flex-end" }}>
-              <button
-                className={styles.saveBtn}
-                onClick={() => setShowFilterPanel(false)}
-                type="button"
-              >Apply</button>
-              <button
-                className={styles.cancelBtn}
-                onClick={() => {
-                  setFilterValue("");
-                  setShowFilterPanel(false);
-                }}
-                type="button"
-              >Clear</button>
-            </div>
-          </div>
-          <div
-            className={styles.advancedFilterBackdrop}
-            onClick={() => setShowFilterPanel(false)}
-          />
-        </div>
-      )}
+{showFilterPanel && (
+  <div className={styles.advancedFilterOverlay}>
+    <div className={styles.advancedFilterPanel}>
+      <div className={styles.advancedFilterHeader}>
+        <span>Advanced Filter</span>
+        <button
+          type="button"
+          onClick={() => setShowFilterPanel(false)}
+          aria-label="Close"
+        >✕</button>
+      </div>
+      <div className={styles.advancedFilterRow}>
+        <label>Column</label>
+        <select
+          value={filterColumn}
+          onChange={e => setFilterColumn(
+            e.target.value as "name" | "description" | "status" | "activityLogs"
+          )}
+        >
+          <option value="name">Name</option>
+          <option value="description">Description</option>
+          <option value="status">Status</option>
+          <option value="activityLogs">Activity Logs</option>
+        </select>
+      </div>
+      <div className={styles.advancedFilterRow}>
+        <label>Value</label>
+        <input
+          type="text"
+          placeholder={`Enter ${filterColumn}`}
+          value={filterValue}
+          onChange={e => setFilterValue(e.target.value)}
+        />
+      </div>
+      <div className="filterActions">
+        <button
+          className={styles.saveBtn}
+          onClick={() => setShowFilterPanel(false)}
+          type="button"
+        >Apply</button>
+        <button
+          className={styles.cancelBtn}
+          onClick={() => {
+            setFilterValue("");
+            setShowFilterPanel(false);
+          }}
+          type="button"
+        >Clear</button>
+      </div>
+    </div>
+    <div
+      className={styles.advancedFilterBackdrop}
+      onClick={() => setShowFilterPanel(false)}
+    />
+  </div>
+)}
+
+
 
       {/* Table */}
       <div className={styles.roleTableContainer}>
         <table>
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
+              <th></th>
               <th>Role Name</th>
               <th>Description</th>
               <th>Status</th>
               <th style={{ textAlign: "center" }}>Activity Logs</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredRoles.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center", color: "#888" }}>
+                <td colSpan={5} style={{ textAlign: "center", color: "#888" }}>
                   No roles found.
                 </td>
               </tr>
             ) : (
               filteredRoles.map((role, idx) => (
                 <tr key={idx}>
-                  <td><input type="checkbox" /></td>
+                  {/* Select row checkbox */}
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedRow === idx}
+                      onChange={() => handleSelectRow(idx)}
+                      aria-label={`Select ${role.name}`}
+                    />
+                  </td>
                   <td>{role.name}</td>
                   <td>{role.description}</td>
                   <td>
@@ -241,7 +286,6 @@ export default function RoleMasterTable() {
                       {role.status}
                     </span>
                   </td>
-                  {/* Activity Logs column with icon */}
                   <td style={{ textAlign: "center" }}>
                     <span
                       className={styles.activityLogIcon}
@@ -255,25 +299,6 @@ export default function RoleMasterTable() {
                       <FaRegClock size={17} />
                     </span>
                   </td>
-                  <td>
-                    {expandedRow === idx ? (
-                      <div className={styles.inlineMenu}>
-                        <button className={`${styles.btn} ${styles.gray}`} onClick={() => handleEditRole(idx)}>
-                          <FaEdit size={14} /> Edit
-                        </button>
-                        <button className={`${styles.btn} ${styles.red}`} onClick={() => handleDelete(idx)}>
-                          <FaTrash size={14} /> Delete
-                        </button>
-                        <button className={`${styles.btn} ${styles.blue}`}>
-                          <FaEye size={14} /> View
-                        </button>
-                      </div>
-                    ) : (
-                      <span onClick={() => setExpandedRow(idx)} title="Show Actions" className={styles.icon}>
-                        <FaEye size={17} />
-                      </span>
-                    )}
-                  </td>
                 </tr>
               ))
             )}
@@ -281,14 +306,13 @@ export default function RoleMasterTable() {
         </table>
       </div>
 
-      {/* Activity Logs Modal */}
       <ActivityLogModal
         open={showActivityLogModal}
         value={activeLogValue}
         onClose={() => setShowActivityLogModal(false)}
       />
 
-      {/* Add/Edit Panel (existing) */}
+      {/* Add/Edit Panel */}
       <AddRolePanel
         open={showPanel}
         title={panelMode === "add" ? "Add Role" : "Edit Role"}
@@ -310,7 +334,6 @@ export default function RoleMasterTable() {
               <option value="INACTIVE">INACTIVE</option>
             </select>
           </div>
-          
           <div className={styles.formActions}>
             <button type="submit" className={styles.saveBtn}>
               {panelMode === "add" ? "Add" : "Update"}
