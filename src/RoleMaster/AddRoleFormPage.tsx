@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ConfirmLoginModal from "./ConfirmLoginModal";
 import styles from "../RoleMaster/AddRoleFormPage.module.css";
 import { useNavigate } from "react-router-dom";
 import { useRoles } from "../RoleMaster/RolesContext";
@@ -19,11 +20,27 @@ export default function AddRoleFormPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  // Get logged-in username from localStorage
+  const username = localStorage.getItem("username") || "";
+
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  setRoles([...roles, form]); // Save to context
-  // Go back to SuperAdmin with sidebar selected
-  navigate("/superadmin", { state: { activeTab: "role" } });
+    e.preventDefault();
+    setShowModal(true); // Show admin confirmation modal
+  };
+
+  // Called after admin confirms
+  const handleConfirmLogin = (userId: string, password: string) => {
+    // For demo: check userId matches logged-in username and password is not empty
+    if (userId === username && password) {
+      setRoles([...roles, form]);
+      setShowModal(false);
+      navigate("/superadmin", { state: { activeTab: "role" } });
+    } else {
+      alert("Invalid credentials. Please try again.");
+    }
   };
 
   
@@ -58,6 +75,13 @@ export default function AddRoleFormPage() {
           </button>
         </div>
       </form>
+      {showModal && (
+        <ConfirmLoginModal
+          username={username}
+          onConfirm={handleConfirmLogin}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

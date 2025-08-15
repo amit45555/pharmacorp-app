@@ -1,6 +1,6 @@
 // ConfirmLoginModal.tsx
 import React, { useState } from "react";
-import styles from "./ConfirmLoginModal.module.css";
+import styles from "../ConfirmLoginModal/ConfirmLoginModal.module.css";
 
 interface ConfirmLoginModalProps {
   onConfirm: (userId: string, password: string) => void;

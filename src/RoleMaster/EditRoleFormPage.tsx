@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ConfirmLoginModal from "./ConfirmLoginModal";
 import styles from "../RoleMaster/AddRoleFormPage.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRoles, Role } from "../RoleMaster/RolesContext";
@@ -26,13 +27,28 @@ export default function EditRoleFormPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  // Get logged-in username from localStorage
+  const username = localStorage.getItem("username") || "";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (idx === undefined) return;
-    const updated = [...roles];
-    updated[parseInt(idx)] = form;
-    setRoles(updated);
-  navigate("/superadmin", { state: { activeTab: "role" } });
+    setShowModal(true); // Show admin confirmation modal
+  };
+
+  // Called after admin confirms
+  const handleConfirmLogin = (userId: string, password: string) => {
+    if (userId === username && password && idx !== undefined) {
+      const updated = [...roles];
+      updated[parseInt(idx)] = form;
+      setRoles(updated);
+      setShowModal(false);
+      navigate("/superadmin", { state: { activeTab: "role" } });
+    } else {
+      alert("Invalid credentials. Please try again.");
+    }
   };
 
   const handleCancel = () => navigate("/superadmin", { state: { activeTab: "role" } });
@@ -57,10 +73,19 @@ export default function EditRoleFormPage() {
           </select>
         </div>
         <div className={styles.formActions}>
-          <button type="submit" className={styles.saveBtn} onClick={handleSubmit}>Update</button>
+          <button type="submit" className={styles.saveBtn}>
+            Update
+          </button>
           <button type="button" className={styles.cancelBtn} onClick={handleCancel}>Cancel</button>
         </div>
       </form>
+      {showModal && (
+        <ConfirmLoginModal
+          username={username}
+          onConfirm={handleConfirmLogin}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }
