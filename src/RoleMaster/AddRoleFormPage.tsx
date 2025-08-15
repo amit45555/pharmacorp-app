@@ -20,12 +20,15 @@ export default function AddRoleFormPage() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setRoles([...roles, form]); // Save to context
-    navigate("/"); // Go back to table
+  e.preventDefault();
+  setRoles([...roles, form]); // Save to context
+  // Go back to SuperAdmin with sidebar selected
+  navigate("/superadmin", { state: { activeTab: "role" } });
   };
 
-  const handleCancel = () => navigate("/");
+  
+  // Update cancel to go back to SuperAdmin with sidebar selected
+  const handleCancel = () => navigate("/superadmin", { state: { activeTab: "role" } });
 
   return (
     <div style={{ maxWidth: 440, margin: "30px auto", padding: 24, background: "#fff", borderRadius: 10, boxShadow: "0 0 16px rgba(40,70,120,.09)" }}>
