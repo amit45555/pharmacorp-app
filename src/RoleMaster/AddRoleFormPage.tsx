@@ -66,6 +66,17 @@ export default function AddRoleFormPage() {
             <option value="INACTIVE">INACTIVE</option>
           </select>
         </div>
+
+        <div className={styles.commentBox}>
+          <label htmlFor="comment">Comment</label>
+          <textarea
+            id="comment"
+            placeholder="Enter comment here..."
+            value={form.activityLogs}
+            onChange={e => setForm({ ...form, activityLogs: e.target.value })}
+          />
+        </div>
+
         <div className={styles.formActions}>
           <button type="submit" className={styles.saveBtn}>
             Add

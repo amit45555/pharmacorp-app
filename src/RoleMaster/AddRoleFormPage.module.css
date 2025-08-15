@@ -1,3 +1,30 @@
+/* Comment Box Styling */
+.commentBox {
+  margin: 1.2rem 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+.commentBox label {
+  font-weight: 500;
+  color: #2563eb;
+  margin-bottom: 0.4rem;
+}
+.commentBox textarea {
+  min-height: 60px;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #e0f7fa;
+  background: #f7fcfd;
+  font-size: 1rem;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  resize: vertical;
+  box-shadow: 0 1px 4px rgba(90, 201, 216, 0.07);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.commentBox textarea:focus {
+  border: 1.5px solid #5ac9d8;
+  box-shadow: 0 2px 8px rgba(90, 201, 216, 0.13);
+}
 .main-header {
   display: flex;
   justify-content: space-between;

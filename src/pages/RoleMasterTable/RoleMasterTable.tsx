@@ -32,8 +32,15 @@ function ActivityLogModal({
           </button>
         </div>
         <div className={styles.activityLogModalBody}>
-          {value && <div className={styles.activityLogContent}>{value}</div>}
-          {!value && (
+          {value ? (
+            Array.isArray(value)
+              ? value.map((log, idx) => (
+                  <div key={idx} className={styles.activityLogContent}>{log}</div>
+                ))
+              : value.split(/\r?\n|\r|,/).map((log, idx) => (
+                  <div key={idx} className={styles.activityLogContent}>{log.trim()}</div>
+                ))
+          ) : (
             <div style={{ color: "#888", fontStyle: "italic" }}>
               No activity logs available.
             </div>
