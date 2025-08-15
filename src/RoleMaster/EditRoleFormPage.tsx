@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ConfirmLoginModal from "./ConfirmLoginModal";
+import ConfirmLoginModal from "../components/Common/ConfirmLoginModal";
 import styles from "../RoleMaster/AddRoleFormPage.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRoles, Role } from "../RoleMaster/RolesContext";
@@ -39,8 +39,8 @@ export default function EditRoleFormPage() {
   };
 
   // Called after admin confirms
-  const handleConfirmLogin = (userId: string, password: string) => {
-    if (userId === username && password && idx !== undefined) {
+  const handleConfirmLogin = (data: Record<string, string>) => {
+    if (data.username === username && data.password && idx !== undefined) {
       const updated = [...roles];
       updated[parseInt(idx)] = form;
       setRoles(updated);
@@ -81,6 +81,8 @@ export default function EditRoleFormPage() {
       </form>
       {showModal && (
         <ConfirmLoginModal
+          title="Confirm Edit Role"
+          description="Please confirm editing this role by entering your password."
           username={username}
           onConfirm={handleConfirmLogin}
           onCancel={() => setShowModal(false)}

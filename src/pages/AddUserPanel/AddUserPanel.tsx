@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AddUserPanel.module.css";
-import ConfirmLoginModal from "pages/ConfirmLoginModal/ConfirmLoginModal";
+import ConfirmLoginModal from "components/Common/ConfirmLoginModal";
 
 const plants = ["GOA", "GOA-1", "Mumbai", "Delhi", "Bangalore"];
 const modules = [
@@ -155,8 +155,10 @@ const handlePermissionToggle = (module: string, action: string) => {
     setShowModal(true); // show login modal before saving
   };
 
-  const handleConfirmLogin = (userId: string, password: string) => {
-    if (userId === "admin" && password === "password123") {
+  const username = localStorage.getItem("username") || "";
+  const handleConfirmLogin = (data: Record<string, string>) => {
+    // username is always from localStorage, not editable in modal
+    if (data.username === username && data.password === "password123") {
       onSave(form); // save only after successful login
       setShowModal(false);
       onClose(); // close panel
@@ -372,6 +374,9 @@ const handlePermissionToggle = (module: string, action: string) => {
       {/* ✅ Modal moved inside JSX return */}
       {showModal && (
         <ConfirmLoginModal
+          title={mode === "edit" ? "Confirm Edit" : "Confirm Add"}
+          description={mode === "edit" ? "Please confirm editing this user by entering your password." : "Please confirm adding a new user by entering your password."}
+          username={username}
           onConfirm={handleConfirmLogin}
           onCancel={() => setShowModal(false)}
         />
