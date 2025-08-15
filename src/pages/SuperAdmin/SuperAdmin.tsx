@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./SuperAdmin.module.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -20,7 +21,6 @@ import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
-
 import { mockUsers } from "../../data/mockUsers";
 
 const getCurrentUser = () => {
@@ -30,7 +30,14 @@ const getCurrentUser = () => {
 };
 
 const SuperAdmin: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(() => {
+    if (location.state && location.state.activeTab) {
+      return location.state.activeTab;
+    }
+    return "dashboard";
+  });
   const user = getCurrentUser();
   const navigate = useNavigate();
 

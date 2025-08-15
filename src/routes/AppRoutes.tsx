@@ -2,14 +2,15 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import UserInformation from "../pages/UserInformation/UserInformation";
 import AccessDetails from "../pages/AccessDetails/AccessDetails";
-
 import ReviewSubmit from "../pages/ReviewSubmit/ReviewSubmit";
 import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredentials";
 import TrackRequest from "../pages/TrackRequest";
 import Login from "../pages/Login";
 import ApproverDashboard from "../pages/ApproverDashboard";
-import SuperAdmin from "pages/SuperAdmin/SuperAdmin";
-
+import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
+import RoleMasterTable from "../pages/RoleMasterTable/RoleMasterTable";
+import AddRoleFormPage from "../RoleMaster/AddRoleFormPage";
+import EditRoleFormPage from "../RoleMaster/EditRoleFormPage";
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
@@ -20,12 +21,18 @@ const AppRoutes: React.FC = () => (
     <Route path="/track-request" element={<TrackRequest />} />
 
     {/* Admin Flow */}
-
     <Route path="/" element={<Login />} />
     <Route path="/approver" element={<ApproverDashboard />} />
-    {/* SuperAdmin Flow */}
 
+    {/* SuperAdmin Flow */}
     <Route path="/superadmin" element={<SuperAdmin />} />
+
+    {/* Role Master */}
+    <Route path="/roles" element={<RoleMasterTable />} />
+    <Route path="/add-role" element={<AddRoleFormPage />} />
+    <Route path="/edit-role/:idx" element={<EditRoleFormPage />} />
+    {/* Catch-all route for 404 */}
+    <Route path="*" element={<div style={{padding:40, textAlign:'center', color:'#e74c3c', fontSize:24}}>404 - Page Not Found</div>} />
   </Routes>
 );
 
