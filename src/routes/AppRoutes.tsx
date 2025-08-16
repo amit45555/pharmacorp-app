@@ -7,6 +7,7 @@ import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredential
 import TrackRequest from "../pages/TrackRequest";
 import Login from "../pages/Login";
 import ApproverDashboard from "../pages/ApproverDashboard";
+import AccessRequestDetails from "../pages/AccessRequestDetails";
 import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
 import RoleMasterTable from "../pages/RoleMasterTable/RoleMasterTable";
 import AddRoleFormPage from "../RoleMaster/AddRoleFormPage";
@@ -23,6 +24,7 @@ const AppRoutes: React.FC = () => (
     {/* Admin Flow */}
     <Route path="/" element={<Login />} />
     <Route path="/approver" element={<ApproverDashboard />} />
+    <Route path="/access-request/:id" element={<AccessRequestDetails />} />
 
     {/* SuperAdmin Flow */}
     <Route path="/superadmin" element={<SuperAdmin />} />
@@ -32,7 +34,21 @@ const AppRoutes: React.FC = () => (
     <Route path="/add-role" element={<AddRoleFormPage />} />
     <Route path="/edit-role/:idx" element={<EditRoleFormPage />} />
     {/* Catch-all route for 404 */}
-    <Route path="*" element={<div style={{padding:40, textAlign:'center', color:'#e74c3c', fontSize:24}}>404 - Page Not Found</div>} />
+    <Route
+      path="*"
+      element={
+        <div
+          style={{
+            padding: 40,
+            textAlign: "center",
+            color: "#e74c3c",
+            fontSize: 24,
+          }}
+        >
+          404 - Page Not Found
+        </div>
+      }
+    />
   </Routes>
 );
 

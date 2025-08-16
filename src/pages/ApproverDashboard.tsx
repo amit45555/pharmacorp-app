@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ApproverDashboard.module.css";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-// Removed unused imports
 import login_headTitle2 from "../assets/login_headTitle2.png";
-import AccessRequests from "./AccessRequests/AccessRequests";
-import UserManagement from "./UserManagement/UserManagement";
-import ComplianceReports from "./ComplianceReports/ComplianceReports";
-import SystemAdministration from "./SystemAdministration/SystemAdministration";
-import Settings from "./Settings/Settings";
-import DashboardStats from "./AdminDashboard/DashboardStats";
-import TaskClosureTracking from "./TaskClosureTracking/TaskClosureTracking";
+import AccessRequestsTable from "./AccessRequestsTable";
 
 // --- Demo/mock data for all admin sections ---
 const initialRequests = [
@@ -46,88 +37,18 @@ const initialRequests = [
   },
 ];
 
-const initialUsers = [
-  {
-    id: "EMP001",
-    name: "John Smith",
-    department: "Quality Control",
-    role: "Lab Analyst",
-    status: "Active",
-    email: "john.smith@pharmacorp.com",
-  },
-  {
-    id: "EMP002",
-    name: "Sarah Johnson",
-    department: "R&D",
-    role: "Data Reviewer",
-    status: "Inactive",
-    email: "sarah.johnson@pharmacorp.com",
-  },
-];
-
-const initialReports = [
-  {
-    id: "CR-001",
-    department: "Quality Control",
-    application: "Laboratory Information System",
-    period: "Q2 2025",
-    status: "Compliant",
-    lastAudit: "2025-06-15",
-  },
-  {
-    id: "CR-002",
-    department: "R&D",
-    application: "Clinical Data Management",
-    period: "Q2 2025",
-    status: "Non-Compliant",
-    lastAudit: "2025-06-10",
-  },
-];
-
-type HealthItem = {
-  name: string;
-  status: "ok" | "warn" | "error";
-  description?: string;
-};
-
-const initialHealth: HealthItem[] = [
-  {
-    name: "Database Connection",
-    status: "ok",
-    description: "All systems operational.",
-  },
-  {
-    name: "Authentication Service",
-    status: "ok",
-    description: "No issues detected.",
-  },
-  {
-    name: "Email Notifications",
-    status: "warn",
-    description: "Delayed delivery detected.",
-  },
-];
-
-const initialSettings = {
-  emailNotifications: true,
-  smsAlerts: true,
-  twoFactor: true,
-  autoLock: false,
-};
-
 const ApproverDashboard: React.FC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() => {
     if (location.state && location.state.activeTab) {
       return location.state.activeTab;
     }
-    return "dashboard";
+    return "access-requests";
   });
-  const [requests, setRequests] = useState(initialRequests);
-  const [users, setUsers] = useState(initialUsers);
-  const [reports, setReports] = useState(initialReports);
-  const [health, setHealth] = useState(initialHealth);
-  const [settings, setSettings] = useState(initialSettings);
+  const [requests] = useState(initialRequests);
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+
   const navigate = useNavigate();
   const user = { username: "approver", role: "Approver" };
 
@@ -139,88 +60,40 @@ const ApproverDashboard: React.FC = () => {
 
   const sidebarConfig = [
     {
-      key: "dashboard",
-      label: "Dashboard",
-      icon: <DashboardIcon fontSize="small" />,
-    },
-    {
-      key: "requests",
+      key: "access-requests",
       label: "Access Requests",
       icon: <ListAltIcon fontSize="small" />,
     },
     {
-      key: "users",
-      label: "User Management",
-      icon: <PersonIcon fontSize="small" />,
-    },
-    {
-      key: "compliance",
-      label: "Compliance Reports",
+      key: "approved-rejected",
+      label: "Approved/Rejected By",
       icon: <AssignmentIcon fontSize="small" />,
-    },
-    {
-      key: "system",
-      label: "System Administration",
-      icon: <SettingsIcon fontSize="small" />,
-    },
-    {
-      key: "settings",
-      label: "Settings",
-      icon: <SettingsIcon fontSize="small" />,
     },
   ];
 
+  const handleViewRequest = (request: any) => {
+    navigate(`/access-request/${request.id}`, { state: { request } });
+  };
+
   const renderContent = () => {
     switch (activeTab) {
-      case "dashboard":
-        return (
-          <section className={styles.dashboardOverview}>
-            <h2 className={styles.sectionTitle}>Dashboard Overview</h2>
-            <div className={styles.statsGrid}>
-              <DashboardStats />
-            </div>
-            <div className={styles.recentActivitySection}>
-              <TaskClosureTracking />
-            </div>
-          </section>
-        );
-      case "requests":
+      case "access-requests":
         return (
           <section className={styles.sectionWrap}>
             <div className={styles.card}>
-              <AccessRequests requests={requests} setRequests={setRequests} />
+              <AccessRequestsTable
+                requests={requests}
+                onView={handleViewRequest}
+              />
             </div>
           </section>
         );
-      case "users":
+      case "approved-rejected":
         return (
           <section className={styles.sectionWrap}>
             <div className={styles.card}>
-              <UserManagement users={users} setUsers={setUsers} />
-            </div>
-          </section>
-        );
-      case "compliance":
-        return (
-          <section className={styles.sectionWrap}>
-            <div className={styles.card}>
-              <ComplianceReports reports={reports} setReports={setReports} />
-            </div>
-          </section>
-        );
-      case "system":
-        return (
-          <section className={styles.sectionWrap}>
-            <div className={styles.card}>
-              <SystemAdministration health={health} setHealth={setHealth} />
-            </div>
-          </section>
-        );
-      case "settings":
-        return (
-          <section className={styles.sectionWrap}>
-            <div className={styles.card}>
-              <Settings settings={settings} setSettings={setSettings} />
+              {/* TODO: Add ApprovedRejectedTable component, fetch data from SuperAdmin */}
+              <div>Approved/Rejected By Table (Coming soon)</div>
             </div>
           </section>
         );
