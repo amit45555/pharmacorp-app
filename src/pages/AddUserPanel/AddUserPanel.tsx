@@ -10,12 +10,12 @@ const modules = [
   "Plant Master",
   "Application Master",
   "Approval Workflow",
- "Approval Workflow1",
+  "Approval Workflow1",
   "Approval Workflow2",
 ];
 const permissions = ["Add", "Edit", "View", "Delete"];
 
-type UserForm = {
+export type UserForm = {
   fullName: string;
   email: string;
   empCode: string;
@@ -28,7 +28,6 @@ type UserForm = {
   centralPermission: boolean;
   comment: string;
   corporateAccessEnabled: boolean;
-
 };
 
 interface AddUserPanelProps {
@@ -45,108 +44,102 @@ const AddUserPanel = ({
   mode = "add",
 }: AddUserPanelProps) => {
   const [form, setForm] = useState<UserForm>(() => {
-  const base: UserForm = initialData ?? {
-    fullName: "",
-    email: "",
-    empCode: "",
-    department: "",
-    status: "Active",
-    plants: [],
-    permissions: {},
-    centralPermission: false,
-    comment: "",
-    corporateAccessEnabled: false,
+    const base: UserForm = initialData ?? {
+      fullName: "",
+      email: "",
+      empCode: "",
+      department: "",
+      status: "Active",
+      plants: [],
+      permissions: {},
+      centralPermission: false,
+      comment: "",
+      corporateAccessEnabled: false,
+    };
+
+    const safePermissions: { [key: string]: string[] } = base.permissions || {};
+    const permissionsWithAllModules = modules.reduce((acc, mod) => {
+      acc[mod] = safePermissions[mod] || [];
+      return acc;
+    }, {} as { [key: string]: string[] });
+
+    return { ...base, permissions: permissionsWithAllModules };
+  });
+
+  const [activePlant, setActivePlant] = useState<string | null>(null);
+
+  const handleCheckboxChange = (plant: string) => {
+    setForm((prev) => {
+      const isSelected = prev.plants.includes(plant);
+      const updatedPlants = isSelected
+        ? prev.plants.filter((p) => p !== plant)
+        : [...prev.plants, plant];
+
+      let newActive = activePlant;
+
+      if (!isSelected) {
+        // Selecting new plant → make it active
+        newActive = plant;
+      } else if (plant === activePlant) {
+        // Deselecting currently active → reset active or pick first available
+        newActive = updatedPlants.length > 0 ? updatedPlants[0] : null;
+      }
+
+      setActivePlant(newActive);
+
+      return {
+        ...prev,
+        plants: updatedPlants,
+      };
+    });
   };
 
-  const safePermissions: { [key: string]: string[] } = base.permissions || {};
-  const permissionsWithAllModules = modules.reduce((acc, mod) => {
-    acc[mod] = safePermissions[mod] || [];
-    return acc;
-  }, {} as { [key: string]: string[] });
+  const handlePermissionToggle = (module: string, action: string) => {
+    setForm((prev) => {
+      const currentPermissions = prev.permissions[module] || [];
+      const isChecked = currentPermissions.includes(action);
 
-  return { ...base, permissions: permissionsWithAllModules };
-});
+      // Toggle the permission
+      const updatedPermissions = isChecked
+        ? currentPermissions.filter((a) => a !== action)
+        : [...currentPermissions, action];
 
+      const updatedForm = {
+        ...prev,
+        permissions: {
+          ...prev.permissions,
+          [module]: updatedPermissions,
+        },
+      };
 
-const [activePlant, setActivePlant] = useState<string | null>(null);
+      // Extract plant name from module key: e.g., "GOA-Role Master" → "GOA"
+      const plantPrefix = module.split("-")[0];
 
+      // Gather all module keys for that plant
+      const plantModules = [
+        "Role Master",
+        "Vendor Master",
+        "Plant Master",
+        "Application Master",
+        "Approval Workflow",
+      ].map((mod) => `${plantPrefix}-${mod}`);
 
+      // Check if any permission is checked for this plant
+      const hasAnyPermission = plantModules.some(
+        (modKey) => (updatedForm.permissions[modKey] || []).length > 0
+      );
 
-const handleCheckboxChange = (plant: string) => {
-  setForm((prev) => {
-    const isSelected = prev.plants.includes(plant);
-    const updatedPlants = isSelected
-      ? prev.plants.filter((p) => p !== plant)
-      : [...prev.plants, plant];
+      // Add or remove plant based on permission status
+      const updatedPlants = hasAnyPermission
+        ? [...new Set([...updatedForm.plants, plantPrefix])] // ensure no duplicates
+        : updatedForm.plants.filter((p) => p !== plantPrefix);
 
-    let newActive = activePlant;
-
-    if (!isSelected) {
-      // Selecting new plant → make it active
-      newActive = plant;
-    } else if (plant === activePlant) {
-      // Deselecting currently active → reset active or pick first available
-      newActive = updatedPlants.length > 0 ? updatedPlants[0] : null;
-    }
-
-    setActivePlant(newActive);
-
-    return {
-      ...prev,
-      plants: updatedPlants,
-    };
-  });
-};
-
-
-
-
-
-const handlePermissionToggle = (module: string, action: string) => {
-  setForm((prev) => {
-    const currentPermissions = prev.permissions[module] || [];
-    const isChecked = currentPermissions.includes(action);
-
-    // Toggle the permission
-    const updatedPermissions = isChecked
-      ? currentPermissions.filter((a) => a !== action)
-      : [...currentPermissions, action];
-
-    const updatedForm = {
-      ...prev,
-      permissions: {
-        ...prev.permissions,
-        [module]: updatedPermissions,
-      },
-    };
-
-    // Extract plant name from module key: e.g., "GOA-Role Master" → "GOA"
-    const plantPrefix = module.split("-")[0];
-
-    // Gather all module keys for that plant
-    const plantModules = ["Role Master", "Vendor Master", "Plant Master", "Application Master", "Approval Workflow"]
-      .map((mod) => `${plantPrefix}-${mod}`);
-
-    // Check if any permission is checked for this plant
-    const hasAnyPermission = plantModules.some((modKey) =>
-      (updatedForm.permissions[modKey] || []).length > 0
-    );
-
-    // Add or remove plant based on permission status
-    const updatedPlants = hasAnyPermission
-      ? [...new Set([...updatedForm.plants, plantPrefix])] // ensure no duplicates
-      : updatedForm.plants.filter((p) => p !== plantPrefix);
-
-    return {
-      ...updatedForm,
-      plants: updatedPlants,
-    };
-  });
-};
-
-
-
-
+      return {
+        ...updatedForm,
+        plants: updatedPlants,
+      };
+    });
+  };
 
   const [showModal, setShowModal] = useState(false);
 
@@ -223,9 +216,7 @@ const handlePermissionToggle = (module: string, action: string) => {
               <label>Status *</label>
               <select
                 value={form.status}
-                onChange={(e) =>
-                  setForm({ ...form, status: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
               >
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
@@ -249,52 +240,62 @@ const handlePermissionToggle = (module: string, action: string) => {
             </div>
           </div>
 
-      {activePlant && form.plants.includes(activePlant) && (
-  <div className={`${styles.plantTableWrapper} ${styles.fadeIn}`}>
-    <label className={styles.sectionTitle}>
-      Module Permissions for {activePlant}
-    </label>
-    <div className={styles.table}>
-      <div className={styles.rowHeader}>
-        <span>Module Name</span>
-        {permissions.map((perm) => (
-          <span key={perm}>{perm}</span>
-        ))}
-      </div>
-      {["Role Master", "Vendor Master", "Plant Master", "Application Master", "Approval Workflow"].map((mod) => {
-        const moduleKey = `${activePlant}-${mod}`;
-        return (
-          <div className={styles.row} key={moduleKey}>
-            <span>{mod}</span>
-            {permissions.map((perm) => {
-              const isApprovalWorkflow = mod === "Approval Workflow";
-              const isDisabled = isApprovalWorkflow && (perm === "Add" || perm === "Delete");
+          {activePlant && form.plants.includes(activePlant) && (
+            <div className={`${styles.plantTableWrapper} ${styles.fadeIn}`}>
+              <label className={styles.sectionTitle}>
+                Module Permissions for {activePlant}
+              </label>
+              <div className={styles.table}>
+                <div className={styles.rowHeader}>
+                  <span>Module Name</span>
+                  {permissions.map((perm) => (
+                    <span key={perm}>{perm}</span>
+                  ))}
+                </div>
+                {[
+                  "Role Master",
+                  "Vendor Master",
+                  "Plant Master",
+                  "Application Master",
+                  "Approval Workflow",
+                ].map((mod) => {
+                  const moduleKey = `${activePlant}-${mod}`;
+                  return (
+                    <div className={styles.row} key={moduleKey}>
+                      <span>{mod}</span>
+                      {permissions.map((perm) => {
+                        const isApprovalWorkflow = mod === "Approval Workflow";
+                        const isDisabled =
+                          isApprovalWorkflow &&
+                          (perm === "Add" || perm === "Delete");
 
-              return (
-                <input
-                  key={perm}
-                  type="checkbox"
-                  checked={form.permissions[moduleKey]?.includes(perm) || false}
-                  disabled={isDisabled}
-                  onChange={() =>
-                    !isDisabled && handlePermissionToggle(moduleKey, perm)
-                  }
-                />
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
-       
-
-
-
+                        return (
+                          <input
+                            key={perm}
+                            type="checkbox"
+                            checked={
+                              form.permissions[moduleKey]?.includes(perm) ||
+                              false
+                            }
+                            disabled={isDisabled}
+                            onChange={() =>
+                              !isDisabled &&
+                              handlePermissionToggle(moduleKey, perm)
+                            }
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div>
-            <label className={styles.formLabel}>Central Master Permission</label>
+            <label className={styles.formLabel}>
+              Central Master Permission
+            </label>
             <div className={styles.centralTable}>
               <div className={styles.rowCheckbox}>
                 <input
@@ -308,41 +309,45 @@ const handlePermissionToggle = (module: string, action: string) => {
                     })
                   }
                 />
-                <label htmlFor="centralPermission">
-                   Central Master 
-                </label>
+                <label htmlFor="centralPermission">Central Master</label>
               </div>
             </div>
           </div>
 
-         {form.centralPermission && (
-  <div className={`${styles.centralSection} ${styles.fadeIn}`}>
-    <label className={styles.sectionTitle}>Module Permissions for Central Master</label>
-    <div className={styles.table}>
-      <div className={styles.rowHeader}>
-        <span>Module Name</span>
-        {permissions.map((perm) => (
-          <span key={perm}>{perm}</span>
-        ))}
-      </div>
-      {["Role Master", "Vendor Master", "Plant Master",  "Approval Workflow1", "Approval Workflow2"].map((mod) => (
-        <div className={styles.row} key={`central-${mod}`}>
-          <span>{mod}</span>
-          {permissions.map((perm) => (
-  <input
-    key={perm}
-    type="checkbox"
-    checked={form.permissions[mod]?.includes(perm) || false}
-    onChange={() => handlePermissionToggle(mod, perm)}
-  />
-))}
-
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
+          {form.centralPermission && (
+            <div className={`${styles.centralSection} ${styles.fadeIn}`}>
+              <label className={styles.sectionTitle}>
+                Module Permissions for Central Master
+              </label>
+              <div className={styles.table}>
+                <div className={styles.rowHeader}>
+                  <span>Module Name</span>
+                  {permissions.map((perm) => (
+                    <span key={perm}>{perm}</span>
+                  ))}
+                </div>
+                {[
+                  "Role Master",
+                  "Vendor Master",
+                  "Plant Master",
+                  "Approval Workflow1",
+                  "Approval Workflow2",
+                ].map((mod) => (
+                  <div className={styles.row} key={`central-${mod}`}>
+                    <span>{mod}</span>
+                    {permissions.map((perm) => (
+                      <input
+                        key={perm}
+                        type="checkbox"
+                        checked={form.permissions[mod]?.includes(perm) || false}
+                        onChange={() => handlePermissionToggle(mod, perm)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className={styles.commentBox}>
             <label htmlFor="comment">Comment</label>
@@ -350,9 +355,7 @@ const handlePermissionToggle = (module: string, action: string) => {
               id="comment"
               placeholder="Enter comment here..."
               value={form.comment}
-              onChange={(e) =>
-                setForm({ ...form, comment: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, comment: e.target.value })}
             />
           </div>
 
@@ -375,7 +378,11 @@ const handlePermissionToggle = (module: string, action: string) => {
       {showModal && (
         <ConfirmLoginModal
           title={mode === "edit" ? "Confirm Edit" : "Confirm Add"}
-          description={mode === "edit" ? "Please confirm editing this user by entering your password." : "Please confirm adding a new user by entering your password."}
+          description={
+            mode === "edit"
+              ? "Please confirm editing this user by entering your password."
+              : "Please confirm adding a new user by entering your password."
+          }
           username={username}
           onConfirm={handleConfirmLogin}
           onCancel={() => setShowModal(false)}

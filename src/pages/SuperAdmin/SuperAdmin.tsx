@@ -17,12 +17,13 @@ import GroupIcon from "@mui/icons-material/Group";
 import SyncIcon from "@mui/icons-material/Sync";
 import DonutChart from "../../components/Common/DonutChart";
 import PlantMasterTable from "pages/PlantMasterTable/PlantMasterTable";
+import VendorMasterTable from "pages/VendorMasterTable/VendorMasterTable";
 import RoleMasterTable from "pages/RoleMasterTable/RoleMasterTable";
 import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
 import { mockUsers } from "../../data/mockUsers";
-import login_headTitle2 from '../../assets/login_headTitle2.png'; 
+import login_headTitle2 from "../../assets/login_headTitle2.png";
 
 const getCurrentUser = () => {
   const username = localStorage.getItem("username");
@@ -31,7 +32,6 @@ const getCurrentUser = () => {
 };
 
 const SuperAdmin: React.FC = () => {
-
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() => {
     if (location.state && location.state.activeTab) {
@@ -117,7 +117,11 @@ const SuperAdmin: React.FC = () => {
           </div>
         );
       case "vendor":
-        return <div>Vendor Master Table</div>;
+        return (
+          <div>
+            <VendorMasterTable />
+          </div>
+        );
       case "application":
         return (
           <div>
@@ -145,8 +149,12 @@ const SuperAdmin: React.FC = () => {
     <div className={styles["main-container"]}>
       <aside className={styles.sidebar}>
         <div className={styles["sidebar-header"]}>
-           <img src={login_headTitle2} alt="Company logo" style={{ width: 250, height: 35, }} />
-        
+          <img
+            src={login_headTitle2}
+            alt="Company logo"
+            style={{ width: 250, height: 35 }}
+          />
+
           <br />
           <span>Unichem Laboratories</span>
         </div>

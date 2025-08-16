@@ -12,6 +12,10 @@ import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
 import RoleMasterTable from "../pages/RoleMasterTable/RoleMasterTable";
 import AddRoleFormPage from "../RoleMaster/AddRoleFormPage";
 import EditRoleFormPage from "../RoleMaster/EditRoleFormPage";
+import VendorMasterTable from "../pages/VendorMasterTable/VendorMasterTable";
+import AddVendorFormPage from "../pages/VendorMasterTable/AddVendorFormPage";
+import EditVendorFormPage from "../pages/VendorMasterTable/EditVendorFormPage";
+import { VendorProvider } from "../context/VendorContext";
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
@@ -35,6 +39,31 @@ const AppRoutes: React.FC = () => (
     <Route path="/roles" element={<RoleMasterTable />} />
     <Route path="/add-role" element={<AddRoleFormPage />} />
     <Route path="/edit-role/:idx" element={<EditRoleFormPage />} />
+    {/* Vendor Master */}
+    <Route
+      path="/vendors"
+      element={
+        <VendorProvider>
+          <VendorMasterTable />
+        </VendorProvider>
+      }
+    />
+    <Route
+      path="/add-vendor"
+      element={
+        <VendorProvider>
+          <AddVendorFormPage />
+        </VendorProvider>
+      }
+    />
+    <Route
+      path="/edit-vendor/:idx"
+      element={
+        <VendorProvider>
+          <EditVendorFormPage />
+        </VendorProvider>
+      }
+    />
     {/* Catch-all route for 404 */}
     <Route
       path="*"

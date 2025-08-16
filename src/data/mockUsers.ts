@@ -1,5 +1,5 @@
 // Mock user store for demo purposes
-export type Role = "superAdmin" | "approver" | "plantAdmin" | "user";
+export type Role = "superAdmin" | "approver" | "plantAdmin" | "user" | "vendor";
 
 export interface MockUser {
   id: number;
@@ -7,6 +7,16 @@ export interface MockUser {
   password: string;
   role: Role;
   permissions: string[];
+  // Vendor-specific fields (optional for other roles)
+  fullName?: string;
+  email?: string;
+  empCode?: string;
+  department?: string;
+  status?: string;
+  plants?: string[];
+  centralPermission?: boolean;
+  comment?: string;
+  corporateAccessEnabled?: boolean;
 }
 
 function ensureViewPermissions(perms: string[]): string[] {
@@ -20,6 +30,44 @@ function ensureViewPermissions(perms: string[]): string[] {
 }
 
 export const mockUsers: MockUser[] = [
+  // Vendor users for VendorMasterTable demo
+  {
+    id: 101,
+    username: "vendor1",
+    password: "vendor123",
+    role: "vendor",
+    permissions: [
+      "vendorMaster:view",
+      "vendorMaster:add",
+      "vendorMaster:edit",
+      "vendorMaster:delete",
+    ],
+    fullName: "Acme Corp",
+    email: "contact@acme.com",
+    empCode: "VEND001",
+    department: "Procurement",
+    status: "Active",
+    plants: ["GOA", "Mumbai"],
+    centralPermission: true,
+    comment: "Preferred vendor",
+    corporateAccessEnabled: true,
+  },
+  {
+    id: 102,
+    username: "vendor2",
+    password: "vendor456",
+    role: "vendor",
+    permissions: ["vendorMaster:view", "vendorMaster:add", "vendorMaster:edit"],
+    fullName: "Beta Supplies",
+    email: "info@betasupplies.com",
+    empCode: "VEND002",
+    department: "Logistics",
+    status: "Inactive",
+    plants: ["Delhi"],
+    centralPermission: false,
+    comment: "Onboarding",
+    corporateAccessEnabled: false,
+  },
   {
     id: 1,
     username: "superadmin1",

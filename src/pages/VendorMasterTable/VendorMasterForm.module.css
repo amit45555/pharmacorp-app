@@ -1,0 +1,75 @@
+.formContainer {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(33, 118, 210, 0.08);
+  padding: 32px 32px 24px 32px;
+  margin: 32px auto;
+  max-width: 600px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2176d2;
+  letter-spacing: 0.5px;
+}
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #2176d2;
+  cursor: pointer;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #274b79;
+}
+.input,
+.select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #b4c2db;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.saveBtn {
+  background: #2176d2;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.cancelBtn {
+  background: #eaf2fb;
+  color: #2176d2;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
