@@ -143,6 +143,21 @@ export default function RoleMasterTable() {
           >
             <FaTrash size={14} /> Delete
           </button>
+          <button
+                className={`${styles.btn} ${styles.exportPdfBtn}`} 
+                
+                aria-label="Export table to PDF"
+                type="button"
+              >
+                <span
+                  role="img"
+                  aria-label="Export PDF"
+                  style={{ fontSize: 18 }}
+                >
+                  🗎
+                </span>
+                PDF
+              </button>
         </div>
       </div>
 

@@ -53,8 +53,9 @@
   background-color:#198754;
 }
 .filterBtn {
- background-color:#2563eb;
+background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
   color: #fff;
+  border: none;
   padding: 6px 14px;
   border-radius: 8px;
   border: none;
@@ -374,7 +375,7 @@ display: flex;
 
 
 .filterBtn:hover {
-  background:#1747b6;
+background: #005fbb;
   color: #fff;
 }
 
@@ -462,12 +463,12 @@ display: flex;
 
 /* Edit button: blue accent */
 .editBtn {
-  background: #4c8bf5;
-  color: #fff;
+    background-color: #e2e3e5;
+  color: #212529;
 }
 .editBtn:hover, .editBtn:focus {
-  background:#2768c6;
-  color: #fff;
+ background-color: #212529;
+  color:  #e2e3e5;
 }
 
 /* Delete button: muted/red gray */
@@ -480,3 +481,30 @@ display: flex;
   color: #fff;
 }
 
+.exportPdfBtn {
+  background: #fff;
+  color: #0b63ce;
+  border: 1px solid #0b63ce;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 8px rgba(11, 99, 206, 0.08);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  display: flex;
+  align-items: center;
+
+  height: 35px;
+}
+.exportPdfBtn:hover {
+  background: #0b63ce;
+  color: #fff;
+  border-color: #084a9e;
+}
+.exportPdfBtn:active {
+  background: #084a9e;
+  color: #fff;
+  border-color: #084a9e;
+}

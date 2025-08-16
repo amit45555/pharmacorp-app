@@ -303,7 +303,7 @@ const UserMasterTable = () => {
                 >
                   🗎
                 </span>
-                Export to PDF
+                PDF
               </button>
             </div>
           </div>
