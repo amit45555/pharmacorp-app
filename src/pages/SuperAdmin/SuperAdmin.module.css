@@ -305,9 +305,10 @@ html,
   font-size: 19px;
   font-weight: 700;
   letter-spacing: .1em;
+    border-bottom: 2px solid rgba(255,255,255,0.10);
 }
 .sidebar-header img {
-  margin-bottom: 8px;
+  margin-bottom: 1px;
   width: 170px;
   height: auto;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
@@ -316,20 +317,24 @@ html,
   display: block;
   color: #e1eeff;
   font-size: 15px;
-  margin-top: 4px;
+  margin-top: 1px;
   font-weight: 500;
   letter-spacing: .03em;
+  margin-bottom: 8px;
 }
 
 /* Navigation group title */
 .sidebar-group {
-  padding: 13px 28px 0 28px;
+  padding: 23px 28px 20px 28px;
   color: #e6efff;
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: bold;
   letter-spacing: 1px;
   opacity: 0.66;
   margin-bottom: 2px;
+  margin-top: 10px;
+  
+  
 }
 
 /* Navigation buttons */
@@ -350,6 +355,7 @@ html,
   border-radius: 0 22px 22px 0;
   transition: background 0.25s, color 0.18s, font-weight 0.15s;
   z-index: 1;
+  margin: 5px;
 }
 
 .nav-button .MuiSvgIcon-root {
@@ -390,14 +396,14 @@ html,
   border-top: 1px solid rgba(255,255,255,0.10);
   background: none;
   padding: 18px 20px 15px 20px;
-  margin-top: 18px;
+  margin-top: 48px;
 }
 
 .admin-info {
   display: flex;
   align-items: center;
   gap: 11px;
-  margin-bottom: 6px;
+  margin-bottom: 22px;
 }
 
 .avatar {
