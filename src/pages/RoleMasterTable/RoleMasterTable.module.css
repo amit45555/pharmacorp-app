@@ -508,3 +508,12 @@ background: #005fbb;
   color: #fff;
   border-color: #084a9e;
 }
+
+.radioInput {
+  outline: none;
+  box-shadow: none;
+}
+.radioInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

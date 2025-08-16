@@ -317,6 +317,7 @@ autoTable(doc, {
                 <tr key={idx}>
                   <td>
                     <input
+                      className={styles.radioInput}
                       type="radio"
                       checked={selectedRow === idx}
                       onChange={() => handleSelectRow(idx)}
