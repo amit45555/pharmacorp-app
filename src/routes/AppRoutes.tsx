@@ -23,7 +23,7 @@ const AppRoutes: React.FC = () => (
     <Route path="/generate-credentials" element={<GenerateCredentials />} />
     <Route path="/track-request" element={<TrackRequest />} />
 
-    {/* Admin Flow */}
+    {/* Approver Flow */}
     <Route path="/" element={<Login />} />
     <Route path="/approver" element={<ApproverDashboard />} />
     <Route path="/access-request/:id" element={<AccessRequestDetails />} />
