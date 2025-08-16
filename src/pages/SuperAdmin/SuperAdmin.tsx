@@ -22,6 +22,7 @@ import UserMasterTable from "pages/UserMasterTable/UserMasterTable";
 import ApplicationMasterTable from "pages/ApplicationMasterTable/ApplicationMasterTable";
 import WorkflowBuilder from "pages/WorkflowBuilder/WorkflowBuilder";
 import { mockUsers } from "../../data/mockUsers";
+import login_headTitle2 from '../../assets/login_headTitle2.png'; 
 
 const getCurrentUser = () => {
   const username = localStorage.getItem("username");
@@ -144,7 +145,8 @@ const SuperAdmin: React.FC = () => {
     <div className={styles["main-container"]}>
       <aside className={styles.sidebar}>
         <div className={styles["sidebar-header"]}>
-          IDAMS LITE
+           <img src={login_headTitle2} alt="Company logo" style={{ width: 250, height: 35, }} />
+        
           <br />
           <span>Unichem Laboratories</span>
         </div>
