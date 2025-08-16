@@ -291,6 +291,17 @@ const UserMasterTable = () => {
                 + Add User
               </button>
               <button
+              className={styles.filterButton}
+              onClick={() => setShowFilterPopover((prev) => !prev)}
+              type="button"
+              aria-label="Filter users"
+            >
+              <span role="img" aria-label="filter">
+                🔎
+              </span>{" "}
+              Filter
+            </button>
+              <button
                 className={styles.exportPdfBtn}
                 onClick={handleExportPDF}
                 aria-label="Export table to PDF"
@@ -309,17 +320,7 @@ const UserMasterTable = () => {
           </div>
           {/* Professional Filter Button with Popover */}
           <div className={styles.controls}>
-            <button
-              className={styles.filterButton}
-              onClick={() => setShowFilterPopover((prev) => !prev)}
-              type="button"
-              aria-label="Filter users"
-            >
-              <span role="img" aria-label="filter">
-                🔎
-              </span>{" "}
-              Filter
-            </button>
+            
             {showFilterPopover && (
               <div className={styles.filterPopover} ref={popoverRef}>
                 <div className={styles.filterPopoverHeader}>
