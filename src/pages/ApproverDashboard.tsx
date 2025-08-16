@@ -77,44 +77,34 @@ const ApproverDashboard: React.FC = () => {
   };
 
   // Demo approval history data
+  // Demo: Three step-based approvers, no sub-approvers
   const approvalActions: ApprovalAction[] = [
     {
       approverName: "Amit Kumar",
-      approverRole: "Plant Admin",
+      approverRole: "Plant Admin (Step 1)",
       plant: "GOA",
       corporate: "Unichem Corp",
       action: "Approved",
       timestamp: "2025-08-16 10:22",
       comments: "All compliance met.",
-      subApprovers: [
-        {
-          approverName: "Priya Sharma",
-          approverRole: "QA Head",
-          plant: "GOA",
-          corporate: "Unichem Corp",
-          action: "Approved",
-          timestamp: "2025-08-16 11:05",
-          comments: "Reviewed and approved.",
-        },
-        {
-          approverName: "Rahul Singh",
-          approverRole: "IT Manager",
-          plant: "GOA",
-          corporate: "Unichem Corp",
-          action: "Rejected",
-          timestamp: "2025-08-16 11:15",
-          comments: "Missing IT clearance.",
-        },
-      ],
     },
     {
-      approverName: "Neha Patel",
-      approverRole: "Corporate Admin",
-      plant: "Corporate",
+      approverName: "Priya Sharma",
+      approverRole: "QA Head (Step 2)",
+      plant: "GOA",
+      corporate: "Unichem Corp",
+      action: "Approved",
+      timestamp: "2025-08-16 11:05",
+      comments: "Reviewed and approved.",
+    },
+    {
+      approverName: "Rahul Singh",
+      approverRole: "IT Manager (Step 3)",
+      plant: "GOA",
       corporate: "Unichem Corp",
       action: "Rejected",
-      timestamp: "2025-08-16 12:00",
-      comments: "Policy violation.",
+      timestamp: "2025-08-16 11:15",
+      comments: "Missing IT clearance.",
     },
   ];
 

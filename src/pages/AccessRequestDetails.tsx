@@ -5,7 +5,7 @@ import styles from "./AccessRequestModal.module.css";
 const AccessRequestDetails: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, step } = useParams();
   const request = location.state?.request;
 
   if (!request) {
@@ -27,7 +27,7 @@ const AccessRequestDetails: React.FC = () => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h2>Access Request Details</h2>
+        <h2>Access Request Details {step ? `(Approver ${step})` : ""}</h2>
         <table className={styles.detailsTable}>
           <tbody>
             {Object.entries(request).map(([key, value]) => (

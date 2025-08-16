@@ -17,6 +17,8 @@ const AppRoutes: React.FC = () => (
     {/* User Flow */}
     <Route path="/user-information" element={<UserInformation />} />
     <Route path="/access-details" element={<AccessDetails />} />
+    {/* Approver step views: Approver 1, 2, 3 */}
+    <Route path="/approver-step/:step/:id" element={<AccessRequestDetails />} />
     <Route path="/review-submit" element={<ReviewSubmit />} />
     <Route path="/generate-credentials" element={<GenerateCredentials />} />
     <Route path="/track-request" element={<TrackRequest />} />
