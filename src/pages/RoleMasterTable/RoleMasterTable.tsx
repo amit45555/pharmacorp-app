@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import styles from "../RoleMasterTable/RoleMasterTable.module.css";
 import { FaEdit, FaTrash, FaTimes, FaRegClock } from "react-icons/fa";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -65,9 +67,69 @@ export default function RoleMasterTable() {
 
   const navigate = useNavigate();
 
+
   const handleAddRole = () => {
     navigate("/add-role");
   };
+
+  // PDF Download Handler
+  const handleDownloadPdf = () => {
+ const doc = new jsPDF({ orientation: "landscape" });
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const fileName = `RoleMasterTable_${yyyy}-${mm}-${dd}.pdf`;
+
+  // Title
+  
+
+  // Headers as in your table/image
+  const  headers = [[
+    "Role Name",
+    "Description",
+    "Status",
+    
+  ]];
+
+  // Body using your filteredRoles (for search/filter support)
+  const rows = filteredRoles.map(role => [
+    role.name,
+    role.description,
+    role.status,
+   
+  ]);
+
+
+    // Title
+    doc.setFontSize(18);
+    doc.text("Role Master Table", 14, 18);
+
+;
+
+autoTable(doc, {
+     head: headers,
+      body: rows,
+      startY: 28,
+      styles: {
+        fontSize: 11,
+        cellPadding: 3,
+        halign: "left",
+        valign: "middle",
+      },
+      headStyles: {
+        fillColor: [11, 99, 206],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [240, 245, 255],
+      },
+      margin: { left: 14, right: 14 },
+      tableWidth: "auto",
+    });
+  doc.save("role-master-table.pdf");
+};
 
   const handleEditRole = () => {
     
@@ -121,6 +183,7 @@ export default function RoleMasterTable() {
           <button className={styles.addUserBtn} onClick={handleAddRole}>
             + Add Role
           </button>
+         
           <button
             className={styles.filterBtn}
             onClick={() => setShowFilterPanel(true)}
@@ -145,7 +208,7 @@ export default function RoleMasterTable() {
           </button>
           <button
                 className={`${styles.btn} ${styles.exportPdfBtn}`} 
-                
+                 onClick={handleDownloadPdf}
                 aria-label="Export table to PDF"
                 type="button"
               >
