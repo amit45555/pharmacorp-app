@@ -8,6 +8,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import login_headTitle2 from "../assets/login_headTitle2.png";
 import AccessRequestsTable from "./AccessRequestsTable";
+import ApprovalHistoryTable, { ApprovalAction } from "./ApprovalHistoryTable";
 
 // --- Demo/mock data for all admin sections ---
 const initialRequests = [
@@ -75,6 +76,48 @@ const ApproverDashboard: React.FC = () => {
     navigate(`/access-request/${request.id}`, { state: { request } });
   };
 
+  // Demo approval history data
+  const approvalActions: ApprovalAction[] = [
+    {
+      approverName: "Amit Kumar",
+      approverRole: "Plant Admin",
+      plant: "GOA",
+      corporate: "Unichem Corp",
+      action: "Approved",
+      timestamp: "2025-08-16 10:22",
+      comments: "All compliance met.",
+      subApprovers: [
+        {
+          approverName: "Priya Sharma",
+          approverRole: "QA Head",
+          plant: "GOA",
+          corporate: "Unichem Corp",
+          action: "Approved",
+          timestamp: "2025-08-16 11:05",
+          comments: "Reviewed and approved.",
+        },
+        {
+          approverName: "Rahul Singh",
+          approverRole: "IT Manager",
+          plant: "GOA",
+          corporate: "Unichem Corp",
+          action: "Rejected",
+          timestamp: "2025-08-16 11:15",
+          comments: "Missing IT clearance.",
+        },
+      ],
+    },
+    {
+      approverName: "Neha Patel",
+      approverRole: "Corporate Admin",
+      plant: "Corporate",
+      corporate: "Unichem Corp",
+      action: "Rejected",
+      timestamp: "2025-08-16 12:00",
+      comments: "Policy violation.",
+    },
+  ];
+
   const renderContent = () => {
     switch (activeTab) {
       case "access-requests":
@@ -92,8 +135,7 @@ const ApproverDashboard: React.FC = () => {
         return (
           <section className={styles.sectionWrap}>
             <div className={styles.card}>
-              {/* TODO: Add ApprovedRejectedTable component, fetch data from SuperAdmin */}
-              <div>Approved/Rejected By Table (Coming soon)</div>
+              <ApprovalHistoryTable actions={approvalActions} />
             </div>
           </section>
         );
