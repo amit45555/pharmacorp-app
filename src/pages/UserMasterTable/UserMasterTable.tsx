@@ -125,6 +125,10 @@ const UserMasterTable = () => {
     },
   ]);
 
+
+const [selectedRow, setSelectedRow] = useState<number | null>(null);
+
+
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<"add" | "edit">("add");
   const [editUserIdx, setEditUserIdx] = useState<number | null>(null);
@@ -274,13 +278,10 @@ const UserMasterTable = () => {
         <div className={styles.container}>
           {/* Header */}
           <div className={styles.header}>
-            <div>
-              <h2>User Management</h2>
-              <p>Manage user accounts, permissions, and plant access</p>
-            </div>
+            
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <button
-                className={styles.addUser}
+                className={styles.addUserBtn}
                 onClick={() => {
                   setPanelMode("add");
                   setEditUserData(null);
@@ -291,7 +292,7 @@ const UserMasterTable = () => {
                 + Add User
               </button>
               <button
-              className={styles.filterButton}
+               className={styles.filterBtn}
               onClick={() => setShowFilterPopover((prev) => !prev)}
               type="button"
               aria-label="Filter users"
@@ -301,6 +302,38 @@ const UserMasterTable = () => {
               </span>{" "}
               Filter
             </button>
+            <button
+   className={`${styles.btn} ${styles.editBtn}`}
+  disabled={selectedRow === null}
+  title="Edit Selected User"
+  onClick={() => {
+    if (selectedRow !== null) {
+      setPanelMode("edit");
+      setEditUserIdx(selectedRow);
+      setEditUserData(filteredUsers[selectedRow]);
+      setShowPanel(true);
+    }
+  }}
+>
+  <FaEdit size={16} /> Edit
+</button>
+<button
+  className={`${styles.btn} ${styles.deleteBtn}`}
+  disabled={selectedRow === null}
+  title="Delete Selected User"
+  onClick={() => {
+    if (selectedRow !== null) {
+      const out = [...users];
+      out.splice(selectedRow, 1);
+      setUsers(out);
+      setSelectedRow(null);
+    }
+  }}
+  style={{ marginLeft: 4 }}
+>
+  <FaTrash size={16} /> Delete
+</button>
+
               <button
                 className={styles.exportPdfBtn}
                 onClick={handleExportPDF}
@@ -397,89 +430,76 @@ const UserMasterTable = () => {
           >
             <table className={styles.userTable}>
               <thead>
-                <tr>
-                  <th>User Name</th>
-                  <th>Email</th>
-                  <th>Employee Code</th>
-                  <th>Department</th>
-                  <th>Assigned Plants</th>
-                  <th>Status</th>
-                  <th>Central Master</th>
-                  <th>Activity Logs</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user: any, idx: number) => (
-                  <tr key={idx}>
-                    <td>
-                      <strong>{user.fullName}</strong>
-                    </td>
-                    <td>{user.email}</td>
-                    <td>{user.empCode}</td>
-                    <td>{user.department}</td>
-                    <td>
-                      {user.plants.map((plant: string, i: number) => (
-                        <span key={i} className={styles.plantBadge}>
-                          {plant}
-                        </span>
-                      ))}
-                    </td>
-                    <td>
-                      <span
-                        className={
-                          user.status === "Active"
-                            ? styles.activeBadge
-                            : styles.inactiveBadge
-                        }
-                      >
-                        {user.status}
-                      </span>
-                    </td>
-                    <td>
-                      {Array.isArray(user.centralMaster) &&
-                      user.centralMaster.length > 0 ? (
-                        user.centralMaster.map((mod: string, index: number) => (
-                          <span key={index} className={styles.plantBadge}>
-                            {mod}
-                          </span>
-                        ))
-                      ) : (
-                        <span className={styles.inactive}>-</span>
-                      )}
-                    </td>
+  <tr>
+    <th></th> {/* Radio column */}
+    <th>User Name</th>
+    <th>Email</th>
+    <th>Employee Code</th>
+    <th>Department</th>
+    <th>Assigned Plants</th>
+    <th>Status</th>
+    <th>Central Master</th>
+    <th>Activity Logs</th>
+    {/* Remove Actions */}
+  </tr>
+</thead>
 
-                    <td>
-                      <button
-                        className={styles.actionBtn}
-                        title="View Activity Logs"
-                        onClick={() => {
-                          setActivityLogsUser(user);
-                          setShowActivityModal(true);
-                        }}
-                      >
-                        {FaRegClock({ size: 17 })}
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className={styles.actionBtn}
-                        onClick={() => {
-                          setPanelMode("edit");
-                          setEditUserIdx(idx);
-                          setEditUserData(filteredUsers[idx]);
-                          setShowPanel(true);
-                        }}
-                      >
-                        {FaEdit({ size: 17 })}
-                      </button>
-                      <button className={styles.actionBtnDelete}>
-                        {FaTrash({ size: 17 })}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              <tbody>
+  {filteredUsers.map((user: any, idx: number) => (
+    <tr key={idx}>
+      {/* Radio input */}
+      <td>
+        <input
+          type="radio"
+          checked={selectedRow === idx}
+          onChange={() => setSelectedRow(idx)}
+          className={styles.radioInput}
+          aria-label={`Select ${user.fullName}`}
+        />
+      </td>
+      <td><strong>{user.fullName}</strong></td>
+      <td>{user.email}</td>
+      <td>{user.empCode}</td>
+      <td>{user.department}</td>
+      <td>
+        {user.plants.map((plant: string, i: number) => (
+          <span key={i} className={styles.plantBadge}>{plant}</span>
+        ))}
+      </td>
+      <td>
+        <span className={
+          user.status === "Active"
+            ? styles.activeBadge
+            : styles.inactiveBadge
+        }>
+          {user.status}
+        </span>
+      </td>
+      <td>
+        {Array.isArray(user.centralMaster) && user.centralMaster.length > 0
+          ? user.centralMaster.map((mod: string, index: number) => (
+              <span key={index} className={styles.plantBadge}>{mod}</span>
+            ))
+          : <span className={styles.inactive}>-</span>
+        }
+      </td>
+      <td>
+        <button
+          className={styles.actionBtn}
+          title="View Activity Logs"
+          onClick={() => {
+            setActivityLogsUser(user);
+            setShowActivityModal(true);
+          }}
+        >
+          <FaRegClock size={17} />
+        </button>
+      </td>
+      {/* REMOVE Actions cell */}
+    </tr>
+  ))}
+</tbody>
+
             </table>
           </div>
           {/* Footer */}
