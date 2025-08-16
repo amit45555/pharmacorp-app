@@ -1,26 +1,21 @@
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./ApproverDashboard.module.css";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+// Removed unused imports
+import login_headTitle2 from "../assets/login_headTitle2.png";
 import AccessRequests from "./AccessRequests/AccessRequests";
 import UserManagement from "./UserManagement/UserManagement";
 import ComplianceReports from "./ComplianceReports/ComplianceReports";
 import SystemAdministration from "./SystemAdministration/SystemAdministration";
 import Settings from "./Settings/Settings";
-
-import React, { useState } from "react";
-import styles from "./ApproverDashboard.module.css";
-import { useNavigate } from "react-router-dom";
 import DashboardStats from "./AdminDashboard/DashboardStats";
-import { useAuth } from "../context/AuthContext";
-import { can } from "../utils/rbac";
-import Sidebar from "../components/Common/Sidebar";
-import {
-  FaChartBar,
-  FaClipboardList,
-  FaUsers,
-  FaCheck,
-  FaCog,
-  FaWrench,
-  FaBell,
-  FaUser,
-} from "react-icons/fa";
 import TaskClosureTracking from "./TaskClosureTracking/TaskClosureTracking";
 
 // --- Demo/mock data for all admin sections ---
@@ -121,167 +116,174 @@ const initialSettings = {
 };
 
 const ApproverDashboard: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<string>("dashboard");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(() => {
+    if (location.state && location.state.activeTab) {
+      return location.state.activeTab;
+    }
+    return "dashboard";
+  });
   const [requests, setRequests] = useState(initialRequests);
   const [users, setUsers] = useState(initialUsers);
   const [reports, setReports] = useState(initialReports);
   const [health, setHealth] = useState(initialHealth);
   const [settings, setSettings] = useState(initialSettings);
-  const { user } = useAuth();
-  const role = user?.role || "admin";
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const user = { username: "approver", role: "Approver" };
 
   const handleLogout = () => {
     localStorage.removeItem("role");
-    navigate("/login");
+    localStorage.removeItem("username");
+    navigate("/");
+  };
+
+  const sidebarConfig = [
+    {
+      key: "dashboard",
+      label: "Dashboard",
+      icon: <DashboardIcon fontSize="small" />,
+    },
+    {
+      key: "requests",
+      label: "Access Requests",
+      icon: <ListAltIcon fontSize="small" />,
+    },
+    {
+      key: "users",
+      label: "User Management",
+      icon: <PersonIcon fontSize="small" />,
+    },
+    {
+      key: "compliance",
+      label: "Compliance Reports",
+      icon: <AssignmentIcon fontSize="small" />,
+    },
+    {
+      key: "system",
+      label: "System Administration",
+      icon: <SettingsIcon fontSize="small" />,
+    },
+    {
+      key: "settings",
+      label: "Settings",
+      icon: <SettingsIcon fontSize="small" />,
+    },
+  ];
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return (
+          <section className={styles.dashboardOverview}>
+            <h2 className={styles.sectionTitle}>Dashboard Overview</h2>
+            <div className={styles.statsGrid}>
+              <DashboardStats />
+            </div>
+            <div className={styles.recentActivitySection}>
+              <TaskClosureTracking />
+            </div>
+          </section>
+        );
+      case "requests":
+        return (
+          <section className={styles.sectionWrap}>
+            <div className={styles.card}>
+              <AccessRequests requests={requests} setRequests={setRequests} />
+            </div>
+          </section>
+        );
+      case "users":
+        return (
+          <section className={styles.sectionWrap}>
+            <div className={styles.card}>
+              <UserManagement users={users} setUsers={setUsers} />
+            </div>
+          </section>
+        );
+      case "compliance":
+        return (
+          <section className={styles.sectionWrap}>
+            <div className={styles.card}>
+              <ComplianceReports reports={reports} setReports={setReports} />
+            </div>
+          </section>
+        );
+      case "system":
+        return (
+          <section className={styles.sectionWrap}>
+            <div className={styles.card}>
+              <SystemAdministration health={health} setHealth={setHealth} />
+            </div>
+          </section>
+        );
+      case "settings":
+        return (
+          <section className={styles.sectionWrap}>
+            <div className={styles.card}>
+              <Settings settings={settings} setSettings={setSettings} />
+            </div>
+          </section>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
-    <div
-      className={`${styles.container} ${
-        !sidebarOpen ? styles.sidebarClosed : styles.sidebarOpen
-      }`.trim()}
-    >
-      <Sidebar
-        open={sidebarOpen}
-        onToggle={() => setSidebarOpen((open) => !open)}
-        navItems={[
-          {
-            key: "dashboard",
-            icon: FaChartBar,
-            label: "Dashboard",
-            active: activeSection === "dashboard",
-            onClick: () => setActiveSection("dashboard"),
-          },
-          {
-            key: "requests",
-            icon: FaClipboardList,
-            label: "Access Requests",
-            active: activeSection === "requests",
-            onClick: () => setActiveSection("requests"),
-          },
-          {
-            key: "users",
-            icon: FaUsers,
-            label: "User Management",
-            active: activeSection === "users",
-            onClick: () => setActiveSection("users"),
-          },
-          {
-            key: "compliance",
-            icon: FaCheck,
-            label: "Compliance Reports",
-            active: activeSection === "compliance",
-            onClick: () => setActiveSection("compliance"),
-          },
-          {
-            key: "system",
-            icon: FaCog,
-            label: "System Administration",
-            active: activeSection === "system",
-            onClick: () => setActiveSection("system"),
-          },
-          {
-            key: "settings",
-            icon: FaWrench,
-            label: "Settings",
-            active: activeSection === "settings",
-            onClick: () => setActiveSection("settings"),
-          },
-        ].filter((item) => can(role, item.key + ":view"))}
-        onLogout={handleLogout}
-      />
-      <div className={styles.mainContent}>
-        <main>
-          <header className={styles.header}>
-            <div className={styles.searchWrap}>
-              <input
-                className={styles.search}
-                placeholder="Search users, requests, equipment..."
-              />
-            </div>
-            <div
-              className={styles.headerIcons}
-              style={{ marginRight: 0, marginLeft: "auto", gap: 10 }}
+    <div className={styles["main-container"]}>
+      <aside className={styles.sidebar}>
+        <div className={styles["sidebar-header"]}>
+          <img
+            src={login_headTitle2}
+            alt="Company logo"
+            style={{ width: 250, height: 35 }}
+          />
+          <br />
+          <span>Unichem Laboratories</span>
+        </div>
+        <nav>
+          <div className={styles["sidebar-group"]}>OVERVIEW</div>
+          {sidebarConfig.map((item) => (
+            <button
+              key={item.key}
+              className={`${styles["nav-button"]} ${
+                activeTab === item.key ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab(item.key)}
             >
-              <span
-                className={styles.bellIcon}
-                title="Notifications"
-                style={{ marginRight: 8 }}
-              >
-                {FaBell({ size: 20 })}
-              </span>
-              <span
-                className={styles.avatar}
-                title="Profile"
-                style={{ marginRight: 8 }}
-              >
-                {FaUser({ size: 28 })}
-              </span>
-              <div className={styles.profileWrap} style={{ marginLeft: 0 }}>
-                <span className={styles.profileName}>Dr. Sarah Mitchell</span>
-                <span className={styles.profileRole}>System Administrator</span>
+              {item.icon} {item.label}
+            </button>
+          ))}
+          <div className={styles["sidebar-footer"]}>
+            <div className={styles["admin-info"]}>
+              <div className={styles.avatar}>A</div>
+              <div>
+                <strong>{user ? user.username : "approver"}</strong>
+                <div className={styles.subtext}>
+                  {user ? user.role : "Approver"}
+                </div>
               </div>
             </div>
-          </header>
-          <div className={styles.pageContent}>
-            {activeSection === "dashboard" && (
-              <section className={styles.dashboardOverview}>
-                <h2 className={styles.sectionTitle}>Dashboard Overview</h2>
-                <div className={styles.statsGrid}>
-                  <DashboardStats />
-                </div>
-
-                <div className={styles.recentActivitySection}>
-                  <TaskClosureTracking />
-                </div>
-              </section>
-            )}
-            {activeSection === "requests" && (
-              <section className={styles.sectionWrap}>
-                <div className={styles.card}>
-                  <AccessRequests
-                    requests={requests}
-                    setRequests={setRequests}
-                  />
-                </div>
-              </section>
-            )}
-            {activeSection === "users" && (
-              <section className={styles.sectionWrap}>
-                <div className={styles.card}>
-                  <UserManagement users={users} setUsers={setUsers} />
-                </div>
-              </section>
-            )}
-            {activeSection === "compliance" && (
-              <section className={styles.sectionWrap}>
-                <div className={styles.card}>
-                  <ComplianceReports
-                    reports={reports}
-                    setReports={setReports}
-                  />
-                </div>
-              </section>
-            )}
-            {activeSection === "system" && (
-              <section className={styles.sectionWrap}>
-                <div className={styles.card}>
-                  <SystemAdministration health={health} setHealth={setHealth} />
-                </div>
-              </section>
-            )}
-            {activeSection === "settings" && (
-              <section className={styles.sectionWrap}>
-                <div className={styles.card}>
-                  <Settings settings={settings} setSettings={setSettings} />
-                </div>
-              </section>
-            )}
+            <button className={styles["logout-button"]} onClick={handleLogout}>
+              <LogoutIcon fontSize="small" /> Logout
+            </button>
           </div>
-        </main>
-      </div>
+        </nav>
+      </aside>
+      <main className={styles["main-content"]}>
+        <header className={styles["main-header"]}>
+          <h2 className={styles["header-title"]}>Approver Dashboard</h2>
+          <div className={styles["header-icons"]}>
+            <span className={styles["header-icon"]}>
+              <NotificationsIcon fontSize="small" />
+            </span>
+            <span className={styles["header-icon"]}>
+              <SettingsIcon fontSize="small" />
+            </span>
+          </div>
+        </header>
+        <div className={styles.pageContent}>{renderContent()}</div>
+      </main>
     </div>
   );
 };
