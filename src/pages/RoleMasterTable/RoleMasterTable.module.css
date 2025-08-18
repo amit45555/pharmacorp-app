@@ -40,7 +40,7 @@
 .addUserBtn {
   background-color: #24bb6a;
   color: #fff;
-  padding: 6px 14px;
+  padding: 7px 14px;
   border-radius: 8px;
   border: none;
   font-weight: 500;
@@ -56,7 +56,7 @@
   background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
   color: #fff;
   border: none;
-  padding: 6px 14px;
+  padding: 7px 13px;
   border-radius: 8px;
   border: none;
   font-weight: 500;
@@ -64,12 +64,15 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .roleTableContainer {
   background: white;
   border-radius: 10px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+  
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
   margin: 25px;
   overflow: hidden;
 }

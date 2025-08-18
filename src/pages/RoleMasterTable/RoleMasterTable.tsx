@@ -290,7 +290,7 @@ export default function RoleMasterTable() {
             className={styles.addUserBtn}
             onClick={() => navigate("/add-role")}
           >
-            + Add Role
+            + Add New
           </button>
           <button
             className={styles.filterBtn}
