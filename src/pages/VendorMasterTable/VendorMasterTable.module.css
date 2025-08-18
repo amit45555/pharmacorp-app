@@ -228,9 +228,10 @@
 
 .roleTableContainer {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
-  margin: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  margin: 50px;
   overflow: hidden;
 }
 table {

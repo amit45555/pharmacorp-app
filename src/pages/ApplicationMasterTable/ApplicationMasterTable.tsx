@@ -91,8 +91,9 @@ export default function ApplicationMasterTable() {
               maxHeight: 500,
               overflowY: "auto",
               borderRadius: 8,
-              boxShadow: "0 0 6px rgba(0, 0, 0, 0.06)",
-
+              
+boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
+          border: "1px solid #e2e8f0",
               height: "100",
             }}>
         <table className={styles.table}>

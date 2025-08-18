@@ -251,8 +251,8 @@ width: 100%;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
-
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
 }
 
 

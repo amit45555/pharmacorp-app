@@ -434,13 +434,14 @@ const VendorMasterTable: React.FC = () => {
               </div>
             </div>
             <div
-              style={{
-                overflowY: "auto",
-                maxHeight: 350,
-                minWidth: "100%",
-                borderRadius: 8,
-                boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
-              }}
+  style={{
+    overflowY: "auto",
+    maxHeight: 350,
+    minWidth: "100%",
+    borderRadius: 8,
+    boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
+    border: "1px solid #e2e8f0",
+  }}
             >
               <table
                 className={styles.activityLogTable}

@@ -394,7 +394,8 @@ const UserMasterTable = () => {
             )}
           </div>
           {/* Table */}
-          <div style={{ height: "100%" }}>
+          <div style={{ height: "100%",boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
+          border: "1px solid #e2e8f0", borderRadius: 8, marginTop: 25 }}>
             <table className={styles.userTable}>
               <thead>
                 <tr>
