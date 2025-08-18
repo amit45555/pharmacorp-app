@@ -34,6 +34,9 @@ const getCurrentUser = () => {
 const SuperAdmin: React.FC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() => {
+    // Try to restore from localStorage first
+    const storedTab = localStorage.getItem("superadmin_activeTab");
+    if (storedTab) return storedTab;
     if (location.state && location.state.activeTab) {
       return location.state.activeTab;
     }
@@ -42,9 +45,15 @@ const SuperAdmin: React.FC = () => {
   const user = getCurrentUser();
   const navigate = useNavigate();
 
+  // Persist activeTab in localStorage whenever it changes
+  React.useEffect(() => {
+    localStorage.setItem("superadmin_activeTab", activeTab);
+  }, [activeTab]);
+
   const handleLogout = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("username");
+    localStorage.removeItem("superadmin_activeTab");
     navigate("/");
   };
   // Map sidebar keys to permission strings
@@ -166,9 +175,12 @@ const SuperAdmin: React.FC = () => {
               className={`${styles["nav-button"]} ${
                 activeTab === item.key ? styles.active : ""
               }`}
-              onClick={() =>
-                !disabledKeys.includes(item.key) && setActiveTab(item.key)
-              }
+              onClick={() => {
+                if (!disabledKeys.includes(item.key)) {
+                  setActiveTab(item.key);
+                  localStorage.setItem("superadmin_activeTab", item.key);
+                }
+              }}
               disabled={disabledKeys.includes(item.key)}
               style={
                 disabledKeys.includes(item.key)
