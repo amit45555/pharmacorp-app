@@ -2,31 +2,39 @@ import React, { useState, useEffect } from "react";
 import ConfirmLoginModal from "../components/Common/ConfirmLoginModal";
 import styles from "../RoleMaster/AddRoleFormPage.module.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRoles, Role } from "../RoleMaster/RolesContext";
+import { useRoles, RoleActivityLog } from "../RoleMaster/RolesContext";
+import type { Role } from "../RoleMaster/RolesContext";
 
 export default function EditRoleFormPage() {
   const { roles, setRoles } = useRoles();
   const navigate = useNavigate();
   const { idx } = useParams<{ idx: string }>();
 
-  const [form, setForm] = useState<Role>({
+  const [form, setForm] = useState<Omit<Role, "activityLogs">>({
     name: "",
     description: "",
     status: "ACTIVE",
-    activityLogs: ""
   });
+  const [comment, setComment] = useState("");
+  const [activityLogs, setActivityLogs] = useState<RoleActivityLog[]>([]);
 
   useEffect(() => {
-    // Load role data into form
     if (idx && roles[parseInt(idx)]) {
-      setForm(roles[parseInt(idx)]);
+      const role = roles[parseInt(idx)];
+      setForm({
+        name: role.name,
+        description: role.description,
+        status: role.status,
+      });
+      setActivityLogs(role.activityLogs || []);
     }
   }, [idx, roles]);
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -42,7 +50,20 @@ export default function EditRoleFormPage() {
   const handleConfirmLogin = (data: Record<string, string>) => {
     if (data.username === username && data.password && idx !== undefined) {
       const updated = [...roles];
-      updated[parseInt(idx)] = form;
+      updated[parseInt(idx)] = {
+        ...form,
+        activityLogs: [
+          ...activityLogs,
+          {
+            action: "Edit",
+            oldValue: "-",
+            newValue: `Role: ${form.name}`,
+            approver: username,
+            dateTime: new Date().toISOString(),
+            reason: comment,
+          },
+        ],
+      };
       setRoles(updated);
       setShowModal(false);
       navigate("/superadmin", { state: { activeTab: "role" } });
@@ -51,19 +72,39 @@ export default function EditRoleFormPage() {
     }
   };
 
-  const handleCancel = () => navigate("/superadmin", { state: { activeTab: "role" } });
+  const handleCancel = () =>
+    navigate("/superadmin", { state: { activeTab: "role" } });
 
   return (
-    <div style={{ maxWidth: 440, margin: "30px auto", padding: 24, background: "#fff", borderRadius: 10, boxShadow: "0 0 16px rgba(40,70,120,.09)" }}>
+    <div
+      style={{
+        maxWidth: 440,
+        margin: "30px auto",
+        padding: 24,
+        background: "#fff",
+        borderRadius: 10,
+        boxShadow: "0 0 16px rgba(40,70,120,.09)",
+      }}
+    >
       <h2 style={{ marginBottom: 20, color: "#2563eb" }}>Edit Role</h2>
       <form className={styles.roleForm} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label>Role Name</label>
-          <input name="name" value={form.name} onChange={handleFormChange} required />
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleFormChange}
+            required
+          />
         </div>
         <div className={styles.formGroup}>
           <label>Description</label>
-          <input name="description" value={form.description} onChange={handleFormChange} required />
+          <input
+            name="description"
+            value={form.description}
+            onChange={handleFormChange}
+            required
+          />
         </div>
         <div className={styles.formGroup}>
           <label>Status</label>
@@ -78,8 +119,8 @@ export default function EditRoleFormPage() {
           <textarea
             id="comment"
             placeholder="Enter comment here..."
-            value={form.activityLogs}
-            onChange={e => setForm({ ...form, activityLogs: e.target.value })}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
           />
         </div>
 
@@ -87,7 +128,13 @@ export default function EditRoleFormPage() {
           <button type="submit" className={styles.saveBtn}>
             Update
           </button>
-          <button type="button" className={styles.cancelBtn} onClick={handleCancel}>Cancel</button>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </form>
       {showModal && (

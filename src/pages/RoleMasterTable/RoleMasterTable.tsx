@@ -1,29 +1,108 @@
 import React, { useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import styles from "../RoleMasterTable/RoleMasterTable.module.css";
+import styles from "./RoleMasterTable.module.css";
 import { FaEdit, FaTrash, FaTimes, FaRegClock } from "react-icons/fa";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
-import { useRoles, Role } from "../../RoleMaster/RolesContext";
+import { useRoles, Role, RoleActivityLog } from "../../RoleMaster/RolesContext";
 
 // ===== Activity Logs Modal Component =====
 function ActivityLogModal({
   open,
-  value,
+  logs,
   onClose,
 }: {
   open: boolean;
-  value: string;
+  logs: RoleActivityLog[];
   onClose: () => void;
 }) {
   if (!open) return null;
+  // Only show edit, delete, add actions
+  const allowed = ["edit", "delete", "add"];
+  const filteredLogs = logs.filter((log) =>
+    allowed.some((type) => (log.action || "").toLowerCase().includes(type))
+  );
+  const handleExportPdf = () => {
+    const doc = new jsPDF({ orientation: "landscape" });
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const fileName = `role_activity_log_${yyyy}-${mm}-${dd}.pdf`;
+    const headers = [
+      [
+        "Action",
+        "Old Value",
+        "New Value",
+        "Action Performed By",
+        "Date/Time (IST)",
+        "Comments",
+      ],
+    ];
+    const rows = filteredLogs.map((log) => {
+      let dateObj = new Date(log.dateTime || "");
+      let istDate = new Date(dateObj.getTime() + 5.5 * 60 * 60 * 1000);
+      let day = String(istDate.getDate()).padStart(2, "0");
+      let month = String(istDate.getMonth() + 1).padStart(2, "0");
+      let year = String(istDate.getFullYear()).slice(-2);
+      let hours = String(istDate.getHours()).padStart(2, "0");
+      let minutes = String(istDate.getMinutes()).padStart(2, "0");
+      let formattedDate = log.dateTime
+        ? `${day}/${month}/${year} ${hours}:${minutes}`
+        : "-";
+      return [
+        log.action || "-",
+        log.oldValue !== undefined ? log.oldValue : "-",
+        log.newValue !== undefined ? log.newValue : "-",
+        log.approver || "-",
+        formattedDate,
+        log.reason || "-",
+      ];
+    });
+    doc.setFontSize(18);
+    doc.text("Activity Log", 14, 18);
+    autoTable(doc, {
+      head: headers,
+      body: rows,
+      startY: 28,
+      styles: {
+        fontSize: 11,
+        cellPadding: 3,
+        halign: "left",
+        valign: "middle",
+      },
+      headStyles: {
+        fillColor: [11, 99, 206],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [240, 245, 255],
+      },
+      margin: { left: 14, right: 14 },
+      tableWidth: "auto",
+    });
+    doc.save(fileName);
+  };
   return (
     <div className={styles.activityLogModalOverlay}>
       <div className={styles.activityLogModal}>
         <div className={styles.activityLogModalHeader}>
-          <span>Activity Logs</span>
+          <span style={{ fontWeight: 700, fontSize: 20 }}>Activity Log</span>
+          <button
+            className={styles.exportPdfBtn}
+            onClick={handleExportPdf}
+            aria-label="Export activity log to PDF"
+            type="button"
+            style={{ marginRight: 8 }}
+          >
+            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 }}>
+              🗎
+            </span>
+            Export PDF
+          </button>
           <button
             className={styles.activityLogModalClose}
             onClick={onClose}
@@ -34,14 +113,48 @@ function ActivityLogModal({
           </button>
         </div>
         <div className={styles.activityLogModalBody}>
-          {value ? (
-            Array.isArray(value)
-              ? value.map((log, idx) => (
-                  <div key={idx} className={styles.activityLogContent}>{log}</div>
-                ))
-              : value.split(/\r?\n|\r|,/).map((log, idx) => (
-                  <div key={idx} className={styles.activityLogContent}>{log.trim()}</div>
-                ))
+          {filteredLogs.length > 0 ? (
+            <table
+              className={styles.activityLogTable}
+              style={{ minWidth: 700 }}
+            >
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Old Value</th>
+                  <th>New Value</th>
+                  <th>Action Performed By</th>
+                  <th>Date/Time (IST)</th>
+                  <th>Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLogs.map((log, i) => {
+                  let dateObj = new Date(log.dateTime || "");
+                  let istDate = new Date(
+                    dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                  );
+                  let day = String(istDate.getDate()).padStart(2, "0");
+                  let month = String(istDate.getMonth() + 1).padStart(2, "0");
+                  let year = String(istDate.getFullYear()).slice(-2);
+                  let hours = String(istDate.getHours()).padStart(2, "0");
+                  let minutes = String(istDate.getMinutes()).padStart(2, "0");
+                  let formattedDate = log.dateTime
+                    ? `${day}/${month}/${year} ${hours}:${minutes}`
+                    : "-";
+                  return (
+                    <tr key={i}>
+                      <td>{log.action || "-"}</td>
+                      <td>{log.oldValue !== undefined ? log.oldValue : "-"}</td>
+                      <td>{log.newValue !== undefined ? log.newValue : "-"}</td>
+                      <td>{log.approver || "-"}</td>
+                      <td>{formattedDate}</td>
+                      <td>{log.reason || "-"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           ) : (
             <div style={{ color: "#888", fontStyle: "italic" }}>
               No activity logs available.
@@ -63,49 +176,23 @@ export default function RoleMasterTable() {
   >("name");
   const [filterValue, setFilterValue] = useState("");
   const [showActivityLogModal, setShowActivityLogModal] = useState(false);
-  const [activeLogValue, setActiveLogValue] = useState<string>("");
+  const [activeLogValue, setActiveLogValue] = useState<RoleActivityLog[]>([]);
 
   const navigate = useNavigate();
 
-
-  const handleAddRole = () => {
-    navigate("/add-role");
-  };
-
-  // PDF Download Handler
+  // PDF Download Handler for main table
   const handleDownloadPdf = () => {
- const doc = new jsPDF({ orientation: "landscape" });
-    
-    
-    
-  // Title
-  
-
-  // Headers as in your table/image
-  const  headers = [[
-    "Role Name",
-    "Description",
-    "Status",
-    
-  ]];
-
-  // Body using your filteredRoles (for search/filter support)
-  const rows = filteredRoles.map(role => [
-    role.name,
-    role.description,
-    role.status,
-   
-  ]);
-
-
-    // Title
+    const doc = new jsPDF({ orientation: "landscape" });
+    const headers = [["Role Name", "Description", "Status"]];
+    const rows = filteredRoles.map((role) => [
+      role.name,
+      role.description,
+      role.status,
+    ]);
     doc.setFontSize(18);
     doc.text("Role Master Table", 14, 18);
-
-;
-
-autoTable(doc, {
-     head: headers,
+    autoTable(doc, {
+      head: headers,
       body: rows,
       startY: 28,
       styles: {
@@ -125,18 +212,27 @@ autoTable(doc, {
       margin: { left: 14, right: 14 },
       tableWidth: "auto",
     });
-  doc.save("role-master-table.pdf");
-};
+    doc.save("role-master-table.pdf");
+  };
 
   const handleEditRole = () => {
-    
     if (selectedRow === null) return;
-  navigate(`/edit-role/${selectedRow}`);
+    navigate(`/edit-role/${selectedRow}`);
   };
 
   const handleDeleteRole = () => {
     if (selectedRow === null) return;
+    // Only record delete action after admin confirmation (simulate here)
     const updated = [...roles];
+    const deletedRole = updated[selectedRow];
+    deletedRole.activityLogs.push({
+      action: "Delete",
+      oldValue: `Status: ${deletedRole.status}`,
+      newValue: "Status: Deleted",
+      approver: "Admin",
+      dateTime: new Date().toISOString(),
+      reason: "Role deleted",
+    });
     updated.splice(selectedRow, 1);
     setRoles(updated);
     setSelectedRow(null);
@@ -154,8 +250,21 @@ autoTable(doc, {
       return role.description.toLowerCase().includes(val);
     if (filterColumn === "status")
       return role.status.toLowerCase().includes(val);
-    if (filterColumn === "activityLogs")
-      return role.activityLogs.toLowerCase().includes(val);
+    if (filterColumn === "activityLogs") {
+      // Only show edit, delete, add actions
+      const allowed = ["edit", "delete", "add"];
+      return role.activityLogs.some(
+        (log) =>
+          allowed.some((type) =>
+            (log.action || "").toLowerCase().includes(type)
+          ) &&
+          ((log.action && log.action.toLowerCase().includes(val)) ||
+            (log.oldValue && log.oldValue.toLowerCase().includes(val)) ||
+            (log.newValue && log.newValue.toLowerCase().includes(val)) ||
+            (log.approver && log.approver.toLowerCase().includes(val)) ||
+            (log.reason && log.reason.toLowerCase().includes(val)))
+      );
+    }
     return true;
   });
 
@@ -177,10 +286,14 @@ autoTable(doc, {
       {/* Table controls */}
       <div className={styles.headerTopRow}>
         <div className={styles.actionHeaderRow}>
-          <button className={styles.addUserBtn} onClick={handleAddRole}>
+          <button
+            className={styles.addUserBtn}
+            onClick={() => {
+              navigate("/add-role");
+            }}
+          >
             + Add Role
           </button>
-         
           <button
             className={styles.filterBtn}
             onClick={() => setShowFilterPanel(true)}
@@ -204,20 +317,16 @@ autoTable(doc, {
             <FaTrash size={14} /> Delete
           </button>
           <button
-                className={`${styles.btn} ${styles.exportPdfBtn}`} 
-                 onClick={handleDownloadPdf}
-                aria-label="Export table to PDF"
-                type="button"
-              >
-                <span
-                  role="img"
-                  aria-label="Export PDF"
-                  style={{ fontSize: 18 }}
-                >
-                  🗎
-                </span>
-                PDF
-              </button>
+            className={`${styles.btn} ${styles.exportPdfBtn}`}
+            onClick={handleDownloadPdf}
+            aria-label="Export table to PDF"
+            type="button"
+          >
+            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 }}>
+              🗎
+            </span>
+            PDF
+          </button>
         </div>
       </div>
 
@@ -252,6 +361,7 @@ autoTable(doc, {
                 <option value="name">Name</option>
                 <option value="description">Description</option>
                 <option value="status">Status</option>
+                <option value="activityLogs">Activity Logs</option>
               </select>
             </div>
             <div className={styles.advancedFilterRow}>
@@ -325,13 +435,11 @@ autoTable(doc, {
                   <td>{role.description}</td>
                   <td>
                     <span
-                      className={
-                        `${styles.status} ${
-                          role.status === "ACTIVE"
-                            ? styles.active
-                            : styles.inactive
-                        }`
-                      }
+                      className={`${styles.status} ${
+                        role.status === "ACTIVE"
+                          ? styles.active
+                          : styles.inactive
+                      }`}
                     >
                       {role.status}
                     </span>
@@ -358,7 +466,7 @@ autoTable(doc, {
 
       <ActivityLogModal
         open={showActivityLogModal}
-        value={activeLogValue}
+        logs={activeLogValue}
         onClose={() => setShowActivityLogModal(false)}
       />
     </div>

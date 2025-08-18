@@ -8,18 +8,18 @@ export default function AddRoleFormPage() {
   const { roles, setRoles } = useRoles();
   const navigate = useNavigate();
 
-    const [form, setForm] = useState<Role>({
+  const [form, setForm] = useState<Omit<Role, "activityLogs">>({
     name: "",
     description: "",
     status: "ACTIVE",
-    activityLogs: ""
   });
+  const [comment, setComment] = useState("");
 
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
@@ -28,14 +28,26 @@ export default function AddRoleFormPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowModal(true); // Show admin confirmation modal
+    setShowModal(true);
   };
 
   // Called after admin confirms
   const handleConfirmLogin = (data: Record<string, string>) => {
-    // For demo: check userId matches logged-in username and password is not empty
     if (data.username === username && data.password) {
-      setRoles([...roles, form]);
+      const newRole: Role = {
+        ...form,
+        activityLogs: [
+          {
+            action: "Add",
+            oldValue: "-",
+            newValue: `Role: ${form.name}`,
+            approver: username,
+            dateTime: new Date().toISOString(),
+            reason: comment,
+          },
+        ],
+      };
+      setRoles([...roles, newRole]);
       setShowModal(false);
       navigate("/superadmin", { state: { activeTab: "role" } });
     } else {
@@ -43,21 +55,40 @@ export default function AddRoleFormPage() {
     }
   };
 
-  
   // Update cancel to go back to SuperAdmin with sidebar selected
-  const handleCancel = () => navigate("/superadmin", { state: { activeTab: "role" } });
+  const handleCancel = () =>
+    navigate("/superadmin", { state: { activeTab: "role" } });
 
   return (
-    <div style={{ maxWidth: 440, margin: "30px auto", padding: 24, background: "#fff", borderRadius: 10, boxShadow: "0 0 16px rgba(40,70,120,.09)" }}>
+    <div
+      style={{
+        maxWidth: 440,
+        margin: "30px auto",
+        padding: 24,
+        background: "#fff",
+        borderRadius: 10,
+        boxShadow: "0 0 16px rgba(40,70,120,.09)",
+      }}
+    >
       <h2 style={{ marginBottom: 20, color: "#2563eb" }}>Add Role</h2>
       <form className={styles.roleForm} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label>Role Name</label>
-          <input name="name" value={form.name} onChange={handleFormChange} required />
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleFormChange}
+            required
+          />
         </div>
         <div className={styles.formGroup}>
           <label>Description</label>
-          <input name="description" value={form.description} onChange={handleFormChange} required />
+          <input
+            name="description"
+            value={form.description}
+            onChange={handleFormChange}
+            required
+          />
         </div>
         <div className={styles.formGroup}>
           <label>Status</label>
@@ -72,8 +103,8 @@ export default function AddRoleFormPage() {
           <textarea
             id="comment"
             placeholder="Enter comment here..."
-            value={form.activityLogs}
-            onChange={e => setForm({ ...form, activityLogs: e.target.value })}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
           />
         </div>
 
@@ -81,7 +112,11 @@ export default function AddRoleFormPage() {
           <button type="submit" className={styles.saveBtn}>
             Add
           </button>
-          <button type="button" className={styles.cancelBtn} onClick={handleCancel}>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </div>
