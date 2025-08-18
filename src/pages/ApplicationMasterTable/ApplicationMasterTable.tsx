@@ -3,7 +3,7 @@ import styles from "./ApplicationMasterTable.module.css";
 import { Eye } from "lucide-react";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
-
+import { FaEdit, FaTrash,} from "react-icons/fa";
 const applications = [
   {
     name: "SAP ERP",
@@ -57,18 +57,44 @@ export default function ApplicationMasterTable() {
     <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
   </div>
 </header>
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Application Master</h2>
-        <input className={styles.searchInput} type="text" placeholder="Search..." />
-        <div className={styles.actions}>
-          <button className={styles.addButton}>+ Add New</button>
-          <button className={styles.editButton}>✎ Edit</button>
-          <button className={styles.deleteButton}>🗑 Delete</button>
+   
+     
+           <div className={styles.headerTopRow}>
+        <div className={styles.actionHeaderRow}>
+          <button className={styles.addUserBtn}>+ Add New</button>
+          <button
+                      className={styles.filterBtn}
+                    >
+                      🔍 Filter
+                    </button>
+          <button className={`${styles.btn} ${styles.editBtn}`}><FaEdit size={14} /> Edit</button>
+          <button className={`${styles.btn} ${styles.deleteBtn}`}><FaTrash size={14} /> Delete</button>
+          <button
+                className={`${styles.btn} ${styles.exportPdfBtn}`} 
+                
+                aria-label="Export table to PDF"
+                type="button"
+              >
+                <span
+                  role="img"
+                  aria-label="Export PDF"
+                  style={{ fontSize: 18 }}
+                >
+                  🗎
+                </span>
+                PDF
+              </button>
         </div>
       </div>
+ <div className={styles.container}>
+      <div  style={{
+              maxHeight: 500,
+              overflowY: "auto",
+              borderRadius: 8,
+              boxShadow: "0 0 6px rgba(0, 0, 0, 0.06)",
 
-      <div className={styles.tableWrapper}>
+              height: "100",
+            }}>
         <table className={styles.table}>
           <thead>
             <tr>

@@ -7,6 +7,8 @@ import { FaEdit, FaTrash, FaRegClock } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 // Unified type for vendor users
 export type VendorUser = {
@@ -131,14 +133,19 @@ const VendorMasterTable: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div >
       {/* Top header */}
       <header className={styles["main-header"]}>
-        <h2 className={styles["header-title"]}>Vendor Master</h2>
-        <div className={styles["header-icons"]}>
-          <span className={styles["header-icon"]}>PDF</span>
-        </div>
-      </header>
+              <h2 className={styles["header-title"]}>User Master</h2>
+              <div className={styles["header-icons"]}>
+                <span className={styles["header-icon"]}>
+                  <NotificationsIcon fontSize="small" />
+                </span>
+                <span className={styles["header-icon"]}>
+                  <SettingsIcon fontSize="small" />
+                </span>
+              </div>
+            </header>
 
       {/* Table controls */}
       <div className={styles.headerTopRow}>

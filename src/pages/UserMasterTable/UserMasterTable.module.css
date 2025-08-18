@@ -186,7 +186,7 @@
 }
 .container {
   padding: 24px;
-  background: #fcfcfc;
+
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -241,26 +241,40 @@
 }
 
 .userTable {
-  width: 100%;
+  
+width: 100%;
   border-collapse: collapse;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+
 }
 
+
+
 .userTable th {
-  background-color: #eef5ff;
+padding: 14px;
   text-align: left;
-  padding: 12px;
+  font-weight: bold;
   font-size: 14px;
-  color: #333;
+  border-bottom: 1px solid #ddd;
 }
 
 .userTable td {
   padding: 12px;
   border-top: 1px solid #eee;
   font-size: 14px;
+}
+
+
+.radioInput {
+  outline: none;
+  box-shadow: none;
+}
+.radioInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .plantBadge {
@@ -489,4 +503,21 @@ background: #005fbb;
 }
 .btn span {
   margin-right: 4px;
+}
+
+
+.headerTopRow {
+  background: #eef5fe;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.actionHeaderRow {
+  display: flex;
+  gap: 18px;
+
+  align-items: center;
 }

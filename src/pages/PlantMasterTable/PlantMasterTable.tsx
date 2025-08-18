@@ -1,11 +1,10 @@
 import React from "react";
 import styles from "./PlantMasterTable.module.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { FaEdit, FaTrash,} from "react-icons/fa";
 const plantData = [
   {
     name: "Mumbai Plant",
@@ -43,19 +42,45 @@ const PlantMasterTable: React.FC = () => {
     <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
   </div>
 </header>
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h3>Plant Master</h3>
-        <div className={styles.actions}>
-          <button className={styles.add}><AddIcon fontSize="small" /> Add New</button>
-          <button className={styles.edit}><EditIcon fontSize="small" /> Edit</button>
-          <button className={styles.delete}><DeleteIcon fontSize="small" /> Delete</button>
+<div className={styles.headerTopRow}>
+        <div className={styles.actionHeaderRow}>
+          <button className={styles.addUserBtn}>+ Add New</button>
+          <button
+                      className={styles.filterBtn}
+                    >
+                      🔍 Filter
+                    </button>
+          <button className={`${styles.btn} ${styles.editBtn}`}><FaEdit size={14} /> Edit</button>
+          <button className={`${styles.btn} ${styles.deleteBtn}`}><FaTrash size={14} /> Delete</button>
+          <button
+                className={`${styles.btn} ${styles.exportPdfBtn}`} 
+                
+                aria-label="Export table to PDF"
+                type="button"
+              >
+                <span
+                  role="img"
+                  aria-label="Export PDF"
+                  style={{ fontSize: 18 }}
+                >
+                  🗎
+                </span>
+                PDF
+              </button>
         </div>
       </div>
+ 
+    <div className={styles.container}>
+      
 
-      <div className={styles.searchRow}>
-        <input type="text" placeholder="Search..." className={styles.searchInput} />
-      </div>
+       <div  style={{
+              maxHeight: 500,
+              overflowY: "auto",
+              borderRadius: 8,
+              boxShadow: "0 0 6px rgba(0, 0, 0, 0.06)",
+
+              height: "100",
+            }}>
 
       <table className={styles.table}>
         <thead>
@@ -81,6 +106,7 @@ const PlantMasterTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
     </div>
   );

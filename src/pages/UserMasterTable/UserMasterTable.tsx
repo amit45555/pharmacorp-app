@@ -274,12 +274,12 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
           </span>
         </div>
       </header>
-      <div className={styles.wrapper}>
-        <div className={styles.container}>
+     
           {/* Header */}
-          <div className={styles.header}>
-            
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          
+               
+              <div className={styles.headerTopRow}>
+        <div className={styles.actionHeaderRow}>
               <button
                 className={styles.addUserBtn}
                 onClick={() => {
@@ -352,6 +352,8 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
             </div>
           </div>
           {/* Professional Filter Button with Popover */}
+           <div className={styles.wrapper}>
+        <div className={styles.container}>
           <div className={styles.controls}>
             
             {showFilterPopover && (
@@ -423,7 +425,7 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
               maxHeight: 500,
               overflowY: "auto",
               borderRadius: 8,
-              boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
+              boxShadow: "0 0 6px rgba(0, 0, 0, 0.06)",
 
               height: "100",
             }}
