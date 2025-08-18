@@ -329,6 +329,9 @@ export default function RoleMasterTable() {
       </div>
 
       {/* Filter Panel */}
+     <div className={styles.wrapper}> 
+     <div className={styles.container}>
+      <div className={styles.controls}>
       {showFilterPanel && (
         <div className={styles.advancedFilterOverlay}>
           <div className={styles.advancedFilterPanel}>
@@ -397,7 +400,7 @@ export default function RoleMasterTable() {
           />
         </div>
       )}
-
+</div>
       {/* Table */}
       <div className={styles.roleTableContainer}>
         <table>
@@ -461,7 +464,8 @@ export default function RoleMasterTable() {
           </tbody>
         </table>
       </div>
-
+</div>
+</div>
       <ActivityLogModal
         open={showActivityLogModal}
         logs={activeLogValue}
