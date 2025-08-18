@@ -292,7 +292,7 @@ export default function RoleMasterTable() {
               navigate("/add-role");
             }}
           >
-            + Add Role
+            + Add New
           </button>
           <button
             className={styles.filterBtn}
