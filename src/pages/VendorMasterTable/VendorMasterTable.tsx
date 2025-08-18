@@ -136,7 +136,7 @@ const VendorMasterTable: React.FC = () => {
     <div >
       {/* Top header */}
       <header className={styles["main-header"]}>
-              <h2 className={styles["header-title"]}>User Master</h2>
+              <h2 className={styles["header-title"]}>Vendor Master</h2>
               <div className={styles["header-icons"]}>
                 <span className={styles["header-icon"]}>
                   <NotificationsIcon fontSize="small" />
@@ -150,8 +150,8 @@ const VendorMasterTable: React.FC = () => {
       {/* Table controls */}
       <div className={styles.headerTopRow}>
         <div className={styles.actionHeaderRow}>
-          <button className={styles.addBtn} onClick={handleAdd}>
-            + Add Vendor
+          <button className={styles.addUserBtn} onClick={handleAdd}>
+            + Add New
           </button>
           <button className={styles.filterBtn} disabled>
             🔍 Filter

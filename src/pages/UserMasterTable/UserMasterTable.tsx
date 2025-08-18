@@ -287,9 +287,9 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                   setEditUserData(null);
                   setShowPanel(true);
                 }}
-                aria-label="Add User"
+                aria-label="Add New"
               >
-                + Add User
+                + Add New
               </button>
               <button
                className={styles.filterBtn}
@@ -297,10 +297,7 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
               type="button"
               aria-label="Filter users"
             >
-              <span role="img" aria-label="filter">
-                🔎
-              </span>{" "}
-              Filter
+              🔍 Filter
             </button>
             <button
    className={`${styles.btn} ${styles.editBtn}`}
@@ -315,7 +312,7 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
     }
   }}
 >
-  <FaEdit size={16} /> Edit
+  <FaEdit size={14} /> Edit
 </button>
 <button
   className={`${styles.btn} ${styles.deleteBtn}`}
@@ -329,9 +326,9 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
       setSelectedRow(null);
     }
   }}
-  style={{ marginLeft: 4 }}
+  
 >
-  <FaTrash size={16} /> Delete
+  <FaTrash size={14} /> Delete
 </button>
 
               <button
@@ -339,6 +336,7 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                 onClick={handleExportPDF}
                 aria-label="Export table to PDF"
                 type="button"
+                style={{ border: "1px solid #0b63ce" }}
               >
                 <span
                   role="img"
