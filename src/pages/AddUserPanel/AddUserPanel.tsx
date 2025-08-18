@@ -151,7 +151,7 @@ const AddUserPanel = ({
   const username = localStorage.getItem("username") || "";
   const handleConfirmLogin = (data: Record<string, string>) => {
     // username is always from localStorage, not editable in modal
-    if (data.username === username && data.password === "password123") {
+    if (data.username === username && data.password === "superadmin123") {
       onSave(form); // save only after successful login
       setShowModal(false);
       onClose(); // close panel

@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./UserMasterTable.module.css"; // Adjust the path and extension if needed
+import styles from "./UserMasterTable.module.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa6";
 import AddUserPanel from "pages/AddUserPanel/AddUserPanel";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
-
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -26,6 +25,8 @@ const UserMasterTable = () => {
           oldValue: "Role: User",
           newValue: "Role: Admin",
           approver: "Admin1",
+          approvedOrRejectedBy: "SuperAdmin",
+          approvalStatus: "Approved",
           dateTime: "2025-08-04 14:25",
           reason: "Role upgraded for audit",
         },
@@ -34,16 +35,10 @@ const UserMasterTable = () => {
           oldValue: "Status: Active",
           newValue: "Status: Deleted",
           approver: "Admin2",
+          approvedOrRejectedBy: "SuperAdmin",
+          approvalStatus: "Rejected",
           dateTime: "2025-08-05 10:10",
           reason: "User left organization",
-        },
-        {
-          action: "View",
-          oldValue: "-",
-          newValue: "-",
-          approver: "Admin3",
-          dateTime: "2025-08-06 09:00",
-          reason: "Viewed for compliance check",
         },
       ],
     },
@@ -62,16 +57,10 @@ const UserMasterTable = () => {
           oldValue: "Department: HR",
           newValue: "Department: Admin",
           approver: "Admin2",
+          approvedOrRejectedBy: "SuperAdmin",
+          approvalStatus: "Approved",
           dateTime: "2025-08-01 10:10",
           reason: "Transferred department",
-        },
-        {
-          action: "View",
-          oldValue: "-",
-          newValue: "-",
-          approver: "Admin1",
-          dateTime: "2025-08-02 11:00",
-          reason: "Viewed for access review",
         },
       ],
     },
@@ -90,6 +79,8 @@ const UserMasterTable = () => {
           oldValue: "Central Master: No",
           newValue: "Central Master: Yes",
           approver: "Admin1",
+          approvedOrRejectedBy: "SuperAdmin",
+          approvalStatus: "Approved",
           dateTime: "2025-08-04 14:25",
           reason: "Granted central access",
         },
@@ -98,6 +89,8 @@ const UserMasterTable = () => {
           oldValue: "Status: Active",
           newValue: "Status: Deleted",
           approver: "Admin2",
+          approvedOrRejectedBy: "SuperAdmin",
+          approvalStatus: "Rejected",
           dateTime: "2025-08-05 10:10",
           reason: "User removed",
         },
@@ -113,21 +106,12 @@ const UserMasterTable = () => {
       centralMaster: ["Role Master", "Plant Master"], // ✅ based on selected checkboxes
 
       activityLogs: [
-        {
-          action: "View",
-          oldValue: "-",
-          newValue: "-",
-          approver: "Admin1",
-          dateTime: "2025-08-04 14:25",
-          reason: "Viewed for audit",
-        },
+        // No view actions, only add/edit/delete
       ],
     },
   ]);
 
-
-const [selectedRow, setSelectedRow] = useState<number | null>(null);
-
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   const [showPanel, setShowPanel] = useState(false);
   const [panelMode, setPanelMode] = useState<"add" | "edit">("add");
@@ -274,86 +258,79 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
           </span>
         </div>
       </header>
-     
-          {/* Header */}
-          
-               
-              <div className={styles.headerTopRow}>
-        <div className={styles.actionHeaderRow}>
-              <button
-                className={styles.addUserBtn}
-                onClick={() => {
-                  setPanelMode("add");
-                  setEditUserData(null);
-                  setShowPanel(true);
-                }}
-                aria-label="Add New"
-              >
-                + Add New
-              </button>
-              <button
-               className={styles.filterBtn}
-              onClick={() => setShowFilterPopover((prev) => !prev)}
-              type="button"
-              aria-label="Filter users"
-            >
-              🔍 Filter
-            </button>
-            <button
-   className={`${styles.btn} ${styles.editBtn}`}
-  disabled={selectedRow === null}
-  title="Edit Selected User"
-  onClick={() => {
-    if (selectedRow !== null) {
-      setPanelMode("edit");
-      setEditUserIdx(selectedRow);
-      setEditUserData(filteredUsers[selectedRow]);
-      setShowPanel(true);
-    }
-  }}
->
-  <FaEdit size={14} /> Edit
-</button>
-<button
-  className={`${styles.btn} ${styles.deleteBtn}`}
-  disabled={selectedRow === null}
-  title="Delete Selected User"
-  onClick={() => {
-    if (selectedRow !== null) {
-      const out = [...users];
-      out.splice(selectedRow, 1);
-      setUsers(out);
-      setSelectedRow(null);
-    }
-  }}
-  
->
-  <FaTrash size={14} /> Delete
-</button>
 
-              <button
-                className={styles.exportPdfBtn}
-                onClick={handleExportPDF}
-                aria-label="Export table to PDF"
-                type="button"
-                style={{ border: "1px solid #0b63ce" }}
-              >
-                <span
-                  role="img"
-                  aria-label="Export PDF"
-                  style={{ fontSize: 18 }}
-                >
-                  🗎
-                </span>
-                PDF
-              </button>
-            </div>
-          </div>
-          {/* Professional Filter Button with Popover */}
-           <div className={styles.wrapper}>
+      {/* Header */}
+
+      <div className={styles.headerTopRow}>
+        <div className={styles.actionHeaderRow}>
+          <button
+            className={styles.addUserBtn}
+            onClick={() => {
+              setPanelMode("add");
+              setEditUserData(null);
+              setShowPanel(true);
+            }}
+            aria-label="Add New"
+          >
+            + Add New
+          </button>
+          <button
+            className={styles.filterBtn}
+            onClick={() => setShowFilterPopover((prev) => !prev)}
+            type="button"
+            aria-label="Filter users"
+          >
+            🔍 Filter
+          </button>
+          <button
+            className={`${styles.btn} ${styles.editBtn}`}
+            disabled={selectedRow === null}
+            title="Edit Selected User"
+            onClick={() => {
+              if (selectedRow !== null) {
+                setPanelMode("edit");
+                setEditUserIdx(selectedRow);
+                setEditUserData(filteredUsers[selectedRow]);
+                setShowPanel(true);
+              }
+            }}
+          >
+            <FaEdit size={14} /> Edit
+          </button>
+          <button
+            className={`${styles.btn} ${styles.deleteBtn}`}
+            disabled={selectedRow === null}
+            title="Delete Selected User"
+            onClick={() => {
+              if (selectedRow !== null) {
+                const out = [...users];
+                out.splice(selectedRow, 1);
+                setUsers(out);
+                setSelectedRow(null);
+              }
+            }}
+          >
+            <FaTrash size={14} /> Delete
+          </button>
+
+          <button
+            className={styles.exportPdfBtn}
+            onClick={handleExportPDF}
+            aria-label="Export table to PDF"
+            type="button"
+            style={{ border: "1px solid #0b63ce" }}
+          >
+            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 }}>
+              🗎
+            </span>
+            PDF
+          </button>
+        </div>
+      </div>
+      {/* Professional Filter Button with Popover */}
+      <div className={styles.wrapper}>
         <div className={styles.container}>
           <div className={styles.controls}>
-            
             {showFilterPopover && (
               <div className={styles.filterPopover} ref={popoverRef}>
                 <div className={styles.filterPopoverHeader}>
@@ -417,89 +394,88 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
             )}
           </div>
           {/* Table */}
-
-          <div
-            style={{
-              maxHeight: 500,
-              overflowY: "auto",
-              borderRadius: 8,
-              boxShadow: "0 0 6px rgba(0, 0, 0, 0.06)",
-
-              height: "100",
-            }}
-          >
+          <div style={{ height: "100%" }}>
             <table className={styles.userTable}>
               <thead>
-  <tr>
-    <th></th> {/* Radio column */}
-    <th>User Name</th>
-    <th>Email</th>
-    <th>Employee Code</th>
-    <th>Department</th>
-    <th>Assigned Plants</th>
-    <th>Status</th>
-    <th>Central Master</th>
-    <th>Activity Logs</th>
-    {/* Remove Actions */}
-  </tr>
-</thead>
+                <tr>
+                  <th></th> {/* Radio column */}
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Employee Code</th>
+                  <th>Department</th>
+                  <th>Assigned Plants</th>
+                  <th>Status</th>
+                  <th>Central Master</th>
+                  <th>Activity Logs</th>
+                  {/* Remove Actions */}
+                </tr>
+              </thead>
 
               <tbody>
-  {filteredUsers.map((user: any, idx: number) => (
-    <tr key={idx}>
-      {/* Radio input */}
-      <td>
-        <input
-          type="radio"
-          checked={selectedRow === idx}
-          onChange={() => setSelectedRow(idx)}
-          className={styles.radioInput}
-          aria-label={`Select ${user.fullName}`}
-        />
-      </td>
-      <td><strong>{user.fullName}</strong></td>
-      <td>{user.email}</td>
-      <td>{user.empCode}</td>
-      <td>{user.department}</td>
-      <td>
-        {user.plants.map((plant: string, i: number) => (
-          <span key={i} className={styles.plantBadge}>{plant}</span>
-        ))}
-      </td>
-      <td>
-        <span className={
-          user.status === "Active"
-            ? styles.activeBadge
-            : styles.inactiveBadge
-        }>
-          {user.status}
-        </span>
-      </td>
-      <td>
-        {Array.isArray(user.centralMaster) && user.centralMaster.length > 0
-          ? user.centralMaster.map((mod: string, index: number) => (
-              <span key={index} className={styles.plantBadge}>{mod}</span>
-            ))
-          : <span className={styles.inactive}>-</span>
-        }
-      </td>
-      <td>
-        <button
-          className={styles.actionBtn}
-          title="View Activity Logs"
-          onClick={() => {
-            setActivityLogsUser(user);
-            setShowActivityModal(true);
-          }}
-        >
-          <FaRegClock size={17} />
-        </button>
-      </td>
-      {/* REMOVE Actions cell */}
-    </tr>
-  ))}
-</tbody>
-
+                {filteredUsers.map((user: any, idx: number) => (
+                  <tr key={idx}>
+                    {/* Radio input */}
+                    <td>
+                      <input
+                        type="radio"
+                        checked={selectedRow === idx}
+                        onChange={() => setSelectedRow(idx)}
+                        className={styles.radioInput}
+                        aria-label={`Select ${user.fullName}`}
+                      />
+                    </td>
+                    <td>
+                      <strong>{user.fullName}</strong>
+                    </td>
+                    <td>{user.email}</td>
+                    <td>{user.empCode}</td>
+                    <td>{user.department}</td>
+                    <td>
+                      {user.plants.map((plant: string, i: number) => (
+                        <span key={i} className={styles.plantBadge}>
+                          {plant}
+                        </span>
+                      ))}
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          user.status === "Active"
+                            ? styles.activeBadge
+                            : styles.inactiveBadge
+                        }
+                      >
+                        {user.status}
+                      </span>
+                    </td>
+                    <td>
+                      {Array.isArray(user.centralMaster) &&
+                      user.centralMaster.length > 0 ? (
+                        user.centralMaster.map((mod: string, index: number) => (
+                          <span key={index} className={styles.plantBadge}>
+                            {mod}
+                          </span>
+                        ))
+                      ) : (
+                        <span className={styles.inactive}>-</span>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className={styles.actionBtn}
+                        title="View Activity Logs"
+                        onClick={() => {
+                          setActivityLogsUser(user);
+                          setShowActivityModal(true);
+                        }}
+                      >
+                        <FaRegClock size={17} />
+                      </button>
+                    </td>
+                    {/* REMOVE Actions cell */}
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
           {/* Footer */}
@@ -553,6 +529,8 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                         "Old Value",
                         "New Value",
                         "Action Performed By",
+                        "Approved/Rejected By",
+                        "Approval Status",
                         "Date/Time (IST)",
                         "Comments",
                       ],
@@ -602,6 +580,8 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                         log.oldValue !== undefined ? log.oldValue : "-",
                         log.newValue !== undefined ? log.newValue : "-",
                         log.approver || "-",
+                        log.approvedOrRejectedBy || "-",
+                        log.approvalStatus || "-",
                         log.dateTime || log.timestamp ? formattedDate : "-",
                         log.reason || log.comment || "-",
                       ];
@@ -713,13 +693,15 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                 boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
               }}
             >
-              <table className={styles.userTable} style={{ minWidth: 900 }}>
+              <table className={styles.userTable} style={{ minWidth: 1100 }}>
                 <thead>
                   <tr>
-                    <th>Action </th>
+                    <th>Action</th>
                     <th>Old Value</th>
                     <th>New Value</th>
                     <th>Action Performed By</th>
+                    <th>Approved/Rejected By</th>
+                    <th>Approval Status</th>
                     <th>Date/Time (IST)</th>
                     <th>Comments</th>
                   </tr>
@@ -772,6 +754,8 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                             {log.newValue !== undefined ? log.newValue : "-"}
                           </td>
                           <td>{log.approver || "-"}</td>
+                          <td>{log.approvedOrRejectedBy || "-"}</td>
+                          <td>{log.approvalStatus || "-"}</td>
                           <td>
                             {log.dateTime || log.timestamp
                               ? formattedDate
@@ -828,6 +812,8 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                             ),
                           }),
                           approver: logDetails.approver,
+                          approvedOrRejectedBy: "SuperAdmin",
+                          approvalStatus: "Approved",
                           dateTime: logDetails.dateTime,
                           reason: logDetails.reason,
                         },
@@ -837,64 +823,69 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
                 } else if (panelMode === "edit" && editUserIdx !== null) {
                   setUsers((prev) =>
                     prev.map((u, i) => {
-                      if (i !== editUserIdx) return u;
-                      const newCentralMaster = getEnabledCentralModules(
-                        userData.permissions
-                      );
-                      let logs = Array.isArray(u.activityLogs)
-                        ? [...u.activityLogs]
-                        : [];
+                      if (i !== editUserIdx) {
+                        return u;
+                      } else {
+                        const newCentralMaster = getEnabledCentralModules(
+                          userData.permissions
+                        );
+                        let logs = Array.isArray(u.activityLogs)
+                          ? [...u.activityLogs]
+                          : [];
 
-                      // Compare only allowed fields
-                      if (u.department !== userData.department) {
-                        logs.push({
-                          action: "Edit department",
-                          oldValue: u.department,
-                          newValue: userData.department,
-                          approver: logDetails.approver,
-                          dateTime: logDetails.dateTime,
-                          reason: logDetails.reason,
-                        });
-                      }
-                      if (u.status !== userData.status) {
-                        logs.push({
-                          action: "Edit status",
-                          oldValue: u.status,
-                          newValue: userData.status,
-                          approver: logDetails.approver,
-                          dateTime: logDetails.dateTime,
-                          reason: logDetails.reason,
-                        });
-                      }
-                      if (u.plants.join(", ") !== userData.plants.join(", ")) {
-                        logs.push({
-                          action: "Edit plants",
-                          oldValue: u.plants.join(", "),
-                          newValue: userData.plants.join(", "),
-                          approver: logDetails.approver,
-                          dateTime: logDetails.dateTime,
-                          reason: logDetails.reason,
-                        });
-                      }
-                      if (
-                        u.centralMaster.join(", ") !==
-                        newCentralMaster.join(", ")
-                      ) {
-                        logs.push({
-                          action: "Edit centralMaster",
-                          oldValue: u.centralMaster.join(", "),
-                          newValue: newCentralMaster.join(", "),
-                          approver: logDetails.approver,
-                          dateTime: logDetails.dateTime,
-                          reason: logDetails.reason,
-                        });
-                      }
+                        // Combine all changes into a single row for each edit
+                        let oldVals = [];
+                        let newVals = [];
+                        if (u.department !== userData.department) {
+                          oldVals.push(`Department: ${u.department}`);
+                          newVals.push(`Department: ${userData.department}`);
+                        }
+                        if (u.status !== userData.status) {
+                          oldVals.push(`Status: ${u.status}`);
+                          newVals.push(`Status: ${userData.status}`);
+                        }
+                        if (
+                          u.plants.join(", ") !== userData.plants.join(", ")
+                        ) {
+                          oldVals.push(`Plants: ${u.plants.join(", ")}`);
+                          newVals.push(`Plants: ${userData.plants.join(", ")}`);
+                        }
+                        if (
+                          u.centralMaster.join(", ") !==
+                          newCentralMaster.join(", ")
+                        ) {
+                          oldVals.push(
+                            `Central Master: ${u.centralMaster.join(", ")}`
+                          );
+                          newVals.push(
+                            `Central Master: ${newCentralMaster.join(", ")}`
+                          );
+                        }
+                        if (oldVals.length > 0 || newVals.length > 0) {
+                          logs.push({
+                            action: "Edit",
+                            oldValue:
+                              oldVals.length > 0 ? oldVals.join(" | ") : "-",
+                            newValue:
+                              newVals.length > 0 ? newVals.join(" | ") : "-",
+                            approver: logDetails.approver,
+                            approvedOrRejectedBy: "SuperAdmin",
+                            approvalStatus: "Approved",
+                            dateTime: logDetails.dateTime,
+                            reason:
+                              logDetails.reason &&
+                              logDetails.reason !== "No reason provided"
+                                ? logDetails.reason
+                                : "-",
+                          });
+                        }
 
-                      return {
-                        ...userData,
-                        centralMaster: newCentralMaster,
-                        activityLogs: logs,
-                      };
+                        return {
+                          ...userData,
+                          centralMaster: newCentralMaster,
+                          activityLogs: logs,
+                        };
+                      }
                     })
                   );
                 }

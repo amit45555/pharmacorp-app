@@ -36,7 +36,7 @@ function ActivityLogModal({
         "Action",
         "Old Value",
         "New Value",
-        "Action Performed By",
+        "Approved By/Rejected By",
         "Date/Time (IST)",
         "Comments",
       ],
@@ -116,14 +116,14 @@ function ActivityLogModal({
           {filteredLogs.length > 0 ? (
             <table
               className={styles.activityLogTable}
-              style={{ minWidth: 700 }}
+              style={{ minWidth: 900 }}
             >
               <thead>
                 <tr>
                   <th>Action</th>
                   <th>Old Value</th>
                   <th>New Value</th>
-                  <th>Action Performed By</th>
+                  <th>Approved By/Rejected By</th>
                   <th>Date/Time (IST)</th>
                   <th>Comments</th>
                 </tr>
@@ -288,11 +288,9 @@ export default function RoleMasterTable() {
         <div className={styles.actionHeaderRow}>
           <button
             className={styles.addUserBtn}
-            onClick={() => {
-              navigate("/add-role");
-            }}
+            onClick={() => navigate("/add-role")}
           >
-            + Add New
+            + Add Role
           </button>
           <button
             className={styles.filterBtn}

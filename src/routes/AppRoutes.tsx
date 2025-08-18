@@ -8,7 +8,6 @@ import TrackRequest from "../pages/TrackRequest";
 import Login from "../pages/Login";
 import ApproverDashboard from "../pages/ApproverDashboard";
 import AccessRequestDetails from "../pages/AccessRequestDetails";
-import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
 import RoleMasterTable from "../pages/RoleMasterTable/RoleMasterTable";
 import AddRoleFormPage from "../RoleMaster/AddRoleFormPage";
 import EditRoleFormPage from "../RoleMaster/EditRoleFormPage";
@@ -16,6 +15,7 @@ import VendorMasterTable from "../pages/VendorMasterTable/VendorMasterTable";
 import AddVendorFormPage from "../pages/VendorMasterTable/AddVendorFormPage";
 import EditVendorFormPage from "../pages/VendorMasterTable/EditVendorFormPage";
 import { VendorProvider } from "../context/VendorContext";
+import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
