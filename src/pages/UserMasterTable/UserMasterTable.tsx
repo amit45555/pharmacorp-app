@@ -350,7 +350,7 @@ const [selectedRow, setSelectedRow] = useState<number | null>(null);
             </div>
           </div>
           {/* Professional Filter Button with Popover */}
-           <div className={styles.wrapper}>
+      <div className={styles.wrapper}>
         <div className={styles.container}>
           <div className={styles.controls}>
             
