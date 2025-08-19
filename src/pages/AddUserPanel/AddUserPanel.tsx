@@ -202,6 +202,7 @@ const AddUserPanel = ({
         </div>
 
         <div className={styles.form}>
+          <div className={styles.sectionCard}>
           <label className={styles.formLabel}>User Details</label>
           <div className={styles.grid}>
             <div>
@@ -216,7 +217,9 @@ const AddUserPanel = ({
               <input
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+
               />
+              <span className={styles.helperText}>Please enter a valid official email address.</span>
             </div>
             <div>
               <label>Employee Code *</label>
@@ -252,13 +255,15 @@ const AddUserPanel = ({
               </select>
             </div>
           </div>
-
-          <div>
-            <label className={styles.formLabel}>Plant Selection</label>
-            <div className={styles.plants}>
-              {plants.map((plant) => (
-                <label
-                  key={plant}
+          </div>
+          <div className={styles.sectionCard}>
+  <label className={styles.formLabel}>Plant Selection</label>
+  <div className={styles.chipGroup}>
+    {plants.map(plant => (
+      <button
+        type="button"
+        className={`${styles.chip} ${form.plants.includes(plant) ? styles.chipActive : ""}`}
+        key={plant}
                   style={{
                     cursor: form.plants.includes(plant) ? "pointer" : "default",
                   }}
@@ -266,21 +271,21 @@ const AddUserPanel = ({
                     if (form.plants.includes(plant)) {
                       setActivePlant(plant);
                     }
-                  }}
-                >
+        }}
+      >
                   <input
                     type="checkbox"
                     checked={form.plants.includes(plant)}
                     onChange={() => handleCheckboxChange(plant)}
                   />
                   {plant}
-                </label>
-              ))}
-            </div>
-          </div>
+                </button>
+    ))}
+  </div>
+</div>
 
           {activePlant && form.plants.includes(activePlant) && (
-            <div className={`${styles.plantTableWrapper} ${styles.fadeIn}`}>
+            <div className={`${styles.plantTableWrapper} ${!activePlant ? styles.plantTableWrapperHidden : ""}`}>
               <label className={styles.sectionTitle}>
                 Module Permissions for {activePlant}
               </label>
@@ -331,7 +336,7 @@ const AddUserPanel = ({
             </div>
           )}
 
-          <div>
+          <div className={styles.sectionCard}>
             <label className={styles.formLabel}>
               Central Master Permission
             </label>
