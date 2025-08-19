@@ -22,6 +22,7 @@ import AddVendorFormPage from "../pages/VendorMasterTable/AddVendorFormPage";
 import EditVendorFormPage from "../pages/VendorMasterTable/EditVendorFormPage";
 import { VendorProvider } from "../context/VendorContext";
 import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
+
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
@@ -48,6 +49,7 @@ const AppRoutes: React.FC = () => (
     <Route path="/roles" element={<RoleMasterTable />} />
     <Route path="/add-role" element={<AddRoleFormPage />} />
     <Route path="/edit-role/:idx" element={<EditRoleFormPage />} />
+
     {/* Application Master */}
     <Route path="/application-master" element={<ApplicationMasterTable />} />
     <Route path="/add-application" element={<AddApplicationFormPage />} />
@@ -55,6 +57,7 @@ const AppRoutes: React.FC = () => (
       path="/edit-application/:idx"
       element={<EditApplicationFormPage />}
     />
+
     {/* Vendor Master */}
     <Route
       path="/vendors"
@@ -80,6 +83,7 @@ const AppRoutes: React.FC = () => (
         </VendorProvider>
       }
     />
+
     {/* Catch-all route for 404 */}
     <Route
       path="*"

@@ -5,48 +5,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
-const applications = [
-  {
-    name: "SAP ERP",
-    version: "v2.1",
-    equipmentId: "EQ001",
-    computer: "MUMAPP01",
-    plant: "Mumbai Plant",
-    status: "ACTIVE",
-  },
-  {
-    name: "ZingHR",
-    version: "v3.5",
-    equipmentId: "EQ002",
-    computer: "MUMAPP02",
-    plant: "Mumbai Plant",
-    status: "ACTIVE",
-  },
-  {
-    name: "Manufacturing Execution System",
-    version: "v1.8",
-    equipmentId: "EQ003",
-    computer: "GOAAPP01",
-    plant: "Goa Plant",
-    status: "ACTIVE",
-  },
-  {
-    name: "Quality Management System",
-    version: "v2.3",
-    equipmentId: "EQ004",
-    computer: "CHENAPP01",
-    plant: "Chennai Plant",
-    status: "ACTIVE",
-  },
-  {
-    name: "Laboratory Information System",
-    version: "v4.1",
-    equipmentId: "EQ005",
-    computer: "PUNAPP01",
-    plant: "Pune Plant",
-    status: "ACTIVE",
-  },
-];
+import { useApplications } from "../../context/ApplicationsContext";
+// Removed unused local applications array. Use context instead.
 
 export default function ApplicationMasterTable() {
   const [selectedRow, setSelectedRow] = React.useState<number | null>(null);
@@ -57,7 +17,7 @@ export default function ApplicationMasterTable() {
   const [tempFilterColumn, setTempFilterColumn] = React.useState(filterColumn);
   const [tempFilterValue, setTempFilterValue] = React.useState(filterValue);
   const popoverRef = React.useRef<HTMLDivElement | null>(null);
-  const [data, setData] = React.useState(applications);
+  const { applications, setApplications } = useApplications();
   const navigate = require("react-router-dom").useNavigate();
 
   React.useEffect(() => {
@@ -74,35 +34,42 @@ export default function ApplicationMasterTable() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [showFilterPopover]);
 
-  const filteredData = data.filter((app: any) => {
-    if (!filterValue.trim()) return true;
-    const value = filterValue.toLowerCase();
-    switch (filterColumn) {
-      case "name":
-        return app.name?.toLowerCase().includes(value);
-      case "version":
-        return app.version?.toLowerCase().includes(value);
-      case "equipmentId":
-        return app.equipmentId?.toLowerCase().includes(value);
-      case "computer":
-        return app.computer?.toLowerCase().includes(value);
-      case "plant":
-        return app.plant?.toLowerCase().includes(value);
-      case "status":
-        return app.status?.toLowerCase().includes(value);
-      default:
-        return true;
+  const filteredData = applications.filter(
+    (
+      app: import("../../context/ApplicationsContext").Application,
+      idx: number
+    ) => {
+      if (!filterValue.trim()) return true;
+      const value = filterValue.toLowerCase();
+      switch (filterColumn) {
+        case "name":
+          return app.name?.toLowerCase().includes(value);
+        case "version":
+          return app.version?.toLowerCase().includes(value);
+        case "equipmentId":
+          return app.equipmentId?.toLowerCase().includes(value);
+        case "computer":
+          return app.computer?.toLowerCase().includes(value);
+        case "plant":
+          return app.plant?.toLowerCase().includes(value);
+        case "status":
+          return app.status?.toLowerCase().includes(value);
+        default:
+          return true;
+      }
     }
-  });
+  );
 
   const handleDelete = () => setShowDeleteModal(true);
   const confirmDelete = () => {
     if (selectedRow === null) return;
-    const updated = [...data];
+    const updated = [...applications];
     updated.splice(selectedRow, 1);
-    setData(updated);
+    setApplications(updated);
     setSelectedRow(null);
     setShowDeleteModal(false);
+    // After delete, navigate to SuperAdmin with Application tab active
+    navigate("/superadmin", { state: { activeTab: "application" } });
   };
 
   const handleExportPDF = async () => {

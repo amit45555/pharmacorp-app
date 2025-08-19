@@ -6,6 +6,7 @@ import { RolesProvider } from "./RoleMaster/RolesContext";
 import { UserProvider } from "./context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
+import { ApplicationsProvider } from "./context/ApplicationsContext";
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,9 @@ const App: React.FC = () => {
         <RolesProvider>
           <UserProvider>
             <BrowserRouter>
-              <AppRoutes />
+              <ApplicationsProvider>
+                <AppRoutes />
+              </ApplicationsProvider>
             </BrowserRouter>
           </UserProvider>
         </RolesProvider>

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import ConfirmLoginModal from "../../components/Common/ConfirmLoginModal";
 import styles from "./ApplicationMasterTable.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function EditApplicationFormPage() {
+  const username = localStorage.getItem("username") || "";
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { applicationData } = location.state || {};
@@ -23,8 +26,7 @@ export default function EditApplicationFormPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Update logic (API or context)
-    navigate("/application-master");
+    setShowModal(true);
   };
 
   return (
@@ -83,12 +85,44 @@ export default function EditApplicationFormPage() {
               <button
                 type="button"
                 className={styles.deleteButton}
-                onClick={() => navigate("/application-master")}
+                onClick={() =>
+                  navigate("/superadmin", {
+                    state: { activeTab: "application" },
+                  })
+                }
               >
                 Cancel
               </button>
             </div>
           </form>
+          {showModal && (
+            <ConfirmLoginModal
+              username={username}
+              fields={[
+                {
+                  name: "password",
+                  label: "Password",
+                  type: "password",
+                  required: true,
+                  placeholder: "Enter Password",
+                },
+              ]}
+              onConfirm={(data) => {
+                // Simple password check (replace with real logic)
+                if (data.username === username && data.password) {
+                  // Update logic (API or context)
+                  // ...existing code...
+                  setShowModal(false);
+                  navigate("/superadmin", {
+                    state: { activeTab: "application" },
+                  });
+                } else {
+                  alert("Invalid credentials. Please try again.");
+                }
+              }}
+              onCancel={() => setShowModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>

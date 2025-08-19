@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import ConfirmLoginModal from "../../components/Common/ConfirmLoginModal";
 import styles from "./ApplicationMasterTable.module.css";
 import { useNavigate } from "react-router-dom";
 
 export default function AddApplicationFormPage() {
+  const username = localStorage.getItem("username") || "";
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -19,8 +22,7 @@ export default function AddApplicationFormPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Save logic (API or context)
-    navigate("/application-master");
+    setShowModal(true);
   };
 
   return (
@@ -79,12 +81,44 @@ export default function AddApplicationFormPage() {
               <button
                 type="button"
                 className={styles.deleteButton}
-                onClick={() => navigate("/application-master")}
+                onClick={() =>
+                  navigate("/superadmin", {
+                    state: { activeTab: "application" },
+                  })
+                }
               >
                 Cancel
               </button>
             </div>
           </form>
+          {showModal && (
+            <ConfirmLoginModal
+              username={username}
+              fields={[
+                {
+                  name: "password",
+                  label: "Password",
+                  type: "password",
+                  required: true,
+                  placeholder: "Enter Password",
+                },
+              ]}
+              onConfirm={(data) => {
+                // Simple password check (replace with real logic)
+                if (data.username === username && data.password) {
+                  // Save logic (API or context)
+                  // ...existing code...
+                  setShowModal(false);
+                  navigate("/superadmin", {
+                    state: { activeTab: "application" },
+                  });
+                } else {
+                  alert("Invalid credentials. Please try again.");
+                }
+              }}
+              onCancel={() => setShowModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>
