@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import UserInformation from "../pages/UserInformation/UserInformation";
 import AccessDetails from "../pages/AccessDetails/AccessDetails";
 import ReviewSubmit from "../pages/ReviewSubmit/ReviewSubmit";
+import ApplicationMasterTable from "../pages/ApplicationMasterTable/ApplicationMasterTable";
+import AddApplicationFormPage from "../pages/ApplicationMasterTable/AddApplicationFormPage";
+import EditApplicationFormPage from "../pages/ApplicationMasterTable/EditApplicationFormPage";
 import GenerateCredentials from "../pages/GenerateCredentials/GenerateCredentials";
 import TrackRequest from "../pages/TrackRequest";
 import Login from "../pages/Login";
@@ -45,6 +48,13 @@ const AppRoutes: React.FC = () => (
     <Route path="/roles" element={<RoleMasterTable />} />
     <Route path="/add-role" element={<AddRoleFormPage />} />
     <Route path="/edit-role/:idx" element={<EditRoleFormPage />} />
+    {/* Application Master */}
+    <Route path="/application-master" element={<ApplicationMasterTable />} />
+    <Route path="/add-application" element={<AddApplicationFormPage />} />
+    <Route
+      path="/edit-application/:idx"
+      element={<EditApplicationFormPage />}
+    />
     {/* Vendor Master */}
     <Route
       path="/vendors"
