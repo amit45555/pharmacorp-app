@@ -1,5 +1,42 @@
-.container {
+/* Add/Edit Form Styles (referenced from UserMasterTable.module.css) */
+.addUserFormPageWrapper {
+  width: 100vw;
+  height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
+.addUserFormPageContainer {
+  width: 100vw;
+  max-width: 1200px;
+  min-height: 90vh;
+  height: 96vh;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(11, 99, 206, 0.08);
+  padding: 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #dbeafe;
+  font-size: 16px;
+  margin-bottom: 0;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+.input:focus {
+  border-color: #0b63ce;
+  outline: none;
+}
+.container {
   border-radius: 12px;
   padding: 24px;
   margin-top: 25px;
@@ -53,23 +90,22 @@
   cursor: pointer;
 }
 
-
 .table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.06);
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 12px;
 }
 
 thead {
-  
   border-radius: 8px;
 }
 
@@ -92,7 +128,6 @@ tbody tr {
   cursor: pointer;
 }
 
-
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -101,7 +136,7 @@ tbody tr {
   color: #fff;
   padding: 12px 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
- 
+
   height: 75px;
 }
 
@@ -109,7 +144,6 @@ tbody tr {
   font-size: 28px;
   font-weight: 600;
   color: #fff;
-  
 }
 
 .header-icons {
@@ -128,8 +162,6 @@ tbody tr {
   color: #007bff;
 }
 
-
-
 .headerTopRow {
   background: #eef5fe;
   padding: 16px 24px;
@@ -146,9 +178,8 @@ tbody tr {
   align-items: center;
 }
 
-
 .addUserBtn {
-  background-color:#24bb6a;
+  background-color: #24bb6a;
   color: #fff;
   padding: 7px 14px;
   border-radius: 8px;
@@ -156,14 +187,14 @@ tbody tr {
   font-weight: 500;
   cursor: pointer;
   font-size: 14px;
-  box-shadow: 0 1px 2px rgba(90,96,120,.07);
+  box-shadow: 0 1px 2px rgba(90, 96, 120, 0.07);
   transition: background 0.18s;
 }
 .addUserBtn:hover {
-  background-color:#198754;
+  background-color: #198754;
 }
 .filterBtn {
-background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
+  background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
   color: #fff;
   border: none;
   padding: 7px 13px;
@@ -175,11 +206,10 @@ background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
   gap: 6px;
   cursor: pointer;
   font-size: 14px;
- 
 }
 
 .filterBtn:hover {
-background: #005fbb;
+  background: #005fbb;
   color: #fff;
 }
 
@@ -194,16 +224,17 @@ background: #005fbb;
   border: none;
   font-size: 14px;
   white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(90,96,120,.08);
+  box-shadow: 0 1px 2px rgba(90, 96, 120, 0.08);
 }
 
 .editBtn {
-    background-color: #e2e3e5;
+  background-color: #e2e3e5;
   color: #212529;
 }
-.editBtn:hover, .editBtn:focus {
- background-color: #212529;
-  color:  #e2e3e5;
+.editBtn:hover,
+.editBtn:focus {
+  background-color: #212529;
+  color: #e2e3e5;
 }
 
 /* Delete button: muted/red gray */
@@ -211,11 +242,11 @@ background: #005fbb;
   background: #ef5350;
   color: #fff;
 }
-.deleteBtn:hover, .deleteBtn:focus {
+.deleteBtn:hover,
+.deleteBtn:focus {
   background: #bc3c2c;
   color: #fff;
 }
-
 
 .exportPdfBtn {
   background: #fff;
@@ -244,4 +275,3 @@ background: #005fbb;
   color: #fff;
   border-color: #084a9e;
 }
-

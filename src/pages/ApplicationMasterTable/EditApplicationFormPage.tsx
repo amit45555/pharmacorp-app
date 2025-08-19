@@ -28,49 +28,69 @@ export default function EditApplicationFormPage() {
   };
 
   return (
-    <div className={styles.formContainer}>
-      <h2>Edit Application</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          placeholder="Application Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="version"
-          placeholder="Version"
-          value={form.version}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="equipmentId"
-          placeholder="Equipment ID"
-          value={form.equipmentId}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="computer"
-          placeholder="Computer"
-          value={form.computer}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="plant"
-          placeholder="Plant"
-          value={form.plant}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Update</button>
-        <button type="button" onClick={() => navigate("/application-master")}>
-          Cancel
-        </button>
-      </form>
+    <div className={styles.addUserFormPageWrapper}>
+      <div className={styles.addUserFormPageContainer}>
+        <div style={{ maxWidth: 500, margin: "0 auto" }}>
+          <h2 style={{ marginBottom: 24 }}>Edit Application</h2>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", flexDirection: "column", gap: 18 }}
+          >
+            <input
+              name="name"
+              placeholder="Application Name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+            <input
+              name="version"
+              placeholder="Version"
+              value={form.version}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+            <input
+              name="equipmentId"
+              placeholder="Equipment ID"
+              value={form.equipmentId}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+            <input
+              name="computer"
+              placeholder="Computer"
+              value={form.computer}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+            <input
+              name="plant"
+              placeholder="Plant"
+              value={form.plant}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+            <div style={{ display: "flex", gap: 12, marginTop: 10 }}>
+              <button type="submit" className={styles.addUserBtn}>
+                Update
+              </button>
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={() => navigate("/application-master")}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

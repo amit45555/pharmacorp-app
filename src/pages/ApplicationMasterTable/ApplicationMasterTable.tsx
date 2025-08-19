@@ -309,9 +309,7 @@ export default function ApplicationMasterTable() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>
-                    <input type="checkbox" />
-                  </th>
+                  <th></th>
                   <th>Application</th>
                   <th>Version</th>
                   <th>Equipment ID</th>
@@ -325,16 +323,17 @@ export default function ApplicationMasterTable() {
                 {filteredData.map((app, idx) => (
                   <tr
                     key={idx}
-                    onClick={() => setSelectedRow(idx)}
                     style={{
                       background: selectedRow === idx ? "#f0f4ff" : undefined,
                     }}
                   >
                     <td>
                       <input
-                        type="checkbox"
+                        className={styles.radioInput}
+                        type="radio"
                         checked={selectedRow === idx}
                         onChange={() => setSelectedRow(idx)}
+                        aria-label={`Select ${app.name}`}
                       />
                     </td>
                     <td>{app.name}</td>
