@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./VendorMasterTable.module.css";
 import { VendorContext } from "../../context/VendorContext";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 import { FaRegClock } from "react-icons/fa6";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -82,7 +83,7 @@ const VendorMasterTable: React.FC = () => {
     doc.save("vendor-master-table.pdf");
   };
   const navigate = useNavigate();
-  const { vendors, updateVendor } = useContext(VendorContext);
+  const { vendors, setVendors } = useContext(VendorContext);
   // Sample vendor data for testing activity log
   const sampleVendors = [
     {
@@ -251,10 +252,15 @@ const VendorMasterTable: React.FC = () => {
     });
   };
 
-  const handleDelete = () => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const handleDelete = () => setShowDeleteModal(true);
+  const confirmDelete = () => {
     if (selectedRow === null) return;
-    updateVendor({ ...vendors[selectedRow], status: "Inactive" });
+    const updated = [...vendorList];
+    updated.splice(selectedRow, 1);
+    setVendors(updated);
     setSelectedRow(null);
+    setShowDeleteModal(false);
   };
 
   const handleSelectRow = (idx: number) => {
@@ -308,6 +314,16 @@ const VendorMasterTable: React.FC = () => {
           >
             <FaTrash size={14} /> Delete
           </button>
+          <ConfirmDeleteModal
+            open={showDeleteModal}
+            name={
+              selectedRow !== null && vendorList[selectedRow]
+                ? vendorList[selectedRow].fullName
+                : "vendor"
+            }
+            onCancel={() => setShowDeleteModal(false)}
+            onConfirm={confirmDelete}
+          />
           <button
             className={`${styles.btn} ${styles.exportPdfBtn}`}
             onClick={handleDownloadPdf}
@@ -434,14 +450,14 @@ const VendorMasterTable: React.FC = () => {
               </div>
             </div>
             <div
-  style={{
-    overflowY: "auto",
-    maxHeight: 350,
-    minWidth: "100%",
-    borderRadius: 8,
-    boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
-    border: "1px solid #e2e8f0",
-  }}
+              style={{
+                overflowY: "auto",
+                maxHeight: 350,
+                minWidth: "100%",
+                borderRadius: 8,
+                boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
+                border: "1px solid #e2e8f0",
+              }}
             >
               <table
                 className={styles.activityLogTable}

@@ -8,12 +8,14 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 
 const UserMasterTable = () => {
   const navigate = useNavigate();
   const { users, deleteUser } = useUserContext();
 
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [activityLogsUser, setActivityLogsUser] = useState<any>(null);
 
@@ -182,15 +184,28 @@ const UserMasterTable = () => {
               className={`${styles.btn} ${styles.deleteBtn}`}
               disabled={selectedRow === null}
               title="Delete Selected User"
-              onClick={() => {
+              onClick={() => setShowDeleteModal(true)}
+            >
+              {" "}
+              <FaTrash size={14} /> Delete
+            </button>
+
+            <ConfirmDeleteModal
+              open={showDeleteModal}
+              name={
+                selectedRow !== null && filteredUsers[selectedRow]
+                  ? filteredUsers[selectedRow].fullName
+                  : "user"
+              }
+              onCancel={() => setShowDeleteModal(false)}
+              onConfirm={() => {
                 if (selectedRow !== null) {
                   deleteUser(selectedRow);
                   setSelectedRow(null);
                 }
+                setShowDeleteModal(false);
               }}
-            >
-              <FaTrash size={14} /> Delete
-            </button>
+            />
             <button
               className={styles.exportPdfBtn}
               onClick={handleExportPDF}

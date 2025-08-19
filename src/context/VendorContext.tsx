@@ -5,12 +5,14 @@ interface VendorContextType {
   vendors: VendorUser[];
   addVendor: (vendor: VendorUser) => void;
   updateVendor: (vendor: VendorUser) => void;
+  setVendors: (vendors: VendorUser[]) => void;
 }
 
 export const VendorContext = createContext<VendorContextType>({
   vendors: [],
   addVendor: () => {},
   updateVendor: () => {},
+  setVendors: () => {},
 });
 
 export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -33,7 +35,9 @@ export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <VendorContext.Provider value={{ vendors, addVendor, updateVendor }}>
+    <VendorContext.Provider
+      value={{ vendors, addVendor, updateVendor, setVendors }}
+    >
       {children}
     </VendorContext.Provider>
   );

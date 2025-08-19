@@ -2,9 +2,10 @@ import React from "react";
 import styles from "./PlantMasterTable.module.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { FaEdit, FaTrash,} from "react-icons/fa";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 const plantData = [
   {
     name: "Mumbai Plant",
@@ -33,82 +34,125 @@ const plantData = [
 ];
 
 const PlantMasterTable: React.FC = () => {
+  const [selectedRow, setSelectedRow] = React.useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [data, setData] = React.useState(plantData);
+  const handleDelete = () => setShowDeleteModal(true);
+  const confirmDelete = () => {
+    if (selectedRow === null) return;
+    const updated = [...data];
+    updated.splice(selectedRow, 1);
+    setData(updated);
+    setSelectedRow(null);
+    setShowDeleteModal(false);
+  };
   return (
-     <div >
-       <header className={styles["main-header"]}>
-  <h2 className={styles["header-title"]}>Plant Master</h2>
-  <div className={styles["header-icons"]}>
-    <span className={styles["header-icon"]}><NotificationsIcon fontSize="small" /></span>
-    <span className={styles["header-icon"]}><SettingsIcon fontSize="small" /></span>
-  </div>
-</header>
-<div className={styles.headerTopRow}>
+    <div>
+      <header className={styles["main-header"]}>
+        <h2 className={styles["header-title"]}>Plant Master</h2>
+        <div className={styles["header-icons"]}>
+          <span className={styles["header-icon"]}>
+            <NotificationsIcon fontSize="small" />
+          </span>
+          <span className={styles["header-icon"]}>
+            <SettingsIcon fontSize="small" />
+          </span>
+        </div>
+      </header>
+      <div className={styles.headerTopRow}>
         <div className={styles.actionHeaderRow}>
           <button className={styles.addUserBtn}>+ Add New</button>
+          <button className={styles.filterBtn}>🔍 Filter</button>
+          <button className={`${styles.btn} ${styles.editBtn}`}>
+            <FaEdit size={14} /> Edit
+          </button>
           <button
-                      className={styles.filterBtn}
-                    >
-                      🔍 Filter
-                    </button>
-          <button className={`${styles.btn} ${styles.editBtn}`}><FaEdit size={14} /> Edit</button>
-          <button className={`${styles.btn} ${styles.deleteBtn}`}><FaTrash size={14} /> Delete</button>
+            className={`${styles.btn} ${styles.deleteBtn}`}
+            disabled={selectedRow === null}
+            onClick={handleDelete}
+            title="Delete selected plant"
+          >
+            <FaTrash size={14} /> Delete
+          </button>
           <button
-                className={`${styles.btn} ${styles.exportPdfBtn}`} 
-                
-                aria-label="Export table to PDF"
-                type="button"
-              >
-                <span
-                  role="img"
-                  aria-label="Export PDF"
-                  style={{ fontSize: 18 }}
-                >
-                  🗎
-                </span>
-                PDF
-              </button>
+            className={`${styles.btn} ${styles.exportPdfBtn}`}
+            aria-label="Export table to PDF"
+            type="button"
+          >
+            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 }}>
+              🗎
+            </span>
+            PDF
+          </button>
         </div>
       </div>
- 
-    <div className={styles.container}>
-      
 
-       <div  style={{
-              maxHeight: 500,
-              overflowY: "auto",
-              borderRadius: 8,
-               boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
-  border: "1px solid #e2e8f0",
-              marginTop: "50px",
-              height: "100",
-            }}>
-
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th><input type="checkbox" /></th>
-            <th>Plant Name</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {plantData.map((plant, index) => (
-            <tr key={index}>
-              <td><input type="checkbox" /></td>
-              <td>{plant.name}</td>
-              <td>{plant.description}</td>
-              <td>{plant.location}</td>
-              <td><span className={styles.status}>{plant.status}</span></td>
-              <td><VisibilityIcon style={{ color: "#4a5568" }} /></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className={styles.container}>
+        <div
+          style={{
+            maxHeight: 500,
+            overflowY: "auto",
+            borderRadius: 8,
+            boxShadow: "0 0 4px rgba(0, 0, 0, 0.05)",
+            border: "1px solid #e2e8f0",
+            marginTop: "50px",
+            height: "100",
+          }}
+        >
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" />
+                </th>
+                <th>Plant Name</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((plant, index) => (
+                <tr
+                  key={index}
+                  onClick={() => setSelectedRow(index)}
+                  style={{
+                    background: selectedRow === index ? "#f0f4ff" : undefined,
+                  }}
+                >
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedRow === index}
+                      onChange={() => setSelectedRow(index)}
+                    />
+                  </td>
+                  <td>{plant.name}</td>
+                  <td>{plant.description}</td>
+                  <td>{plant.location}</td>
+                  <td>
+                    <span className={styles.status}>{plant.status}</span>
+                  </td>
+                  <td>
+                    <VisibilityIcon style={{ color: "#4a5568" }} />
+                  </td>
+                </tr>
+              ))}
+              <ConfirmDeleteModal
+                open={showDeleteModal}
+                name={
+                  selectedRow !== null && data[selectedRow]
+                    ? data[selectedRow].name
+                    : "plant"
+                }
+                onCancel={() => setShowDeleteModal(false)}
+                onConfirm={confirmDelete}
+              />
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
