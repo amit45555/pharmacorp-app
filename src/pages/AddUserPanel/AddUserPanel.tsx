@@ -35,6 +35,7 @@ interface AddUserPanelProps {
   onSave: (user: UserForm) => void;
   initialData?: UserForm | null;
   mode?: "add" | "edit";
+  panelClassName?: string;
 }
 
 const AddUserPanel = ({
@@ -42,6 +43,7 @@ const AddUserPanel = ({
   onSave,
   initialData = null,
   mode = "add",
+  panelClassName = "",
 }: AddUserPanelProps) => {
   const [form, setForm] = useState<UserForm>(() => {
     const base: UserForm = initialData ?? {
@@ -162,9 +164,12 @@ const AddUserPanel = ({
 
   return (
     <>
-      <form className={styles.panel} onSubmit={handleSubmit}>
+      <form
+        className={`${styles.panel} ${panelClassName}`}
+        onSubmit={handleSubmit}
+      >
         <div className={styles.header}>
-          <h2>
+          <h2 className={styles.title}>
             {mode === "edit" ? `Edit User - ${form.fullName}` : "Add New User"}
           </h2>
           <button type="button" className={styles.closeBtn} onClick={onClose}>

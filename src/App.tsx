@@ -3,6 +3,7 @@ import "./App.module.css";
 import { FormProvider } from "./context/FormContext";
 import { AuthProvider } from "./context/AuthContext";
 import { RolesProvider } from "./RoleMaster/RolesContext";
+import { UserProvider } from "./context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 
@@ -11,9 +12,11 @@ const App: React.FC = () => {
     <AuthProvider>
       <FormProvider>
         <RolesProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <UserProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </UserProvider>
         </RolesProvider>
       </FormProvider>
     </AuthProvider>

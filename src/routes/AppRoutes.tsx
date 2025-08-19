@@ -9,6 +9,9 @@ import Login from "../pages/Login";
 import ApproverDashboard from "../pages/ApproverDashboard";
 import AccessRequestDetails from "../pages/AccessRequestDetails";
 import RoleMasterTable from "../pages/RoleMasterTable/RoleMasterTable";
+import UserMasterTable from "../pages/UserMasterTable/UserMasterTable";
+import AddUserFormPage from "../pages/AddUserPanel/AddUserFormPage";
+import EditUserFormPage from "../pages/AddUserPanel/EditUserFormPage";
 import AddRoleFormPage from "../RoleMaster/AddRoleFormPage";
 import EditRoleFormPage from "../RoleMaster/EditRoleFormPage";
 import VendorMasterTable from "../pages/VendorMasterTable/VendorMasterTable";
@@ -19,6 +22,9 @@ import SuperAdmin from "../pages/SuperAdmin/SuperAdmin";
 const AppRoutes: React.FC = () => (
   <Routes>
     {/* User Flow */}
+    <Route path="/users" element={<UserMasterTable />} />
+    <Route path="/add-user" element={<AddUserFormPage />} />
+    <Route path="/edit-user/:idx" element={<EditUserFormPage />} />
     <Route path="/user-information" element={<UserInformation />} />
     <Route path="/access-details" element={<AccessDetails />} />
     {/* Approver step views: Approver 1, 2, 3 */}
