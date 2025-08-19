@@ -73,18 +73,38 @@ const AddUserPanel = ({
   const handleCheckboxChange = (plant: string) => {
     setForm((prev) => {
       const isSelected = prev.plants.includes(plant);
-      const updatedPlants = isSelected
-        ? prev.plants.filter((p) => p !== plant)
-        : [...prev.plants, plant];
+      // Gather all module keys for that plant
+      const plantModules = [
+        "Role Master",
+        "Vendor Master",
+        "Plant Master",
+        "Application Master",
+        "Approval Workflow",
+      ].map((mod) => `${plant}-${mod}`);
 
+      // Check if any permission is checked for this plant
+      const hasAnyPermission = plantModules.some(
+        (modKey) => (prev.permissions[modKey] || []).length > 0
+      );
+
+      let updatedPlants;
       let newActive = activePlant;
 
       if (!isSelected) {
         // Selecting new plant → make it active
+        updatedPlants = [...prev.plants, plant];
         newActive = plant;
-      } else if (plant === activePlant) {
-        // Deselecting currently active → reset active or pick first available
-        newActive = updatedPlants.length > 0 ? updatedPlants[0] : null;
+      } else {
+        // Only allow unchecking if no permissions are selected for this plant
+        if (hasAnyPermission) {
+          // Prevent unchecking
+          return prev;
+        } else {
+          updatedPlants = prev.plants.filter((p) => p !== plant);
+          if (plant === activePlant) {
+            newActive = updatedPlants.length > 0 ? updatedPlants[0] : null;
+          }
+        }
       }
 
       setActivePlant(newActive);
@@ -132,9 +152,13 @@ const AddUserPanel = ({
       );
 
       // Add or remove plant based on permission status
-      const updatedPlants = hasAnyPermission
-        ? [...new Set([...updatedForm.plants, plantPrefix])] // ensure no duplicates
-        : updatedForm.plants.filter((p) => p !== plantPrefix);
+      let updatedPlants;
+      if (hasAnyPermission) {
+        updatedPlants = [...new Set([...updatedForm.plants, plantPrefix])]; // ensure no duplicates
+      } else {
+        // Auto-uncheck plant only if all permissions are removed
+        updatedPlants = updatedForm.plants.filter((p) => p !== plantPrefix);
+      }
 
       return {
         ...updatedForm,
@@ -233,7 +257,17 @@ const AddUserPanel = ({
             <label className={styles.formLabel}>Plant Selection</label>
             <div className={styles.plants}>
               {plants.map((plant) => (
-                <label key={plant}>
+                <label
+                  key={plant}
+                  style={{
+                    cursor: form.plants.includes(plant) ? "pointer" : "default",
+                  }}
+                  onClick={() => {
+                    if (form.plants.includes(plant)) {
+                      setActivePlant(plant);
+                    }
+                  }}
+                >
                   <input
                     type="checkbox"
                     checked={form.plants.includes(plant)}
