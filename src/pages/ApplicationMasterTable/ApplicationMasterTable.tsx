@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ApplicationMasterTable.module.css";
-import { Eye } from "lucide-react";
+import { FaRegClock } from "react-icons/fa6";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -9,6 +9,8 @@ import { useApplications } from "../../context/ApplicationsContext";
 // Removed unused local applications array. Use context instead.
 
 export default function ApplicationMasterTable() {
+  const [showActivityModal, setShowActivityModal] = React.useState(false);
+  const [activityLogsApp, setActivityLogsApp] = React.useState<any>(null);
   const [selectedRow, setSelectedRow] = React.useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);
   const [showFilterPopover, setShowFilterPopover] = React.useState(false);
@@ -64,11 +66,22 @@ export default function ApplicationMasterTable() {
   const confirmDelete = () => {
     if (selectedRow === null) return;
     const updated = [...applications];
+    const app = updated[selectedRow];
+    // Add activity log for delete
+    if (app) {
+      app.activityLogs = app.activityLogs || [];
+      app.activityLogs.push({
+        action: "Delete",
+        oldValue: { ...app },
+        newValue: "-",
+        approver: localStorage.getItem("username") || "admin",
+        dateTime: new Date().toISOString(),
+      });
+    }
     updated.splice(selectedRow, 1);
     setApplications(updated);
     setSelectedRow(null);
     setShowDeleteModal(false);
-    // After delete, navigate to SuperAdmin with Application tab active
     navigate("/superadmin", { state: { activeTab: "application" } });
   };
 
@@ -283,7 +296,7 @@ export default function ApplicationMasterTable() {
                   <th>Computer</th>
                   <th>Plant</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th>Activity Logs</th>
                 </tr>
               </thead>
               <tbody>
@@ -312,12 +325,321 @@ export default function ApplicationMasterTable() {
                       <span className={styles.status}>{app.status}</span>
                     </td>
                     <td>
-                      <Eye className={styles.icon} />
+                      <button
+                        className={styles.actionBtn}
+                        title="View Activity Logs"
+                        onClick={() => {
+                          setActivityLogsApp(app);
+                          setShowActivityModal(true);
+                        }}
+                      >
+                        <FaRegClock size={17} />
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            {/* Activity Logs Modal */}
+            {showActivityModal && activityLogsApp && (
+              <div
+                className={styles.panelOverlay}
+                style={{ zIndex: 2000, background: "rgba(0,0,0,0.18)" }}
+              >
+                <div
+                  className={styles.panelWrapper}
+                  style={{
+                    maxWidth: 1000,
+                    width: "95%",
+                    left: "53%",
+                    transform: "translateX(-50%)",
+                    position: "fixed",
+                    top: 176,
+                    borderRadius: 16,
+                    boxShadow: "0 8px 32px rgba(11,99,206,0.18)",
+                    padding: "24px 18px 18px 18px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 16,
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, fontSize: 20 }}>
+                      Activity Log
+                    </div>
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 8 }}
+                    >
+                      <button
+                        className={styles.exportPdfBtn}
+                        onClick={async () => {
+                          const jsPDF = (await import("jspdf")).default;
+                          const autoTable = (await import("jspdf-autotable"))
+                            .default;
+                          const doc = new jsPDF({ orientation: "landscape" });
+                          const today = new Date();
+                          const yyyy = today.getFullYear();
+                          const mm = String(today.getMonth() + 1).padStart(
+                            2,
+                            "0"
+                          );
+                          const dd = String(today.getDate()).padStart(2, "0");
+                          const fileName = `activity_log_${yyyy}-${mm}-${dd}.pdf`;
+                          const headers = [
+                            [
+                              "Action",
+                              "Old Value",
+                              "New Value",
+                              "Action Performed By",
+                              "Approved/Rejected By",
+                              "Approval Status",
+                              "Date/Time (IST)",
+                              "Comments",
+                            ],
+                          ];
+                          const allowed = ["edit", "delete", "add"];
+                          const logs = (
+                            Array.isArray(activityLogsApp.activityLogs)
+                              ? activityLogsApp.activityLogs
+                              : [activityLogsApp.activityLogs]
+                          ).filter((log: any) => {
+                            const actionType = (log.action || "").toLowerCase();
+                            return allowed.some((type) =>
+                              actionType.includes(type)
+                            );
+                          });
+                          const rows = logs.map((log: any) => {
+                            let dateObj = new Date(
+                              log.dateTime || log.timestamp
+                            );
+                            let istDate = new Date(
+                              dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                            );
+                            let day = String(istDate.getDate()).padStart(
+                              2,
+                              "0"
+                            );
+                            let month = String(istDate.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            );
+                            let year = String(istDate.getFullYear()).slice(-2);
+                            let hours = String(istDate.getHours()).padStart(
+                              2,
+                              "0"
+                            );
+                            let minutes = String(istDate.getMinutes()).padStart(
+                              2,
+                              "0"
+                            );
+                            let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                            return [
+                              log.action || "-",
+                              JSON.stringify(log.oldValue) || "-",
+                              JSON.stringify(log.newValue) || "-",
+                              log.approver || "-",
+                              log.approvedOrRejectedBy || "-",
+                              log.approvalStatus || "-",
+                              log.dateTime || log.timestamp
+                                ? formattedDate
+                                : "-",
+                              log.reason || log.comment || "-",
+                            ];
+                          });
+                          doc.setFontSize(18);
+                          doc.text("Activity Log", 14, 18);
+                          autoTable(doc, {
+                            head: headers,
+                            body: rows,
+                            startY: 28,
+                            styles: {
+                              fontSize: 11,
+                              cellPadding: 3,
+                              halign: "left",
+                              valign: "middle",
+                            },
+                            headStyles: {
+                              fillColor: [11, 99, 206],
+                              textColor: 255,
+                              fontStyle: "bold",
+                            },
+                            alternateRowStyles: {
+                              fillColor: [240, 245, 255],
+                            },
+                            margin: { left: 14, right: 14 },
+                            tableWidth: "auto",
+                          });
+                          doc.save(fileName);
+                        }}
+                        aria-label="Export activity log to PDF"
+                        type="button"
+                      >
+                        <span
+                          role="img"
+                          aria-label="Export PDF"
+                          style={{ fontSize: 18 }}
+                        >
+                          🗎
+                        </span>
+                        Export PDF
+                      </button>
+                      <button
+                        style={{
+                          background: "#e3e9f7",
+                          border: "none",
+                          borderRadius: 8,
+                          padding: "6px 14px",
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: 18,
+                        }}
+                        onClick={() => setShowActivityModal(false)}
+                        aria-label="Close activity log"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      marginBottom: 12,
+                      fontWeight: 500,
+                      fontSize: 15,
+                      color: "#333",
+                    }}
+                  >
+                    <span>
+                      Application:{" "}
+                      <span style={{ color: "#0b63ce" }}>
+                        {activityLogsApp.name}
+                      </span>
+                    </span>
+                    &nbsp; | &nbsp;
+                    <span>
+                      Version:{" "}
+                      <span style={{ color: "#0b63ce" }}>
+                        {activityLogsApp.version}
+                      </span>
+                    </span>
+                  </div>
+                  <div style={{ marginBottom: 10 }}>
+                    <input
+                      type="text"
+                      placeholder="Filter by Action Performed By"
+                      value={activityLogsApp.approverFilter || ""}
+                      onChange={(e) => {
+                        setActivityLogsApp({
+                          ...activityLogsApp,
+                          approverFilter: e.target.value,
+                        });
+                      }}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: 6,
+                        border: "1px solid #ccc",
+                        fontSize: 14,
+                        width: 220,
+                        marginRight: 12,
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      overflowY: "auto",
+                      maxHeight: 350,
+                      minWidth: "100%",
+                      borderRadius: 8,
+                      boxShadow: "0 2px 8px rgba(11,99,206,0.08)",
+                    }}
+                  >
+                    <table className={styles.table} style={{ minWidth: 1100 }}>
+                      <thead>
+                        <tr>
+                          <th>Action</th>
+                          <th>Old Value</th>
+                          <th>New Value</th>
+                          <th>Action Performed By</th>
+                          <th>Approved/Rejected By</th>
+                          <th>Approval Status</th>
+                          <th>Date/Time (IST)</th>
+                          <th>Comments</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(Array.isArray(activityLogsApp.activityLogs)
+                          ? activityLogsApp.activityLogs
+                          : [activityLogsApp.activityLogs]
+                        )
+                          .filter((log: any) => {
+                            const allowed = ["edit", "delete", "add"];
+                            const actionType = (log.action || "").toLowerCase();
+                            return allowed.some((type) =>
+                              actionType.includes(type)
+                            );
+                          })
+                          .filter(
+                            (log: any) =>
+                              !activityLogsApp.approverFilter ||
+                              (log.approver || "")
+                                .toLowerCase()
+                                .includes(
+                                  activityLogsApp.approverFilter.toLowerCase()
+                                )
+                          )
+                          .map((log: any, i: number) => {
+                            let dateObj = new Date(
+                              log.dateTime || log.timestamp
+                            );
+                            let istDate = new Date(
+                              dateObj.getTime() + 5.5 * 60 * 60 * 1000
+                            );
+                            let day = String(istDate.getDate()).padStart(
+                              2,
+                              "0"
+                            );
+                            let month = String(istDate.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            );
+                            let year = String(istDate.getFullYear()).slice(-2);
+                            let hours = String(istDate.getHours()).padStart(
+                              2,
+                              "0"
+                            );
+                            let minutes = String(istDate.getMinutes()).padStart(
+                              2,
+                              "0"
+                            );
+                            let formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+                            return (
+                              <tr key={i}>
+                                <td>{log.action || "-"}</td>
+                                <td>{JSON.stringify(log.oldValue) || "-"}</td>
+                                <td>{JSON.stringify(log.newValue) || "-"}</td>
+                                <td>{log.approver || "-"}</td>
+                                <td>{log.approvedOrRejectedBy || "-"}</td>
+                                <td>{log.approvalStatus || "-"}</td>
+                                <td>
+                                  {log.dateTime || log.timestamp
+                                    ? formattedDate
+                                    : "-"}
+                                </td>
+                                <td>{log.reason || log.comment || "-"}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

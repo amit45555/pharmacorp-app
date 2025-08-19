@@ -7,6 +7,16 @@ export interface Application {
   computer: string;
   plant: string;
   status: string;
+  activityLogs?: Array<{
+    action: string;
+    oldValue: any;
+    newValue: any;
+    approver: string;
+    approvedOrRejectedBy?: string;
+    approvalStatus?: string;
+    dateTime: string;
+    reason?: string;
+  }>;
 }
 
 const initialApplications: Application[] = [
@@ -17,6 +27,7 @@ const initialApplications: Application[] = [
     computer: "MUMAPP01",
     plant: "Mumbai Plant",
     status: "ACTIVE",
+    activityLogs: [],
   },
   {
     name: "ZingHR",
@@ -25,6 +36,7 @@ const initialApplications: Application[] = [
     computer: "MUMAPP02",
     plant: "Mumbai Plant",
     status: "ACTIVE",
+    activityLogs: [],
   },
   {
     name: "Manufacturing Execution System",
@@ -33,6 +45,7 @@ const initialApplications: Application[] = [
     computer: "GOAAPP01",
     plant: "Goa Plant",
     status: "ACTIVE",
+    activityLogs: [],
   },
   {
     name: "Quality Management System",
@@ -41,6 +54,7 @@ const initialApplications: Application[] = [
     computer: "CHENAPP01",
     plant: "Chennai Plant",
     status: "ACTIVE",
+    activityLogs: [],
   },
   {
     name: "Laboratory Information System",
@@ -49,6 +63,7 @@ const initialApplications: Application[] = [
     computer: "PUNAPP01",
     plant: "Pune Plant",
     status: "ACTIVE",
+    activityLogs: [],
   },
 ];
 
