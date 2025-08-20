@@ -70,7 +70,7 @@ const initialUsers: UserWithLogs[] = [
     ],
   },
   {
-    fullName: "Sneha Desaii",
+    fullName: "Sneha Desai",
     email: "sneha.desai@unichemlab.com",
     empCode: "EMP002",
     department: "HR",
