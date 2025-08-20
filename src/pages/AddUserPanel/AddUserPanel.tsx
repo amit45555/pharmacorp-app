@@ -326,6 +326,7 @@ const AddUserPanel = ({
                               !isDisabled &&
                               handlePermissionToggle(moduleKey, perm)
                             }
+                          className={styles.activePlantCheckbox}
                           />
                         );
                       })}
@@ -337,26 +338,28 @@ const AddUserPanel = ({
           )}
 
           <div className={styles.sectionCard}>
-            <label className={styles.formLabel}>
-              Central Master Permission
-            </label>
-            <div className={styles.centralTable}>
-              <div className={styles.rowCheckbox}>
-                <input
-                  type="checkbox"
-                  id="centralPermission"
-                  checked={form.centralPermission}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      centralPermission: e.target.checked,
-                    })
-                  }
-                />
-                <label htmlFor="centralPermission">Central Master</label>
-              </div>
-            </div>
-          </div>
+  <label className={styles.formLabel}>
+    Central Master Permission
+  </label>
+  <div className={styles.chipGroup}>
+    <label
+      className={`${styles.chip} ${form.centralPermission ? styles.chipActive : ""}`}
+    >
+      <input
+        type="checkbox"
+        checked={form.centralPermission}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            centralPermission: e.target.checked,
+          })
+        }
+      />
+      Central Master
+    </label>
+  </div>
+</div>
+
 
           {form.centralPermission && (
             <div className={`${styles.centralSection} ${styles.fadeIn}`}>
@@ -392,7 +395,7 @@ const AddUserPanel = ({
               </div>
             </div>
           )}
-
+        <div className={styles.sectionCard}>
           <div className={styles.commentBox}>
             <label htmlFor="comment">Comment</label>
             <textarea
@@ -402,7 +405,7 @@ const AddUserPanel = ({
               onChange={(e) => setForm({ ...form, comment: e.target.value })}
             />
           </div>
-
+        </div>
           <div className={styles.actions}>
             <button
               type="button"
