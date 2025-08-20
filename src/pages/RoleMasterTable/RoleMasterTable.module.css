@@ -292,7 +292,7 @@ tbody td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #eef5fe;
+  background: #e7f4f1;
   padding: 5px 7px;
   font-size: 18px;
   transition: background 0.16s, color 0.18s;
@@ -516,7 +516,7 @@ tbody td {
 
 
 .container {
-  padding: 24px;
+  margin-top: 25px;
 
   font-family: "Segoe UI", sans-serif;
 }

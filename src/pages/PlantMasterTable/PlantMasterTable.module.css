@@ -3,7 +3,7 @@
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
  
-  margin: 20px;
+  margin: 25px;
 }
 
 .header {
@@ -243,5 +243,15 @@ background: #005fbb;
   background: #084a9e;
   color: #fff;
   border-color: #084a9e;
+}
+
+
+.radioInput {
+  outline: none;
+  box-shadow: none;
+}
+.radioInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 

@@ -103,7 +103,7 @@ const PlantMasterTable: React.FC = () => {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" />
+                  
                 </th>
                 <th>Plant Name</th>
                 <th>Description</th>
@@ -123,7 +123,8 @@ const PlantMasterTable: React.FC = () => {
                 >
                   <td>
                     <input
-                      type="checkbox"
+                      type="radio"
+                      className={styles.radioInput}
                       checked={selectedRow === index}
                       onChange={() => setSelectedRow(index)}
                     />

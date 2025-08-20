@@ -231,7 +231,8 @@
   border-radius: 8px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
-  margin: 50px;
+  margin: 25px;
+margin-top: 50px;
   overflow: hidden;
 }
 table {
@@ -252,4 +253,13 @@ tbody td {
   padding: 14px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
+}
+
+.radioInput {
+  outline: none;
+  box-shadow: none;
+}
+.radioInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

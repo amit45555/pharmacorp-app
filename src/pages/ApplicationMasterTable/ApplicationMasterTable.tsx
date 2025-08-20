@@ -6,6 +6,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 import { useApplications } from "../../context/ApplicationsContext";
+import { Margin } from "@mui/icons-material";
 // Removed unused local applications array. Use context instead.
 
 export default function ApplicationMasterTable() {
@@ -203,7 +204,7 @@ export default function ApplicationMasterTable() {
             type="button"
             style={{ border: "1px solid #0b63ce" }}
           >
-            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 }}>
+            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 } }  className={styles.exportIcon}>
               🗎
             </span>
             PDF
