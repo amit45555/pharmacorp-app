@@ -2,40 +2,53 @@
 .addUserFormPageWrapper {
   width: 100vw;
   height: 100vh;
-  background: #f8fafc;
+  background: #f1f5f9; /* softer background */
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  padding: 20px;
 }
 
 .addUserFormPageContainer {
-  width: 100vw;
-  max-width: 1200px;
-  min-height: 90vh;
-  height: 96vh;
-  background: #fff;
+  width: 100%;
+  max-width: 550px;
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(11, 99, 206, 0.08);
-  padding: 32px;
-  overflow-y: auto;
+  padding: 40px 32px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+
+.addUserFormPageContainer h2 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 28px;
+  color: #0b2540;
+  border-bottom: 2px solid #e3e9f7;
+  padding-bottom: 10px;
 }
 
 .input {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #dbeafe;
-  font-size: 16px;
-  margin-bottom: 0;
-  background: #f8fafc;
-  transition: border 0.2s;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #d1d9e6;
+  font-size: 15px;
+  background: #f9fbfd;
+  transition: all 0.25s ease;
 }
+
 .input:focus {
   border-color: #0b63ce;
+  background: #fff;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(11, 99, 206, 0.15);
 }
+
+
 .container {
   border-radius: 12px;
   padding: 24px;
@@ -82,12 +95,21 @@
 }
 
 .deleteButton {
-  background-color: #dc3545;
-  color: white;
+  background: #ef4444;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
+  flex: 1;
+  transition: transform 0.15s ease, background 0.2s;
+}
+
+.deleteButton:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
 }
 
 .table {
@@ -179,19 +201,21 @@ tbody tr {
 }
 
 .addUserBtn {
-  background-color: #24bb6a;
+  background: linear-gradient(90deg, #24bb6a, #1a8738);
   color: #fff;
-  padding: 7px 14px;
+  padding: 10px 18px;
   border-radius: 8px;
   border: none;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 1px 2px rgba(90, 96, 120, 0.07);
-  transition: background 0.18s;
+  flex: 1;
+  transition: transform 0.15s ease, background 0.2s;
 }
+
 .addUserBtn:hover {
-  background-color: #198754;
+  background: linear-gradient(90deg, #1a8738, #0f5f27);
+  transform: translateY(-2px);
 }
 .filterBtn {
   background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
@@ -242,6 +266,7 @@ tbody tr {
   background: #ef5350;
   color: #fff;
 }
+
 .deleteBtn:hover,
 .deleteBtn:focus {
   background: #bc3c2c;
@@ -377,4 +402,21 @@ tbody tr {
   margin-right: 6px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.formActions {
+  display: flex;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
