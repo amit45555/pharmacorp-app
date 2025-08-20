@@ -6,7 +6,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 import { useApplications } from "../../context/ApplicationsContext";
-import { Margin } from "@mui/icons-material";
+
 // Removed unused local applications array. Use context instead.
 
 export default function ApplicationMasterTable() {
