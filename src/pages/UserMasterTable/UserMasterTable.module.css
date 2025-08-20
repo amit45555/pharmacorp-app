@@ -98,6 +98,7 @@
   position: absolute;
   top: 60px;
   left: 0;
+  
   z-index: 1000;
   background: #fff;
   border-radius: 12px;
@@ -190,7 +191,7 @@
 }
 .container {
   padding: 24px;
-
+ 
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -226,6 +227,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+ 
 }
 
 .controls input {
@@ -233,6 +235,7 @@
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  
 }
 
 .controlButtons button {
@@ -401,12 +404,6 @@ padding: 14px;
   color: #333;
 }
 
-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
 
 .filterDropdown {
   padding: 6px 10px;

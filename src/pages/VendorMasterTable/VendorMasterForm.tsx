@@ -51,80 +51,105 @@ const VendorMasterForm: React.FC<Props> = ({
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <h2>{mode === "add" ? "Add Vendor" : "Edit Vendor"}</h2>
-      <div className={styles.fieldGroup}>
-        <label>Vendor Code</label>
-        <input
-          name="empCode"
-          value={form.empCode}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>Vendor Name</label>
-        <input
-          name="vendorName"
-          value={form.vendorName}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>Contact Person</label>
-        <input
-          name="contactPerson"
-          value={form.contactPerson}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>Contact Number</label>
-        <input
-          name="contactNumber"
-          value={form.contactNumber}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>Email</label>
-        <input
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>Address</label>
-        <textarea
-          name="address"
-          value={form.address}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.fieldGroup}>
-        <label>GST Number</label>
-        <input
-          name="gstNumber"
-          value={form.gstNumber}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.buttonGroup}>
-        <button type="submit" className={styles.saveBtn}>
-          {mode === "add" ? "Add Vendor" : "Save Changes"}
-        </button>
-        <button type="button" className={styles.cancelBtn} onClick={onClose}>
-          Cancel
+    <div className={styles.formContainer}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>
+          {mode === "add" ? "Add Vendor" : "Edit Vendor"}
+        </h2>
+        <button type="button" className={styles.closeBtn} onClick={onClose}>
+          ×
         </button>
       </div>
-    </form>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Vendor Code</label>
+          <input
+            className={styles.input}
+            name="empCode"
+            value={form.empCode}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Vendor Name</label>
+          <input
+            className={styles.input}
+            name="vendorName"
+            value={form.vendorName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Contact Person</label>
+          <input
+            className={styles.input}
+            name="contactPerson"
+            value={form.contactPerson}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Contact Number</label>
+          <input
+            className={styles.input}
+            name="contactNumber"
+            value={form.contactNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Email</label>
+          <input
+            className={styles.input}
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Address</label>
+          <textarea
+            className={styles.input}
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>GST Number</label>
+          <input
+            className={styles.input}
+            name="gstNumber"
+            value={form.gstNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formActions}>
+          <button type="submit" className={styles.saveBtn}>
+            {mode === "add" ? "Add Vendor" : "Save Changes"}
+          </button>
+          <button type="button" className={styles.cancelBtn} onClick={onClose}>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
