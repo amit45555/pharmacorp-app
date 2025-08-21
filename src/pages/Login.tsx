@@ -45,7 +45,6 @@ const LogoHeading = () => (
       />
     </div>
     <div className={styles.logoUam}>User Access Management</div>
-    <div className={styles.logoModule}>(UAM) Module</div>
   </div>
 );
 

@@ -204,7 +204,12 @@ export default function ApplicationMasterTable() {
             type="button"
             style={{ border: "1px solid #0b63ce" }}
           >
-            <span role="img" aria-label="Export PDF" style={{ fontSize: 18 } }  className={styles.exportIcon}>
+            <span
+              role="img"
+              aria-label="Export PDF"
+              style={{ fontSize: 18 }}
+              className={styles.exportIcon}
+            >
               🗎
             </span>
             PDF
@@ -361,6 +366,7 @@ export default function ApplicationMasterTable() {
                     padding: "24px 18px 18px 18px",
                     display: "flex",
                     flexDirection: "column",
+                    background: "#fff",
                   }}
                 >
                   <div
