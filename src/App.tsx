@@ -7,10 +7,12 @@ import { UserProvider } from "./context/UserContext";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import { ApplicationsProvider } from "./context/ApplicationsContext";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
+      <SpeedInsights />
       <FormProvider>
         <RolesProvider>
           <UserProvider>
