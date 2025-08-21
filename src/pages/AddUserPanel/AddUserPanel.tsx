@@ -118,13 +118,52 @@ const AddUserPanel = ({
 
   const handlePermissionToggle = (module: string, action: string) => {
     setForm((prev) => {
-      const currentPermissions = prev.permissions[module] || [];
+      let currentPermissions = prev.permissions[module] || [];
+      let updatedPermissions = [...currentPermissions];
       const isChecked = currentPermissions.includes(action);
 
-      // Toggle the permission
-      const updatedPermissions = isChecked
-        ? currentPermissions.filter((a) => a !== action)
-        : [...currentPermissions, action];
+      // If Add/Edit/Delete is checked, always check View and disable it
+      const triggers = ["Add", "Edit", "Delete"];
+      if (triggers.includes(action)) {
+        if (!isChecked) {
+          if (!updatedPermissions.includes(action))
+            updatedPermissions.push(action);
+          if (!updatedPermissions.includes("View"))
+            updatedPermissions.push("View");
+        } else {
+          updatedPermissions = updatedPermissions.filter((a) => a !== action);
+          // If none of Add/Edit/Delete is checked, allow View to be toggled
+          const stillChecked = triggers.some(
+            (t) => t !== action && updatedPermissions.includes(t)
+          );
+          if (!stillChecked) {
+            // Do not auto-uncheck View, just allow toggling
+          }
+        }
+      } else if (action === "View") {
+        // Only allow toggling 'View' if none of Add/Edit/Delete is checked
+        const anyTriggerChecked = triggers.some((t) =>
+          currentPermissions.includes(t)
+        );
+        if (!anyTriggerChecked) {
+          if (!isChecked) {
+            updatedPermissions.push("View");
+          } else {
+            updatedPermissions = updatedPermissions.filter((a) => a !== "View");
+          }
+        }
+      }
+
+      // Remove duplicates
+      updatedPermissions = Array.from(new Set(updatedPermissions));
+
+      // If any of Add/Edit/Delete is present, ensure View is present
+      const anyTriggerChecked = triggers.some((t) =>
+        updatedPermissions.includes(t)
+      );
+      if (anyTriggerChecked && !updatedPermissions.includes("View")) {
+        updatedPermissions.push("View");
+      }
 
       const updatedForm = {
         ...prev,
@@ -136,8 +175,6 @@ const AddUserPanel = ({
 
       // Extract plant name from module key: e.g., "GOA-Role Master" → "GOA"
       const plantPrefix = module.split("-")[0];
-
-      // Gather all module keys for that plant
       const plantModules = [
         "Role Master",
         "Vendor Master",
@@ -145,21 +182,15 @@ const AddUserPanel = ({
         "Application Master",
         "Approval Workflow",
       ].map((mod) => `${plantPrefix}-${mod}`);
-
-      // Check if any permission is checked for this plant
       const hasAnyPermission = plantModules.some(
         (modKey) => (updatedForm.permissions[modKey] || []).length > 0
       );
-
-      // Add or remove plant based on permission status
       let updatedPlants;
       if (hasAnyPermission) {
-        updatedPlants = [...new Set([...updatedForm.plants, plantPrefix])]; // ensure no duplicates
+        updatedPlants = [...new Set([...updatedForm.plants, plantPrefix])];
       } else {
-        // Auto-uncheck plant only if all permissions are removed
         updatedPlants = updatedForm.plants.filter((p) => p !== plantPrefix);
       }
-
       return {
         ...updatedForm,
         plants: updatedPlants,
@@ -203,67 +234,74 @@ const AddUserPanel = ({
 
         <div className={styles.form}>
           <div className={styles.sectionCard}>
-          <label className={styles.formLabel}>User Details</label>
-          <div className={styles.grid}>
-            <div>
-              <label>Full Name *</label>
-              <input
-                value={form.fullName}
-                onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-              />
+            <label className={styles.formLabel}>User Details</label>
+            <div className={styles.grid}>
+              <div>
+                <label>Full Name *</label>
+                <input
+                  value={form.fullName}
+                  onChange={(e) =>
+                    setForm({ ...form, fullName: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label>Email *</label>
+                <input
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+                <span className={styles.helperText}>
+                  Please enter a valid official email address.
+                </span>
+              </div>
+              <div>
+                <label>Employee Code *</label>
+                <input
+                  value={form.empCode}
+                  onChange={(e) =>
+                    setForm({ ...form, empCode: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label>Department *</label>
+                <select
+                  value={form.department}
+                  onChange={(e) =>
+                    setForm({ ...form, department: e.target.value })
+                  }
+                >
+                  <option value="">Select Department</option>
+                  <option value="IT">IT</option>
+                  <option value="QA">QA</option>
+                  <option value="HR">HR</option>
+                  <option value="Production">Production</option>
+                  <option value="Finance">Finance</option>
+                </select>
+              </div>
+              <div>
+                <label>Status *</label>
+                <select
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label>Email *</label>
-              <input
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-
-              />
-              <span className={styles.helperText}>Please enter a valid official email address.</span>
-            </div>
-            <div>
-              <label>Employee Code *</label>
-              <input
-                value={form.empCode}
-                onChange={(e) => setForm({ ...form, empCode: e.target.value })}
-              />
-            </div>
-            <div>
-              <label>Department *</label>
-              <select
-                value={form.department}
-                onChange={(e) =>
-                  setForm({ ...form, department: e.target.value })
-                }
-              >
-                <option value="">Select Department</option>
-                <option value="IT">IT</option>
-                <option value="QA">QA</option>
-                <option value="HR">HR</option>
-                <option value="Production">Production</option>
-                <option value="Finance">Finance</option>
-              </select>
-            </div>
-            <div>
-              <label>Status *</label>
-              <select
-                value={form.status}
-                onChange={(e) => setForm({ ...form, status: e.target.value })}
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
           </div>
           <div className={styles.sectionCard}>
-  <label className={styles.formLabel}>Plant Selection</label>
-  <div className={styles.chipGroup}>
-    {plants.map(plant => (
-      <button
-        type="button"
-        className={`${styles.chip} ${form.plants.includes(plant) ? styles.chipActive : ""}`}
-        key={plant}
+            <label className={styles.formLabel}>Plant Selection</label>
+            <div className={styles.chipGroup}>
+              {plants.map((plant) => (
+                <button
+                  type="button"
+                  className={`${styles.chip} ${
+                    form.plants.includes(plant) ? styles.chipActive : ""
+                  }`}
+                  key={plant}
                   style={{
                     cursor: form.plants.includes(plant) ? "pointer" : "default",
                   }}
@@ -271,8 +309,8 @@ const AddUserPanel = ({
                     if (form.plants.includes(plant)) {
                       setActivePlant(plant);
                     }
-        }}
-      >
+                  }}
+                >
                   <input
                     type="checkbox"
                     checked={form.plants.includes(plant)}
@@ -280,12 +318,16 @@ const AddUserPanel = ({
                   />
                   {plant}
                 </button>
-    ))}
-  </div>
-</div>
+              ))}
+            </div>
+          </div>
 
           {activePlant && form.plants.includes(activePlant) && (
-            <div className={`${styles.plantTableWrapper} ${!activePlant ? styles.plantTableWrapperHidden : ""}`}>
+            <div
+              className={`${styles.plantTableWrapper} ${
+                !activePlant ? styles.plantTableWrapperHidden : ""
+              }`}
+            >
               <label className={styles.sectionTitle}>
                 Module Permissions for {activePlant}
               </label>
@@ -309,10 +351,17 @@ const AddUserPanel = ({
                       <span>{mod}</span>
                       {permissions.map((perm) => {
                         const isApprovalWorkflow = mod === "Approval Workflow";
-                        const isDisabled =
+                        let isDisabled =
                           isApprovalWorkflow &&
                           (perm === "Add" || perm === "Delete");
-
+                        // Disable 'View' if any of Add/Edit/Delete is checked
+                        const triggers = ["Add", "Edit", "Delete"];
+                        if (!isDisabled && perm === "View") {
+                          const anyTriggerChecked = triggers.some((t) =>
+                            form.permissions[moduleKey]?.includes(t)
+                          );
+                          if (anyTriggerChecked) isDisabled = true;
+                        }
                         return (
                           <input
                             key={perm}
@@ -326,7 +375,7 @@ const AddUserPanel = ({
                               !isDisabled &&
                               handlePermissionToggle(moduleKey, perm)
                             }
-                          className={styles.activePlantCheckbox}
+                            className={styles.activePlantCheckbox}
                           />
                         );
                       })}
@@ -338,28 +387,29 @@ const AddUserPanel = ({
           )}
 
           <div className={styles.sectionCard}>
-  <label className={styles.formLabel}>
-    Central Master Permission
-  </label>
-  <div className={styles.chipGroup}>
-    <label
-      className={`${styles.chip} ${form.centralPermission ? styles.chipActive : ""}`}
-    >
-      <input
-        type="checkbox"
-        checked={form.centralPermission}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            centralPermission: e.target.checked,
-          })
-        }
-      />
-      Central Master
-    </label>
-  </div>
-</div>
-
+            <label className={styles.formLabel}>
+              Central Master Permission
+            </label>
+            <div className={styles.chipGroup}>
+              <label
+                className={`${styles.chip} ${
+                  form.centralPermission ? styles.chipActive : ""
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={form.centralPermission}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      centralPermission: e.target.checked,
+                    })
+                  }
+                />
+                Central Master
+              </label>
+            </div>
+          </div>
 
           {form.centralPermission && (
             <div className={`${styles.centralSection} ${styles.fadeIn}`}>
@@ -382,30 +432,46 @@ const AddUserPanel = ({
                 ].map((mod) => (
                   <div className={styles.row} key={`central-${mod}`}>
                     <span>{mod}</span>
-                    {permissions.map((perm) => (
-                      <input
-                        key={perm}
-                        type="checkbox"
-                        checked={form.permissions[mod]?.includes(perm) || false}
-                        onChange={() => handlePermissionToggle(mod, perm)}
-                      />
-                    ))}
+                    {permissions.map((perm) => {
+                      let isDisabled = false;
+                      // For central, if any of Add/Edit/Delete is checked, disable 'View'
+                      const triggers = ["Add", "Edit", "Delete"];
+                      if (perm === "View") {
+                        const anyTriggerChecked = triggers.some((t) =>
+                          form.permissions[mod]?.includes(t)
+                        );
+                        if (anyTriggerChecked) isDisabled = true;
+                      }
+                      return (
+                        <input
+                          key={perm}
+                          type="checkbox"
+                          checked={
+                            form.permissions[mod]?.includes(perm) || false
+                          }
+                          disabled={isDisabled}
+                          onChange={() =>
+                            !isDisabled && handlePermissionToggle(mod, perm)
+                          }
+                        />
+                      );
+                    })}
                   </div>
                 ))}
               </div>
             </div>
           )}
-        <div className={styles.sectionCard}>
-          <div className={styles.commentBox}>
-            <label htmlFor="comment">Comment</label>
-            <textarea
-              id="comment"
-              placeholder="Enter comment here..."
-              value={form.comment}
-              onChange={(e) => setForm({ ...form, comment: e.target.value })}
-            />
+          <div className={styles.sectionCard}>
+            <div className={styles.commentBox}>
+              <label htmlFor="comment">Comment</label>
+              <textarea
+                id="comment"
+                placeholder="Enter comment here..."
+                value={form.comment}
+                onChange={(e) => setForm({ ...form, comment: e.target.value })}
+              />
+            </div>
           </div>
-        </div>
           <div className={styles.actions}>
             <button
               type="button"
