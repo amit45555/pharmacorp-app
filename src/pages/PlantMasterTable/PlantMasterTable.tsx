@@ -3,10 +3,10 @@ import styles from "./PlantMasterTable.module.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { FaRegListAlt } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { FaRegClock } from "react-icons/fa6";
 
 const plantData = [
   {
@@ -303,7 +303,7 @@ const PlantMasterTable: React.FC = () => {
                         setShowActivityModal(true);
                       }}
                     >
-                      <FaRegListAlt size={18} />
+                      <FaRegClock size={18} />
                     </span>
                   </td>
                 </tr>
@@ -343,6 +343,7 @@ const PlantMasterTable: React.FC = () => {
               padding: "24px 18px 18px 18px",
               display: "flex",
               flexDirection: "column",
+              background: "#fff",
             }}
           >
             <div
