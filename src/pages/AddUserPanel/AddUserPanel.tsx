@@ -68,7 +68,13 @@ const AddUserPanel = ({
     return { ...base, permissions: permissionsWithAllModules };
   });
 
-  const [activePlant, setActivePlant] = useState<string | null>(null);
+  // Set activePlant to the first selected plant on initial load (edit mode)
+  const [activePlant, setActivePlant] = React.useState<string | null>(() => {
+    if (initialData && initialData.plants && initialData.plants.length > 0) {
+      return initialData.plants[0];
+    }
+    return null;
+  });
 
   const handleCheckboxChange = (plant: string) => {
     setForm((prev) => {
@@ -163,6 +169,15 @@ const AddUserPanel = ({
       );
       if (anyTriggerChecked && !updatedPermissions.includes("View")) {
         updatedPermissions.push("View");
+      }
+
+      // If all permissions are removed, ensure View is also removed
+      const allPerms = ["Add", "Edit", "Delete", "View"];
+      const noneChecked = allPerms.every(
+        (p) => !updatedPermissions.includes(p)
+      );
+      if (noneChecked) {
+        updatedPermissions = [];
       }
 
       const updatedForm = {
@@ -295,30 +310,56 @@ const AddUserPanel = ({
           <div className={styles.sectionCard}>
             <label className={styles.formLabel}>Plant Selection</label>
             <div className={styles.chipGroup}>
-              {plants.map((plant) => (
-                <button
-                  type="button"
-                  className={`${styles.chip} ${
-                    form.plants.includes(plant) ? styles.chipActive : ""
-                  }`}
-                  key={plant}
-                  style={{
-                    cursor: form.plants.includes(plant) ? "pointer" : "default",
-                  }}
-                  onClick={() => {
-                    if (form.plants.includes(plant)) {
+              {plants.map((plant) => {
+                // Determine if any permission is set for this plant
+                const plantModules = [
+                  "Role Master",
+                  "Vendor Master",
+                  "Plant Master",
+                  "Application Master",
+                  "Approval Workflow",
+                ].map((mod) => `${plant}-${mod}`);
+                const hasAnyPermission = plantModules.some(
+                  (modKey) => (form.permissions[modKey] || []).length > 0
+                );
+                return (
+                  <button
+                    type="button"
+                    className={`${styles.chip} ${
+                      form.plants.includes(plant) ? styles.chipActive : ""
+                    }`}
+                    key={plant}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      // Always allow selecting a chip to view permissions
                       setActivePlant(plant);
-                    }
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={form.plants.includes(plant)}
-                    onChange={() => handleCheckboxChange(plant)}
-                  />
-                  {plant}
-                </button>
-              ))}
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={form.plants.includes(plant)}
+                      disabled={form.plants.includes(plant) && hasAnyPermission}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleCheckboxChange(plant);
+                        // If plant is being checked, set as active
+                        if (!form.plants.includes(plant)) {
+                          setActivePlant(plant);
+                        } else if (activePlant === plant) {
+                          // If plant is being unchecked and was active, set next available as active
+                          const remaining = form.plants.filter(
+                            (p) => p !== plant
+                          );
+                          setActivePlant(
+                            remaining.length > 0 ? remaining[0] : null
+                          );
+                        }
+                      }}
+                    />
+                    {plant}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -333,7 +374,6 @@ const AddUserPanel = ({
               </label>
               <div className={styles.table}>
                 <div className={styles.rowHeader}>
-                  <span>Module Name</span>
                   {permissions.map((perm) => (
                     <span key={perm}>{perm}</span>
                   ))}
@@ -400,10 +440,7 @@ const AddUserPanel = ({
                   type="checkbox"
                   checked={form.centralPermission}
                   onChange={(e) =>
-                    setForm({
-                      ...form,
-                      centralPermission: e.target.checked,
-                    })
+                    setForm({ ...form, centralPermission: e.target.checked })
                   }
                 />
                 Central Master
@@ -461,6 +498,7 @@ const AddUserPanel = ({
               </div>
             </div>
           )}
+
           <div className={styles.sectionCard}>
             <div className={styles.commentBox}>
               <label htmlFor="comment">Comment</label>
