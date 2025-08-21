@@ -175,33 +175,35 @@ tbody td {
   margin-top: 12px;
 }
 .saveBtn {
-  background: #2563eb;
+  background: #1565c0;
   color: #fff;
   border: none;
-  border-radius: 7px;
-  padding: 8px 28px;
+  border-radius: 8px;
+  padding: 9px 28px;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
-  margin-right: 30px;
-  margin-left: 30px;
+  margin-right: 50px;
 }
 .saveBtn:hover {
-  background: #1747b6;
+  background: #0d4d9a;
 }
+
 .cancelBtn {
-  background: #e5e7eb;
-  color: #374151;
-  border: 2px solid #0a3164;
-  border-radius: 7px;
-  padding: 8px 20px;
+  background: #f3f6fc;
+  color: #1565c0;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 24px;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 .cancelBtn:hover {
-  background: #ced7e1;
+  background: #e2eaf7;
+  color: #0d4d9a;
 }
 
 .advancedFilterOverlay {
@@ -210,7 +212,9 @@ tbody td {
   z-index: 1300;
 }
 .advancedFilterPanel {
-  position: absolute;
+
+
+    position: absolute;
   top: 148px;
   right: 344px;
  height: 330px;
@@ -228,7 +232,13 @@ tbody td {
   flex-direction: column;
   gap: 18px;
   animation: filterFadeIn 0.23s ease;
+
+  
+  
 }
+
+
+
 
 @keyframes filterFadeIn {
   from {
@@ -241,44 +251,68 @@ tbody td {
   }
 }
 
+
+.filterPopover {
+  position: absolute;
+  top: 148px;
+  right: 344px;
+  z-index: 1400;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(11, 99, 206, 0.18);
+  min-width: 320px;
+  padding: 20px 22px 24px 22px;
+  animation: fadeIn 0.2s;
+  font-family: "Segoe UI", sans-serif;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .advancedFilterHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 19px;
+font-size: 18px;
   font-weight: 600;
-  color: #2563eb;
-  margin-bottom: 8px;
-  letter-spacing: 0.2px;
+  color: #1565c0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #e5eaf5;
+  padding-bottom: 8px;
 }
 .advancedFilterRow {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  margin-bottom: 4px;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
 .advancedFilterRow label {
-  font-size: 15px;
-  color: #274b79;
-  margin-bottom: 2px;
+  font-size: 14px;
   font-weight: 500;
-  display: block;
+  color: #274b79;
 }
 
 .advancedFilterRow select,
 .advancedFilterRow input {
   padding: 9px 12px;
-  border: 1px solid #d0dae8;
-  border-radius: 6px;
-  font-size: 15px;
+  border: 1px solid #cfd9e8;
+  border-radius: 8px;
+  font-size: 14px;
   outline: none;
-  transition: border 0.15s;
+  transition: border 0.2s;
 }
 
 .advancedFilterRow select:focus,
 .advancedFilterRow input:focus {
-  border-color: #2563eb;
+border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
 .advancedFilterBackdrop {
@@ -387,9 +421,9 @@ tbody td {
 
 .advancedFilterPanel .filterActions {
   display: flex;
+  justify-content: flex-start;
   gap: 12px;
-  margin-top: 14px;
-  justify-content: flex-end;
+  margin-top: 12px;
 }
 
 .advancedFilterPanel .saveBtn {

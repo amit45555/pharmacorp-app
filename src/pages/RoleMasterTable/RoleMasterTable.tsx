@@ -350,16 +350,10 @@ export default function RoleMasterTable() {
           <div className={styles.controls}>
             {showFilterPanel && (
               <div className={styles.advancedFilterOverlay}>
-                <div className={styles.advancedFilterPanel}>
+                <div className={styles.filterPopover}>
                   <div className={styles.advancedFilterHeader}>
                     <span>Advanced Filter</span>
-                    <button
-                      type="button"
-                      onClick={() => setShowFilterPanel(false)}
-                      aria-label="Close"
-                    >
-                      ✕
-                    </button>
+                    
                   </div>
                   <div className={styles.advancedFilterRow}>
                     <label>Column</label>

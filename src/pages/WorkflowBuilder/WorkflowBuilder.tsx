@@ -230,7 +230,7 @@ const WorkflowBuilder: React.FC = () => {
   return (
     <div>
     <header className={styles["main-header"]}>
-              <h2 className={styles["header-title"]}>User Master</h2>
+              <h2 className={styles["header-title"]}>Approver WorkFlow</h2>
               
             </header>
     <div className={styles.container} aria-label="Workflow Approver Master">
