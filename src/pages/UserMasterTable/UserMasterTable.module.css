@@ -96,9 +96,9 @@
 
 .filterPopover {
   position: absolute;
-  top: 60px;
-  left: 0;
-  
+  top :148px;
+  right: 344px;
+ height: 230px;
   z-index: 1000;
   background: #fff;
   border-radius: 12px;
@@ -146,7 +146,7 @@
   padding: 8px 20px;
   font-size: 1rem;
   font-weight: 600;
-  margin-right: 10px;
+  margin-right: 50px;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -523,4 +523,9 @@ background: #005fbb;
   gap: 18px;
 
   align-items: center;
+}
+
+
+.filterPopoverFooter{
+  text-align: center;
 }
