@@ -67,7 +67,8 @@
 display: flex;
   gap: 12px;
   margin-top: 16px;
-  position: sticky;   /* ✅ sticks to bottom of container */
+/* ✅ sticks to bottom of container */
+     
   bottom: 0;
   background: #fff;
   padding: 12px 0;
