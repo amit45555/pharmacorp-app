@@ -388,17 +388,18 @@ const UserMasterTable = () => {
             <div
               className={styles.panelWrapper}
               style={{
-                maxWidth: 1000,
-                width: "95%",
-                left: "53%",
+                maxWidth: 1400,
+                width: "72%",
+                left: "54%",
                 transform: "translateX(-50%)",
                 position: "fixed",
-                top: 176,
+                top: 193,
                 borderRadius: 16,
                 boxShadow: "0 8px 32px rgba(11,99,206,0.18)",
                 padding: "24px 18px 18px 18px",
                 display: "flex",
                 flexDirection: "column",
+                height: "max-content",
               }}
             >
               <div
