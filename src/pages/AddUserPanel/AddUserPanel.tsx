@@ -374,6 +374,7 @@ const AddUserPanel = ({
               </label>
               <div className={styles.table}>
                 <div className={styles.rowHeader}>
+                   <span>Module Name</span>
                   {permissions.map((perm) => (
                     <span key={perm}>{perm}</span>
                   ))}
@@ -388,7 +389,9 @@ const AddUserPanel = ({
                   const moduleKey = `${activePlant}-${mod}`;
                   return (
                     <div className={styles.row} key={moduleKey}>
+                       
                       <span>{mod}</span>
+                       
                       {permissions.map((perm) => {
                         const isApprovalWorkflow = mod === "Approval Workflow";
                         let isDisabled =
