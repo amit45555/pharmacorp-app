@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./VendorMasterTable.module.css";
+import styles from "../ApplicationMasterTable/ApplicationMasterTable.module.css";
 import { VendorContext } from "../../context/VendorContext";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
@@ -85,7 +85,7 @@ const VendorMasterTable: React.FC = () => {
   const navigate = useNavigate();
   const { vendors, setVendors } = useContext(VendorContext);
   // Sample vendor data for testing activity log
-  const sampleVendors = [
+  const sampleVendors: VendorUser[] = [
     {
       fullName: "Acme Pharma Pvt Ltd",
       email: "contact@acmepharma.com",
@@ -156,6 +156,26 @@ const VendorMasterTable: React.FC = () => {
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [showActivityLogModal, setShowActivityLogModal] = useState(false);
   const [activeLogValue, setActiveLogValue] = useState<any[]>([]);
+  // Filter state
+  const [showFilterPopover, setShowFilterPopover] = useState(false);
+  const [filterColumn, setFilterColumn] = useState("fullName");
+  const [filterValue, setFilterValue] = useState("");
+  const [tempFilterColumn, setTempFilterColumn] = useState(filterColumn);
+  const [tempFilterValue, setTempFilterValue] = useState(filterValue);
+  const popoverRef = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    if (!showFilterPopover) return;
+    const handleClick = (e: MouseEvent) => {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node)
+      ) {
+        setShowFilterPopover(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showFilterPopover]);
 
   // PDF Export for Activity Log
   const handleExportActivityLogPdf = () => {
@@ -272,7 +292,38 @@ const VendorMasterTable: React.FC = () => {
     setShowActivityLogModal(true);
   };
 
-  const vendorList = vendors && vendors.length > 0 ? vendors : sampleVendors;
+  const vendorList: VendorUser[] =
+    vendors && vendors.length > 0 ? vendors : sampleVendors;
+
+  // Filtering logic
+  const filteredData = vendorList.filter((user: VendorUser) => {
+    if (!filterValue.trim()) return true;
+    const value = filterValue.toLowerCase();
+    switch (filterColumn) {
+      case "fullName":
+        return user.fullName?.toLowerCase().includes(value);
+      case "email":
+        return user.email?.toLowerCase().includes(value);
+      case "empCode":
+        return user.empCode?.toLowerCase().includes(value);
+      case "department":
+        return user.department?.toLowerCase().includes(value);
+      case "status":
+        return user.status?.toLowerCase().includes(value);
+      case "plants":
+        return user.plants?.join(", ").toLowerCase().includes(value);
+      case "centralPermission":
+        return (user.centralPermission ? "yes" : "no").includes(value);
+      case "corporateAccessEnabled":
+        return (user.corporateAccessEnabled ? "enabled" : "disabled").includes(
+          value
+        );
+      case "comment":
+        return user.comment?.toLowerCase().includes(value);
+      default:
+        return true;
+    }
+  });
 
   return (
     <div>
@@ -295,9 +346,83 @@ const VendorMasterTable: React.FC = () => {
           <button className={styles.addUserBtn} onClick={handleAdd}>
             + Add New
           </button>
-          <button className={styles.filterBtn} disabled>
+          <button
+            className={styles.filterBtn}
+            onClick={() => setShowFilterPopover((prev) => !prev)}
+            type="button"
+            aria-label="Filter vendors"
+          >
             🔍 Filter
           </button>
+          {/* Filter Popover */}
+          <div className={styles.controls}>
+            {showFilterPopover && (
+              <div className={styles.filterPopover} ref={popoverRef}>
+                <div className={styles.filterPopoverHeader}>
+                  Advanced Filter
+                </div>
+                <div className={styles.filterPopoverBody}>
+                  <div className={styles.filterFieldRow}>
+                    <label className={styles.filterLabel}>Column</label>
+                    <select
+                      className={styles.filterDropdown}
+                      value={tempFilterColumn}
+                      onChange={(e) => setTempFilterColumn(e.target.value)}
+                    >
+                      <option value="fullName">Full Name</option>
+                      <option value="email">Email</option>
+                      <option value="empCode">Employee Code</option>
+                      <option value="department">Department</option>
+                      <option value="status">Status</option>
+                      <option value="plants">Plants</option>
+                      <option value="centralPermission">
+                        Central Permission
+                      </option>
+                      <option value="corporateAccessEnabled">
+                        Corporate Access
+                      </option>
+                      <option value="comment">Comment</option>
+                    </select>
+                  </div>
+                  <div className={styles.filterFieldRow}>
+                    <label className={styles.filterLabel}>Value</label>
+                    <input
+                      className={styles.filterInput}
+                      type="text"
+                      placeholder={`Enter ${
+                        tempFilterColumn.charAt(0).toUpperCase() +
+                        tempFilterColumn.slice(1)
+                      }`}
+                      value={tempFilterValue}
+                      onChange={(e) => setTempFilterValue(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className={styles.filterPopoverFooter}>
+                  <button
+                    className={styles.applyBtn}
+                    onClick={() => {
+                      setFilterColumn(tempFilterColumn);
+                      setFilterValue(tempFilterValue);
+                      setShowFilterPopover(false);
+                    }}
+                  >
+                    Apply
+                  </button>
+                  <button
+                    className={styles.clearBtn}
+                    onClick={() => {
+                      setTempFilterValue("");
+                      setFilterValue("");
+                      setShowFilterPopover(false);
+                    }}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           <button
             className={`${styles.btn} ${styles.editBtn}`}
             disabled={selectedRow === null}
@@ -357,14 +482,14 @@ const VendorMasterTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {vendorList.length === 0 ? (
+            {filteredData.length === 0 ? (
               <tr>
                 <td colSpan={11} style={{ textAlign: "center", color: "#888" }}>
                   No vendors found.
                 </td>
               </tr>
             ) : (
-              vendorList.map((user, idx) => (
+              filteredData.map((user: VendorUser, idx: number) => (
                 <tr key={idx}>
                   <td>
                     <input

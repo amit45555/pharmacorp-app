@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./PlantMasterTable.module.css";
+import styles from "../ApplicationMasterTable/ApplicationMasterTable.module.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -77,6 +77,43 @@ const PlantMasterTable: React.FC = () => {
   const [activityLogs] = React.useState(dummyActivityLogs);
   const [approverFilter, setApproverFilter] = React.useState("");
   const [activityPlant, setActivityPlant] = React.useState<any>(null);
+  // Filter state
+  const [showFilterPopover, setShowFilterPopover] = React.useState(false);
+  const [filterColumn, setFilterColumn] = React.useState("name");
+  const [filterValue, setFilterValue] = React.useState("");
+  const [tempFilterColumn, setTempFilterColumn] = React.useState(filterColumn);
+  const [tempFilterValue, setTempFilterValue] = React.useState(filterValue);
+  const popoverRef = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    if (!showFilterPopover) return;
+    const handleClick = (e: MouseEvent) => {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node)
+      ) {
+        setShowFilterPopover(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showFilterPopover]);
+  // Filtering logic
+  const filteredData = data.filter((plant) => {
+    if (!filterValue.trim()) return true;
+    const value = filterValue.toLowerCase();
+    switch (filterColumn) {
+      case "name":
+        return plant.name?.toLowerCase().includes(value);
+      case "description":
+        return plant.description?.toLowerCase().includes(value);
+      case "location":
+        return plant.location?.toLowerCase().includes(value);
+      case "status":
+        return plant.status?.toLowerCase().includes(value);
+      default:
+        return true;
+    }
+  });
 
   const handleDelete = () => setShowDeleteModal(true);
   const confirmDelete = () => {
@@ -217,7 +254,14 @@ const PlantMasterTable: React.FC = () => {
       <div className={styles.headerTopRow}>
         <div className={styles.actionHeaderRow}>
           <button className={styles.addUserBtn}>+ Add New</button>
-          <button className={styles.filterBtn}>🔍 Filter</button>
+          <button
+            className={styles.filterBtn}
+            onClick={() => setShowFilterPopover((prev) => !prev)}
+            type="button"
+            aria-label="Filter plants"
+          >
+            🔍 Filter
+          </button>
           <button className={`${styles.btn} ${styles.editBtn}`}>
             <FaEdit size={14} /> Edit
           </button>
@@ -240,6 +284,64 @@ const PlantMasterTable: React.FC = () => {
             </span>
             PDF
           </button>
+        </div>
+        {/* Filter Popover */}
+        <div className={styles.controls}>
+          {showFilterPopover && (
+            <div className={styles.filterPopover} ref={popoverRef}>
+              <div className={styles.filterPopoverHeader}>Advanced Filter</div>
+              <div className={styles.filterPopoverBody}>
+                <div className={styles.filterFieldRow}>
+                  <label className={styles.filterLabel}>Column</label>
+                  <select
+                    className={styles.filterDropdown}
+                    value={tempFilterColumn}
+                    onChange={(e) => setTempFilterColumn(e.target.value)}
+                  >
+                    <option value="name">Plant Name</option>
+                    <option value="description">Description</option>
+                    <option value="location">Location</option>
+                    <option value="status">Status</option>
+                  </select>
+                </div>
+                <div className={styles.filterFieldRow}>
+                  <label className={styles.filterLabel}>Value</label>
+                  <input
+                    className={styles.filterInput}
+                    type="text"
+                    placeholder={`Enter ${
+                      tempFilterColumn.charAt(0).toUpperCase() +
+                      tempFilterColumn.slice(1)
+                    }`}
+                    value={tempFilterValue}
+                    onChange={(e) => setTempFilterValue(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className={styles.filterPopoverFooter}>
+                <button
+                  className={styles.applyBtn}
+                  onClick={() => {
+                    setFilterColumn(tempFilterColumn);
+                    setFilterValue(tempFilterValue);
+                    setShowFilterPopover(false);
+                  }}
+                >
+                  Apply
+                </button>
+                <button
+                  className={styles.clearBtn}
+                  onClick={() => {
+                    setTempFilterValue("");
+                    setFilterValue("");
+                    setShowFilterPopover(false);
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -267,7 +369,7 @@ const PlantMasterTable: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((plant, index) => (
+              {filteredData.map((plant, index) => (
                 <tr
                   key={index}
                   onClick={() => setSelectedRow(index)}
@@ -311,8 +413,8 @@ const PlantMasterTable: React.FC = () => {
               <ConfirmDeleteModal
                 open={showDeleteModal}
                 name={
-                  selectedRow !== null && data[selectedRow]
-                    ? data[selectedRow].name
+                  selectedRow !== null && filteredData[selectedRow]
+                    ? filteredData[selectedRow].name
                     : "plant"
                 }
                 onCancel={() => setShowDeleteModal(false)}
