@@ -27,13 +27,13 @@ const AddVendorFormPage: React.FC = () => {
       // You can also add vendor-specific fields as custom properties
     };
     addVendor(newVendor);
-    navigate("/vendors");
+    navigate("/superadmin");
   };
 
   return (
     <div className="formContainer">
       <VendorMasterForm
-        onClose={() => navigate("/vendors")}
+        onClose={() => navigate("/superadmin")}
         onSave={handleSave}
         initialData={initialData}
         mode={mode}

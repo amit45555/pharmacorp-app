@@ -16,7 +16,7 @@ const EditVendorFormPage: React.FC = () => {
       ...user,
       permissions: user.permissions.vendor || [],
     });
-    navigate("/vendors");
+    navigate("/edit-vendor/:idx");
   };
 
   return (
