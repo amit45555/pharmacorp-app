@@ -231,6 +231,16 @@ const AddUserPanel = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    // Basic validation
+    if (!form.fullName || form.fullName.trim().length < 2) {
+      setError("Please enter a valid name (at least 2 characters).");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email || !emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     if (mode === "edit" && form.status === "Inactive") {
       setError(
         "Inactive user cannot be saved. Please make the user Active before saving."
@@ -286,9 +296,6 @@ const AddUserPanel = ({
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
-                <span className={styles.helperText}>
-                  Please enter a valid official email address.
-                </span>
               </div>
               <div>
                 <label>Employee Code *</label>
