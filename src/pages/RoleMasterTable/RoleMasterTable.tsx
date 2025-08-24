@@ -217,10 +217,11 @@ export default function RoleMasterTable() {
     doc.save("role-master-table.pdf");
   };
 
-  const handleEditRole = () => {
-    if (selectedRow === null) return;
-    navigate(`/edit-role/${selectedRow}`);
-  };
+  //removed due to henadle cannot be edited in r0le master
+  // const handleEditRole = () => {
+  //   if (selectedRow === null) return;
+  //   navigate(`/edit-role/${selectedRow}`);
+  // };
 
   const handleDeleteRole = () => {
     setShowDeleteModal(true);
@@ -306,9 +307,8 @@ export default function RoleMasterTable() {
           </button>
           <button
             className={`${styles.btn} ${styles.editBtn}`}
-            disabled={selectedRow === null}
-            onClick={handleEditRole}
-            title="Edit selected role"
+            disabled
+            title="Role name cannot be edited after creation"
           >
             <FaEdit size={14} /> Edit
           </button>
@@ -353,7 +353,6 @@ export default function RoleMasterTable() {
                 <div className={styles.filterPopover}>
                   <div className={styles.advancedFilterHeader}>
                     <span>Advanced Filter</span>
-                    
                   </div>
                   <div className={styles.advancedFilterRow}>
                     <label>Column</label>
