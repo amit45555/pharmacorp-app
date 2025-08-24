@@ -252,21 +252,10 @@ const VendorMasterTable: React.FC = () => {
 
   const handleEdit = () => {
     if (selectedRow === null) return;
-    const user = vendors[selectedRow];
+    const user = vendorList[selectedRow];
     navigate(`/edit-vendor/${selectedRow}`, {
       state: {
-        initialData: {
-          fullName: user.fullName,
-          email: user.email,
-          empCode: user.empCode,
-          department: user.department,
-          status: user.status,
-          plants: user.plants,
-          centralPermission: user.centralPermission,
-          comment: user.comment,
-          corporateAccessEnabled: user.corporateAccessEnabled,
-          permissions: { vendor: user.permissions || [] },
-        },
+        initialData: user,
         mode: "edit",
       },
     });

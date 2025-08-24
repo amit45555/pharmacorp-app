@@ -1,21 +1,12 @@
 import React, { useState } from "react";
 import styles from "./VendorMasterForm.module.css";
 
-export interface VendorForm {
-  empCode: string;
-  vendorName: string;
-  contactPerson: string;
-  contactNumber: string;
-  email: string;
-  address: string;
-  gstNumber: string;
-  activityLogs?: any[];
-}
+import { VendorUser } from "./VendorMasterTable";
 
 interface Props {
-  initialData?: VendorForm | null;
+  initialData?: VendorUser | null;
   mode: "add" | "edit";
-  onSave: (vendor: VendorForm) => void;
+  onSave: (vendor: VendorUser) => void;
   onClose: () => void;
 }
 
@@ -25,24 +16,35 @@ const VendorMasterForm: React.FC<Props> = ({
   onSave,
   onClose,
 }) => {
-  const [form, setForm] = useState<VendorForm>(
+  const [form, setForm] = useState<VendorUser>(
     initialData || {
       empCode: "",
-      vendorName: "",
-      contactPerson: "",
-      contactNumber: "",
+      fullName: "",
       email: "",
-      address: "",
-      gstNumber: "",
+      department: "",
+      status: "Active",
+      plants: [],
+      centralPermission: false,
+      comment: "",
+      corporateAccessEnabled: false,
       activityLogs: [],
     }
   );
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    let checked = false;
+    if (type === "checkbox" && "checked" in e.target) {
+      checked = (e.target as HTMLInputElement).checked;
+    }
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -63,7 +65,7 @@ const VendorMasterForm: React.FC<Props> = ({
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label className={styles.label}>Vendor Code</label>
+          <label className={styles.label}>Employee Code</label>
           <input
             className={styles.input}
             name="empCode"
@@ -74,33 +76,11 @@ const VendorMasterForm: React.FC<Props> = ({
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Vendor Name</label>
+          <label className={styles.label}>Full Name</label>
           <input
             className={styles.input}
-            name="vendorName"
-            value={form.vendorName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Contact Person</label>
-          <input
-            className={styles.input}
-            name="contactPerson"
-            value={form.contactPerson}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Contact Number</label>
-          <input
-            className={styles.input}
-            name="contactNumber"
-            value={form.contactNumber}
+            name="fullName"
+            value={form.fullName}
             onChange={handleChange}
             required
           />
@@ -119,24 +99,77 @@ const VendorMasterForm: React.FC<Props> = ({
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Address</label>
-          <textarea
+          <label className={styles.label}>Department</label>
+          <input
             className={styles.input}
-            name="address"
-            value={form.address}
+            name="department"
+            value={form.department}
             onChange={handleChange}
             required
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>GST Number</label>
+          <label className={styles.label}>Status</label>
+          <select
+            className={styles.input}
+            name="status"
+            value={form.status}
+            onChange={
+              handleChange as React.ChangeEventHandler<HTMLSelectElement>
+            }
+            required
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Plants (comma separated)</label>
           <input
             className={styles.input}
-            name="gstNumber"
-            value={form.gstNumber}
+            name="plants"
+            value={form.plants.join(", ")}
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                plants: e.target.value
+                  .split(",")
+                  .map((p) => p.trim())
+                  .filter(Boolean),
+              }))
+            }
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Central Permission</label>
+          <input
+            type="checkbox"
+            name="centralPermission"
+            checked={form.centralPermission}
             onChange={handleChange}
-            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Corporate Access Enabled</label>
+          <input
+            type="checkbox"
+            name="corporateAccessEnabled"
+            checked={form.corporateAccessEnabled}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Comment</label>
+          <textarea
+            className={styles.input}
+            name="comment"
+            value={form.comment}
+            onChange={handleChange}
           />
         </div>
 
