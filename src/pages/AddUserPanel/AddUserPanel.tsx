@@ -226,9 +226,17 @@ const AddUserPanel = ({
   };
 
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    if (mode === "edit" && form.status === "Inactive") {
+      setError(
+        "Inactive user cannot be saved. Please make the user Active before saving."
+      );
+      return;
+    }
     setShowModal(true); // show login modal before saving
   };
 
@@ -524,6 +532,36 @@ const AddUserPanel = ({
               />
             </div>
           </div>
+          {error && (
+            <div
+              className={styles.fancyErrorBox}
+              role="alert"
+              aria-live="assertive"
+            >
+              <svg
+                width="22"
+                height="22"
+                fill="none"
+                viewBox="0 0 24 24"
+                style={{
+                  marginRight: 8,
+                  flexShrink: 0,
+                  background: "white",
+                  borderRadius: "50%",
+                }}
+              >
+                <circle cx="12" cy="12" r="12" fill="#fff2" />
+                <path
+                  d="M12 7v4m0 4h.01"
+                  stroke="#ff5858"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
           <div className={styles.actions}>
             <button
               type="button"
