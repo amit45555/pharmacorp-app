@@ -3,16 +3,6 @@ import styles from "./AddUserPanel.module.css";
 import ConfirmLoginModal from "components/Common/ConfirmLoginModal";
 
 const plants = ["GOA", "GOA-1", "Mumbai", "Delhi", "Bangalore"];
-const modules = [
-  "Central",
-  "Role Master",
-  "Vendor Master",
-  "Plant Master",
-  "Application Master",
-  "Approval Workflow",
-  "Approval Workflow1",
-  "Approval Workflow2",
-];
 const permissions = ["Add", "Edit", "View", "Delete"];
 
 export type UserForm = {
@@ -59,13 +49,35 @@ const AddUserPanel = ({
       corporateAccessEnabled: false,
     };
 
-    const safePermissions: { [key: string]: string[] } = base.permissions || {};
-    const permissionsWithAllModules = modules.reduce((acc, mod) => {
-      acc[mod] = safePermissions[mod] || [];
-      return acc;
-    }, {} as { [key: string]: string[] });
+    // Ensure all plant-module and central module keys are present in permissions
+    const safePermissions: { [key: string]: string[] } = {
+      ...base.permissions,
+    };
+    // Add plant-module keys
+    plants.forEach((plant) => {
+      [
+        "Role Master",
+        "Vendor Master",
+        "Plant Master",
+        "Application Master",
+        "Approval Workflow",
+      ].forEach((mod) => {
+        const key = `${plant}-${mod}`;
+        if (!safePermissions[key]) safePermissions[key] = [];
+      });
+    });
+    // Add central module keys
+    [
+      "Role Master",
+      "Vendor Master",
+      "Plant Master",
+      "Approval Workflow1",
+      "Approval Workflow2",
+    ].forEach((mod) => {
+      if (!safePermissions[mod]) safePermissions[mod] = [];
+    });
 
-    return { ...base, permissions: permissionsWithAllModules };
+    return { ...base, permissions: safePermissions };
   });
 
   // Set activePlant to the first selected plant on initial load (edit mode)
@@ -374,7 +386,7 @@ const AddUserPanel = ({
               </label>
               <div className={styles.table}>
                 <div className={styles.rowHeader}>
-                   <span>Module Name</span>
+                  <span>Module Name</span>
                   {permissions.map((perm) => (
                     <span key={perm}>{perm}</span>
                   ))}
@@ -389,9 +401,8 @@ const AddUserPanel = ({
                   const moduleKey = `${activePlant}-${mod}`;
                   return (
                     <div className={styles.row} key={moduleKey}>
-                       
                       <span>{mod}</span>
-                       
+
                       {permissions.map((perm) => {
                         const isApprovalWorkflow = mod === "Approval Workflow";
                         let isDisabled =
