@@ -31,6 +31,7 @@ const AccessRequestModal: React.FC<AccessRequestModalProps> = ({
               </tr>
             ))}
           </tbody>
+           
         </table>
         <button className={styles.closeBtn} onClick={onClose}>
           Close

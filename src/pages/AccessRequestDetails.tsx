@@ -27,6 +27,35 @@ const AccessRequestDetails: React.FC = () => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
+         {/* Close Cross Button */}
+    <button
+      className={styles.closeBtn}
+      style={{
+        position: "absolute",
+        top: "1.2rem",
+        right: "1.2rem",
+        background: "#1e88e5",
+        color: "#fff",
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        fontSize: "1.25rem",
+        border: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        zIndex: 2,
+      }}
+      aria-label="Close"
+      title="Close"
+      onClick={() => navigate(-1)}
+    >
+      &#10006;
+    </button>
+
+    
+
         <h2>Access Request Details {step ? `(Approver ${step})` : ""}</h2>
         <table className={styles.detailsTable}>
           <tbody>
@@ -64,10 +93,11 @@ const AccessRequestDetails: React.FC = () => {
           >
             Reject
           </button>
-          <button className={styles.closeBtn} onClick={() => navigate(-1)}>
-            Close
-          </button>
+        
+          
         </div>
+        
+   
       </div>
     </div>
   );
