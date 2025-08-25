@@ -22,7 +22,7 @@ const initialRequests = [
     equipmentId: "LAB-INS-001",
     role: "Lab Analyst",
     accessStatus: "Granted",
-    requestStatus: "Closed",
+    requestStatus: "Pending",
   },
   {
     id: "TCO02",
@@ -34,7 +34,7 @@ const initialRequests = [
     equipmentId: "CDM-SYS-002",
     role: "Data Reviewer",
     accessStatus: "Granted",
-    requestStatus: "Closed",
+    requestStatus: "Pending",
   },
 ];
 

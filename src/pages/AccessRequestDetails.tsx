@@ -24,37 +24,57 @@ const AccessRequestDetails: React.FC = () => {
     navigate(-1);
   };
 
+  // Dummy attached documents (simulate as in UserInformation stepper)
+  const attachedDocuments = [
+    {
+      name: "Certification.pdf",
+      url: "#",
+      type: "Certification",
+      info: "GMP Compliance Certificate",
+    },
+    {
+      name: "TrainingRecord.pdf",
+      url: "#",
+      type: "Training Record",
+      info: "21 CFR Part 11 Training Completion",
+    },
+    {
+      name: "IDProof.pdf",
+      url: "#",
+      type: "ID Proof",
+      info: "Aadhar Card (Last 4: 1234)",
+    },
+  ];
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-         {/* Close Cross Button */}
-    <button
-      className={styles.closeBtn}
-      style={{
-        position: "absolute",
-        top: "1.2rem",
-        right: "1.2rem",
-        background: "#1e88e5",
-        color: "#fff",
-        width: "40px",
-        height: "40px",
-        borderRadius: "50%",
-        fontSize: "1.25rem",
-        border: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        zIndex: 2,
-      }}
-      aria-label="Close"
-      title="Close"
-      onClick={() => navigate(-1)}
-    >
-      &#10006;
-    </button>
-
-    
+        {/* Close Cross Button */}
+        <button
+          className={styles.closeBtn}
+          style={{
+            position: "absolute",
+            top: "1.2rem",
+            right: "1.2rem",
+            background: "#1e88e5",
+            color: "#fff",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            fontSize: "1.25rem",
+            border: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            zIndex: 2,
+          }}
+          aria-label="Close"
+          title="Close"
+          onClick={() => navigate(-1)}
+        >
+          &#10006;
+        </button>
 
         <h2>Access Request Details {step ? `(Approver ${step})` : ""}</h2>
         <table className={styles.detailsTable}>
@@ -71,6 +91,53 @@ const AccessRequestDetails: React.FC = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Attached Documents Section */}
+        <div style={{ margin: "1.5rem 0 1rem 0" }}>
+          <h3 style={{ marginBottom: 8, fontSize: 18 }}>Attached Documents</h3>
+          {attachedDocuments.length === 0 ? (
+            <div style={{ color: "#888", fontSize: 14 }}>
+              No documents attached.
+            </div>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {attachedDocuments.map((doc, idx) => (
+                <li
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 6,
+                  }}
+                >
+                  <span style={{ fontWeight: 500, marginRight: 8 }}>
+                    {doc.type}:
+                  </span>
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#1976d2",
+                      textDecoration: "underline",
+                      marginRight: 8,
+                    }}
+                  >
+                    {doc.name}
+                  </a>
+                  <span style={{ color: "#888", fontSize: 13, marginRight: 8 }}>
+                    (PDF)
+                  </span>
+                  <span style={{ color: "#555", fontSize: 13 }}>
+                    {doc.info}
+                  </span>
+                  {/* You can add a download/view icon here if you want */}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div
           style={{
             display: "flex",
@@ -93,11 +160,7 @@ const AccessRequestDetails: React.FC = () => {
           >
             Reject
           </button>
-        
-          
         </div>
-        
-   
       </div>
     </div>
   );
