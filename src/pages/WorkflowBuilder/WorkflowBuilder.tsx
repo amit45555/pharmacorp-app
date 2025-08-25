@@ -234,9 +234,7 @@ const WorkflowBuilder: React.FC = () => {
               
             </header>
     <div className={styles.container} aria-label="Workflow Approver Master">
-      <div className={styles.headerBox}>
-        <h2 className={styles.title}>Workflow Approver Master</h2>
-      </div>
+      
       <div className={styles.selectionRow}>
         <div className={styles.selectGroup}>
           <label className={styles.label} htmlFor="plant-select">

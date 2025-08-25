@@ -100,7 +100,8 @@
 
 .editBtn {
   background-color: #e2e3e5;
-  color: #212529;
+  color: #212529; 
+  margin-left: -18px;
 }
 .editBtn:hover,
 .editBtn:focus {
@@ -226,6 +227,7 @@
   border-color: #084a9e;
 }
 
+
 .roleTableContainer {
   background: white;
   border-radius: 8px;
@@ -234,7 +236,9 @@
   margin: 25px;
 margin-top: 50px;
   overflow: hidden;
+  
 }
+
 table {
   width: 100%;
   border-collapse: collapse;

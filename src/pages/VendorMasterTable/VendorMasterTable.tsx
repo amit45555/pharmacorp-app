@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "../ApplicationMasterTable/ApplicationMasterTable.module.css";
+import styles from "./VendorMasterTable.module.css";
 import { VendorContext } from "../../context/VendorContext";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "../../components/Common/ConfirmDeleteModal";
