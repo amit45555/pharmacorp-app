@@ -1,26 +1,58 @@
 import React from "react";
+import { useApprover } from "../context/ApproverContext";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./AccessRequestModal.module.css";
 
 const AccessRequestDetails: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id, step } = useParams();
+  const { step } = useParams();
   const request = location.state?.request;
+  const { setRequests, setApprovalActions } = useApprover();
 
   if (!request) {
     return <div className={styles.modal}>No request data found.</div>;
   }
 
   const handleAccept = () => {
-    // TODO: Implement accept logic (API call etc.)
-    alert(`Request ${id} accepted!`);
+    setRequests((prev) =>
+      prev.map((req) =>
+        req.id === request.id ? { ...req, requestStatus: "Approved" } : req
+      )
+    );
+    setApprovalActions((prev) => [
+      ...prev,
+      {
+        approverName: "approver",
+        approverRole: "Approver",
+        plant: request.plant || "GOA",
+        corporate: "Unichem Corp",
+        action: "Approved",
+        timestamp: new Date().toISOString().slice(0, 16).replace("T", " "),
+        comments: "Approved by Approver",
+      },
+    ]);
     navigate(-1);
   };
 
   const handleReject = () => {
-    // TODO: Implement reject logic (API call etc.)
-    alert(`Request ${id} rejected!`);
+    setRequests((prev) =>
+      prev.map((req) =>
+        req.id === request.id ? { ...req, requestStatus: "Rejected" } : req
+      )
+    );
+    setApprovalActions((prev) => [
+      ...prev,
+      {
+        approverName: "approver",
+        approverRole: "Approver",
+        plant: request.plant || "GOA",
+        corporate: "Unichem Corp",
+        action: "Rejected",
+        timestamp: new Date().toISOString().slice(0, 16).replace("T", " "),
+        comments: "Rejected by Approver",
+      },
+    ]);
     navigate(-1);
   };
 
