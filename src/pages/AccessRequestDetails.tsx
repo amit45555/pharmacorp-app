@@ -8,7 +8,7 @@ const AccessRequestDetails: React.FC = () => {
   const navigate = useNavigate();
   const { step } = useParams();
   const request = location.state?.request;
-  const { setRequests, setApprovalActions } = useApprover();
+  const { setRequests, setApprovalActions, setActiveTab } = useApprover();
 
   if (!request) {
     return <div className={styles.modal}>No request data found.</div>;
@@ -32,6 +32,7 @@ const AccessRequestDetails: React.FC = () => {
         comments: "Approved by Approver",
       },
     ]);
+    setActiveTab("approved-rejected");
     navigate(-1);
   };
 
@@ -53,6 +54,7 @@ const AccessRequestDetails: React.FC = () => {
         comments: "Rejected by Approver",
       },
     ]);
+    setActiveTab("approved-rejected");
     navigate(-1);
   };
 

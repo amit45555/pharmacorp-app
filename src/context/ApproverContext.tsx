@@ -6,6 +6,8 @@ interface ApproverContextType {
   setRequests: React.Dispatch<React.SetStateAction<any[]>>;
   approvalActions: ApprovalAction[];
   setApprovalActions: React.Dispatch<React.SetStateAction<ApprovalAction[]>>;
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ApproverContext = createContext<ApproverContextType | undefined>(
@@ -17,10 +19,18 @@ export const ApproverProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [requests, setRequests] = useState<any[]>([]);
   const [approvalActions, setApprovalActions] = useState<ApprovalAction[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("access-requests");
 
   return (
     <ApproverContext.Provider
-      value={{ requests, setRequests, approvalActions, setApprovalActions }}
+      value={{
+        requests,
+        setRequests,
+        approvalActions,
+        setApprovalActions,
+        activeTab,
+        setActiveTab,
+      }}
     >
       {children}
     </ApproverContext.Provider>

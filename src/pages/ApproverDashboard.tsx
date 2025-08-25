@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./ApproverDashboard.module.css";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -40,46 +40,46 @@ const initialRequests = [
 ];
 
 const ApproverDashboard: React.FC = () => {
-  const location = useLocation();
-  const [activeTab, setActiveTab] = useState(() => {
-    if (location.state && location.state.activeTab) {
-      return location.state.activeTab;
-    }
-    return "access-requests";
-  });
-  const { requests, setRequests, approvalActions, setApprovalActions } =
-    useApprover();
+  const {
+    requests,
+    setRequests,
+    approvalActions,
+    setApprovalActions,
+    activeTab,
+    setActiveTab,
+  } = useApprover();
   useEffect(() => {
-    setRequests(initialRequests);
-    setApprovalActions([
-      {
-        approverName: "Amit Kumar",
-        approverRole: "Plant Admin (Step 1)",
-        plant: "GOA",
-        corporate: "Unichem Corp",
-        action: "Approved",
-        timestamp: "2025-08-16 10:22",
-        comments: "All compliance met.",
-      },
-      {
-        approverName: "Priya Sharma",
-        approverRole: "QA Head (Step 2)",
-        plant: "GOA",
-        corporate: "Unichem Corp",
-        action: "Approved",
-        timestamp: "2025-08-16 11:05",
-        comments: "Reviewed and approved.",
-      },
-      {
-        approverName: "Rahul Singh",
-        approverRole: "IT Manager (Step 3)",
-        plant: "GOA",
-        corporate: "Unichem Corp",
-        action: "Rejected",
-        timestamp: "2025-08-16 11:15",
-        comments: "Missing IT clearance.",
-      },
-    ]);
+    if (requests.length === 0) setRequests(initialRequests);
+    if (approvalActions.length === 0)
+      setApprovalActions([
+        {
+          approverName: "Amit Kumar",
+          approverRole: "Plant Admin (Step 1)",
+          plant: "GOA",
+          corporate: "Unichem Corp",
+          action: "Approved",
+          timestamp: "2025-08-16 10:22",
+          comments: "All compliance met.",
+        },
+        {
+          approverName: "Priya Sharma",
+          approverRole: "QA Head (Step 2)",
+          plant: "GOA",
+          corporate: "Unichem Corp",
+          action: "Approved",
+          timestamp: "2025-08-16 11:05",
+          comments: "Reviewed and approved.",
+        },
+        {
+          approverName: "Rahul Singh",
+          approverRole: "IT Manager (Step 3)",
+          plant: "GOA",
+          corporate: "Unichem Corp",
+          action: "Rejected",
+          timestamp: "2025-08-16 11:15",
+          comments: "Missing IT clearance.",
+        },
+      ]);
     // eslint-disable-next-line
   }, []);
 
@@ -106,7 +106,9 @@ const ApproverDashboard: React.FC = () => {
   ];
 
   const handleViewRequest = (request: any) => {
-    navigate(`/access-request/${request.id}`, { state: { request } });
+    navigate(`/access-request/${request.id}`, {
+      state: { request },
+    });
   };
 
   const renderContent = () => {
